@@ -53,7 +53,7 @@ khẩu màu vàng ở cuối.
 ~/analytix/start.sh
 ```
 
-![Output start.sh: nạp cấu hình, Running on http://127.0.0.1:9100.](./img/cai-may/03-khoi-dong.png)
+![Output start.sh: nạp cấu hình xong, in dòng Running on kèm địa chỉ.](./img/cai-may/03-khoi-dong.png)
 
 ### 4 · Mở địa chỉ nó in ra
 
