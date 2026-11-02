@@ -61,7 +61,7 @@ PYTHON=python3.12 \
 `ANALYTIX_BIND` **không** dùng lúc cài — nó chỉ được `start.sh` đọc, xem phần
 dưới. Bảng đầy đủ: [Biến môi trường](../reference/bien-moi-truong.md).
 
-:::danger Mật khẩu in một lần, không ghi vào tệp nào
+:::danger[Mật khẩu in một lần, không ghi vào tệp nào]
 Dòng cuối của bộ cài:
 
 ```
@@ -88,7 +88,7 @@ Không có tài khoản mặc định nào — đây là chủ ý của sản ph
 | `$ANALYTIX_HOME/superset.db` | database metadata (SQLite) |
 | `$ANALYTIX_HOME/start.sh` | script khởi động |
 
-:::note Theme là tệp thứ hai, không nằm trong wheel
+:::note[Theme là tệp thứ hai, không nằm trong wheel]
 `superset_config.py` có dòng `exec(open(.../workspace_x_theme.py).read())`. Nghĩa
 là **xoá tệp theme là mất thương hiệu** và AnalytiX trở lại thành Superset. Hai
 tệp phải đi cùng nhau.
@@ -102,7 +102,7 @@ tệp phải đi cùng nhau.
 ANALYTIX_BIND=0.0.0.0 ~/analytix/start.sh
 ```
 
-:::danger Đổi mật khẩu quản trị TRƯỚC khi mở ra mạng
+:::danger[Đổi mật khẩu quản trị TRƯỚC khi mở ra mạng]
 Và biết rằng bạn đang mở một web server dành cho phát triển, không có HTTPS. Xem
 [Vì sao bản cài chưa sẵn sàng cho môi trường thật](../explanation/chua-san-sang-cho-production.md).
 :::

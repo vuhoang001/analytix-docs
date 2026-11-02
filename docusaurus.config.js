@@ -53,10 +53,10 @@ const config = {
   url: siteUrl,
   baseUrl: siteBaseUrl,
 
-  // Chỉ dùng cho lệnh `docusaurus deploy` — ta không dùng lệnh đó, phát hành
-  // bằng GitHub Actions (xem .github/workflows/pages.yml). Giữ cho đủ cấu hình.
-  organizationName: 'vuhoang001',
-  projectName: 'analytix-docs',
+  // Chỉ dùng cho lệnh `docusaurus deploy` của GitHub — ta không dùng lệnh đó,
+  // phát hành bằng GitLab Pages (xem .gitlab-ci.yml). Giữ lại cho đủ cấu hình.
+  organizationName: 'hdos',
+  projectName: 'analytix',
 
   onBrokenLinks: 'throw',
 
@@ -112,7 +112,7 @@ const config = {
       navbar: {
         title: 'AnalytiX',
         logo: {
-          alt: 'AnalytiX',
+          alt: 'CoreX Logo',
           src: 'img/logo.svg',
         },
         items: [
@@ -127,7 +127,7 @@ const config = {
       footer: {
         style: 'dark',
         links: [],
-        copyright: `Copyright © ${new Date().getFullYear()} AnalytiX.`,
+        copyright: `Copyright © ${new Date().getFullYear()} CoreX.`,
       },
       prism: {
         theme: prismThemes.github,

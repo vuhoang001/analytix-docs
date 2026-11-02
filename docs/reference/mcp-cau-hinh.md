@@ -14,7 +14,7 @@ Mọi giá trị mặc định dưới đây **đọc trực tiếp từ `mcp_se
 `mcp_service/constants.py`** của bản 6.1.0 đang cài, không lấy theo tài liệu
 thượng nguồn.
 
-:::warning Tài liệu thượng nguồn sai hai chỗ
+:::warning[Tài liệu thượng nguồn sai hai chỗ]
 Trang tài liệu bản `master` ghi `MCP_RESPONSE_SIZE_CONFIG["max_bytes"]` —
 bản 6.1.0 dùng **`token_limit`**. Trang đó cũng ghi yêu cầu "Superset 5.0+",
 trong khi mã nguồn MCP **không tồn tại** ở 6.0.0 và cũ hơn. Sàn thật là 6.1.0.
@@ -31,7 +31,7 @@ trong khi mã nguồn MCP **không tồn tại** ở 6.0.0 và cũ hơn. Sàn th
 | `WEBDRIVER_BASEURL` | `"http://localhost:9001/"` | Địa chỉ nội bộ để chụp ảnh biểu đồ |
 | `WEBDRIVER_BASEURL_USER_FRIENDLY` | *(bằng `WEBDRIVER_BASEURL`)* | **Biến sinh link trả về cho người dùng** |
 
-:::danger `WEBDRIVER_BASEURL_USER_FRIENDLY` phải đặt tường minh
+:::danger[`WEBDRIVER_BASEURL_USER_FRIENDLY` phải đặt tường minh]
 AnalytiX gán biến này từ mặc định riêng của nó **trước khi**
 `superset_config.py` chạy. Nên đặt `WEBDRIVER_BASEURL` là **không đủ** — link
 biểu đồ MCP trả về sẽ trỏ về địa chỉ mặc định và không mở được. Phải đặt thẳng
@@ -55,7 +55,7 @@ biến `_USER_FRIENDLY`.
 | `MCP_JWT_DEBUG_ERRORS` | `False` | Ghi lý do từ chối token vào log. **Chỉ bật tạm khi gỡ lỗi** |
 | `MCP_AUTH_FACTORY` | `None` | Hàm tự viết thay toàn bộ cơ chế xác thực |
 
-:::note `MCP_REQUIRED_SCOPES` gác ở tầng token
+:::note[`MCP_REQUIRED_SCOPES` gác ở tầng token]
 Biến này được thực thi thật — token thiếu scope bị từ chối hoàn toàn
 (`jwt_verifier.py`, bước 7: scope bắt buộc phải là tập con của scope trong
 token). Nhưng nó **không** quyết định token gọi được công cụ nào; việc đó do
@@ -125,7 +125,7 @@ Cả hai **tắt** mặc định. Chạy một bản duy nhất thì giữ nguy�
 `SESSION_COOKIE_SECURE: **False**`, `SESSION_COOKIE_SAMESITE: "Lax"`,
 `PERMANENT_SESSION_LIFETIME: 86400`.
 
-:::caution `SESSION_COOKIE_SECURE` mặc định là `False`
+:::caution[`SESSION_COOKIE_SECURE` mặc định là `False`]
 Phục vụ qua HTTPS thì phải đổi thành `True`, nếu không cookie phiên đi được trên
 kết nối không mã hoá.
 :::
@@ -141,7 +141,7 @@ Cách thứ hai mặc định là `stdio`, dành cho client chỉ nói được 
 `FASTMCP_TRANSPORT` sang giao thức HTTP thì nó đọc `FASTMCP_HOST` (mặc định
 `127.0.0.1`) và `FASTMCP_PORT` (mặc định `5008`).
 
-:::note Không có cờ tính năng nào
+:::note[Không có cờ tính năng nào]
 MCP **không** bật bằng cờ tính năng. Nó là một tiến trình riêng: cài gói
 `fastmcp`, đặt cấu hình, chạy lệnh. Thượng nguồn từng có một cờ `MCP_SERVICE`
 nhưng nó chưa bao giờ được dùng tới và đã bị xoá.

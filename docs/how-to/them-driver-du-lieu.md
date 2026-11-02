@@ -1,6 +1,6 @@
 ---
 title: Thêm driver cho nguồn dữ liệu
-sidebar_position: 3
+sidebar_position: 4
 last_update:
   date: "2026-11-02"
   author: vuhoang001
@@ -14,7 +14,7 @@ database thật của bạn.
 Dành cho người quản trị. Cần có trước: AnalytiX đã cài và chạy được, và mạng ra
 được PyPI (hoặc một kho gói nội bộ).
 
-:::danger Đây là việc gần như ai cũng phải làm
+:::danger[Đây là việc gần như ai cũng phải làm]
 Bộ 156 gói đã ghim của AnalytiX **không chứa driver nào** ngoài SQLite. Không
 `psycopg2`, không `PyMySQL`, không `trino`, không `pyodbc`, không
 `clickhouse-connect`, không `snowflake`, không `bigquery`.
@@ -95,7 +95,7 @@ docker restart analytix
 **Settings → Database Connections → + Database**, chọn loại database, điền chuỗi
 kết nối. Bấm **Test Connection** trước khi lưu.
 
-:::caution Tắt quyền ghi trừ khi thật sự cần
+:::caution[Tắt quyền ghi trừ khi thật sự cần]
 Bỏ chọn **Allow DML**, **Allow CTAS**, **Allow CVAS**. Đây là chốt chặn thật —
 nó chặn ở tầng kết nối, không dựa vào việc người dùng tự giữ mình. Đặc biệt quan
 trọng nếu bạn bật [dịch vụ MCP](./bat-mcp.md).

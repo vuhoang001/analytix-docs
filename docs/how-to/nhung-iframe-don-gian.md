@@ -1,6 +1,6 @@
 ---
 title: Nhúng dashboard bằng iframe đơn giản
-sidebar_position: 8
+sidebar_position: 9
 ---
 
 # Nhúng dashboard bằng iframe đơn giản

@@ -27,7 +27,7 @@ Cột cho biết biến có tác dụng ở đường nào — đây là chỗ h
 | `ANALYTIX_SECRET_KEY` | *sinh ngẫu nhiên lần chạy đầu* | — | — | ✅ |
 | `PYTHON` | `python3` | ✅ | — | — |
 
-:::caution Ba chỗ hay nhầm
+:::caution[Ba chỗ hay nhầm]
 **`ANALYTIX_BIND` không có tác dụng lúc cài.** Chỉ `start.sh` đọc nó. Đặt lúc
 chạy `./install.sh` là không có gì xảy ra.
 
@@ -72,7 +72,7 @@ Không đặt thì bộ cài sinh một mật khẩu ngẫu nhiên và **in ra m
 [analytix] this is printed once and is written to no file. Save it now.
 ```
 
-:::danger Không có mật khẩu mặc định
+:::danger[Không có mật khẩu mặc định]
 Đây là chủ ý của sản phẩm. Không có `admin/admin`.
 
 Mất mật khẩu thì đặt lại:
@@ -87,7 +87,7 @@ Mất mật khẩu thì đặt lại:
 
 Cổng ứng dụng nghe. Mặc định `8088`.
 
-:::danger Đổi cổng làm healthcheck của container báo sai
+:::danger[Đổi cổng làm healthcheck của container báo sai]
 Healthcheck trong ảnh **ghim cứng** `http://127.0.0.1:8088/health`. Đổi
 `ANALYTIX_PORT` thì ứng dụng chạy đúng nhưng Docker báo `unhealthy` mãi.
 
@@ -117,7 +117,7 @@ Chỉ ở đường container. Không đặt thì entrypoint sinh một khoá �
 và ghi vào `superset_config.py`. Lần chạy sau, nếu cấu hình đã tồn tại thì khối
 đó bị bỏ qua — khoá cũ được giữ.
 
-:::danger Mất khoá là hỏng session và dashboard đã nhúng
+:::danger[Mất khoá là hỏng session và dashboard đã nhúng]
 Khoá ký session và ký vé khách dùng cho nhúng. Container không gắn volume thì
 mỗi lần `docker rm` là mất khoá.
 

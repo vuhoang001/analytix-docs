@@ -1,6 +1,6 @@
 ---
 title: Nhúng dashboard qua SDK cho đối tác ngoài
-sidebar_position: 9
+sidebar_position: 10
 ---
 
 # Nhúng dashboard qua SDK cho đối tác ngoài
@@ -157,7 +157,7 @@ Khung khác tên miền **không tự co giãn theo nội dung**. Giữ cố đ�
 Mỗi UUID mang một danh sách tên miền được phép nhúng. AnalytiX so
 khớp **nguyên văn chuỗi origin**.
 
-:::caution `localhost` KHÁC `127.0.0.1`
+:::caution[`localhost` KHÁC `127.0.0.1`]
 Khai `http://localhost:5173` rồi mở trang bằng `http://127.0.0.1:5173` sẽ
 cho khung hiện JSON `403 Forbidden` — trình duyệt coi hai origin này hoàn
 toàn khác nhau. Khai đủ mọi địa chỉ mà đội phát triển thực sự dùng để mở

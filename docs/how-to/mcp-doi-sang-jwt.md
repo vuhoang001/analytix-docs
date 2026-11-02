@@ -1,6 +1,6 @@
 ---
 title: Đổi xác thực MCP sang JWT
-sidebar_position: 11
+sidebar_position: 12
 last_update:
   date: "2026-11-02"
   author: vuhoang001
@@ -14,7 +14,7 @@ khi để dịch vụ MCP nghe ngoài `127.0.0.1`.**
 Dành cho người quản trị. Cần có trước: dịch vụ MCP đã chạy được ở chế độ dev
 (xem [Bật dịch vụ MCP](./bat-mcp.md)), và đã chọn được nơi phát token.
 
-:::danger Chế độ dev không kiểm token
+:::danger[Chế độ dev không kiểm token]
 `MCP_AUTH_ENABLED = False` nghĩa là dịch vụ **không xác thực gì cả** — mọi lời
 gọi chạy dưới tài khoản ghi ở `MCP_DEV_USERNAME`. Nó an toàn ở máy cá nhân chỉ
 vì cổng nghe trên `127.0.0.1`. Mở ra mạng mà giữ cấu hình đó là mở quyền của tài
@@ -82,7 +82,7 @@ quan — tài khoản đó phải **tồn tại** và có đúng quyền cần t
 MCP_REQUIRED_SCOPES = ["superset:read"]
 ```
 
-:::note Scope gác ở tầng token, không phân quyền từng công cụ
+:::note[Scope gác ở tầng token, không phân quyền từng công cụ]
 Biến này **được thực thi thật**: token thiếu scope trong danh sách sẽ bị từ chối
 hoàn toàn, không vào được dịch vụ. Nhưng nó **không** quyết định token đó gọi
 được công cụ nào — việc đó do phân quyền của AnalytiX làm. Đừng dùng

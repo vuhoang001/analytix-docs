@@ -44,7 +44,7 @@ chỗ khác sẽ thiếu tệp.
 
 Bảng đầy đủ: [Biến môi trường](../reference/bien-moi-truong.md).
 
-:::danger Đổi `ANALYTIX_PORT` làm healthcheck báo sai
+:::danger[Đổi `ANALYTIX_PORT` làm healthcheck báo sai]
 Healthcheck trong ảnh **ghim cứng** `http://127.0.0.1:8088/health`. Đổi
 `ANALYTIX_PORT` sang cổng khác thì ứng dụng chạy đúng nhưng Docker báo
 `unhealthy` mãi.

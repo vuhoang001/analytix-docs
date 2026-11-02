@@ -54,7 +54,7 @@ rồi cài wheel của AnalytiX.
 **Tự kiểm tra:** `docker images analytix` thấy ảnh vừa dựng, kích thước
 khoảng **1,6 GB**.
 
-:::note Vì sao nó lớn
+:::note[Vì sao nó lớn]
 Phần lớn là bộ thư viện Python đã ghim phiên bản cộng với giao diện web đã biên
 dịch. Ảnh dựng một stage nên các lớp trung gian vẫn nằm trong đó.
 :::
@@ -79,7 +79,7 @@ docker logs -f analytix
 Lần chạy đầu nó tự làm bốn việc: sinh khoá bí mật, tạo cơ sở dữ liệu metadata,
 tạo tài khoản quản trị, nạp vai trò và quyền.
 
-:::danger Mật khẩu chỉ in MỘT LẦN
+:::danger[Mật khẩu chỉ in MỘT LẦN]
 Trong log sẽ có một dòng dạng:
 
 ```
@@ -135,7 +135,7 @@ Trong AnalytiX: **Settings → Database Connections → + Database**, chọn
 sqlite:////app/analytix/thu.db
 ```
 
-:::caution Bốn dấu gạch chéo
+:::caution[Bốn dấu gạch chéo]
 `sqlite:////` — ba dấu của giao thức cộng một dấu mở đầu đường dẫn tuyệt đối.
 Ba dấu là đường dẫn tương đối và sẽ không tìm thấy tệp.
 :::

@@ -1,6 +1,6 @@
 ---
 title: Bật dịch vụ MCP
-sidebar_position: 10
+sidebar_position: 11
 last_update:
   date: "2026-11-02"
   author: vuhoang001
@@ -15,7 +15,7 @@ quan bằng lời. Dịch vụ chạy như **một tiến trình riêng** — xe
 Dành cho người quản trị. Cần có trước: quyền ghi vào thư mục cài của công cụ
 trực quan, và quyền khởi động tiến trình trên máy đó.
 
-:::warning MCP không phải tính năng được giao sẵn
+:::warning[MCP không phải tính năng được giao sẵn]
 Mã nguồn dịch vụ MCP **có** trong bản cài — nó đi theo nền Superset 6.1.0 mà
 AnalytiX dựa trên. Nhưng **không có gì trong bộ cài bật nó lên**: `install.sh`,
 `Dockerfile` và `entrypoint.sh` đều không cài `fastmcp`, không mở cổng 5008,
@@ -52,7 +52,7 @@ Cả hai đường dẫn phải tồn tại. Thiếu là bản quá cũ.
 <venv>/bin/pip check
 ```
 
-:::note Phải chặn ở bản 4
+:::note[Phải chặn ở bản 4]
 Khai báo của AnalytiX là `fastmcp>=3.1.0,<4.0`. Trên kho gói công khai
 đã có bản 4.x — cài bản 4 là ra ngoài khoảng được hỗ trợ. Bản 3 cao nhất hiện
 là `3.4.11`.
@@ -90,7 +90,7 @@ WEBDRIVER_BASEURL = "<dia-chi-cong-cu-truc-quan>/"
 WEBDRIVER_BASEURL_USER_FRIENDLY = "<dia-chi-cong-cu-truc-quan>/"
 ```
 
-:::danger Thiếu dòng cuối là link không bấm được
+:::danger[Thiếu dòng cuối là link không bấm được]
 AnalytiX gán `WEBDRIVER_BASEURL_USER_FRIENDLY` từ mặc định riêng của nó
 **trước khi** `superset_config.py` chạy, nên đặt `WEBDRIVER_BASEURL` là **không
 đủ**. Thiếu dòng cuối thì mọi link biểu đồ MCP trả về đều trỏ về một địa chỉ mặc

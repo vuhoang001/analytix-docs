@@ -1,6 +1,6 @@
 ---
 title: Ghim báo cáo quan trọng lên menu
-sidebar_position: 7
+sidebar_position: 8
 ---
 
 # Ghim báo cáo quan trọng lên menu

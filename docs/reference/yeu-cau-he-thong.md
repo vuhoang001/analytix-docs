@@ -22,16 +22,42 @@ Những gì máy đích phải có để cài được AnalytiX.
 | Quyền `root` | **không cần** | cần quyền chạy Docker |
 | Đĩa trống | ~2 GB (venv + gói) | ~1,6 GB cho ảnh |
 
-:::danger Bắt buộc có mạng ra PyPI
+:::danger[Bắt buộc có mạng ra PyPI]
 Bản đóng gói mang theo **danh sách** 156 gói đã ghim, **không** mang theo chính
-các gói đó. Máy không ra được PyPI thì cả hai đường cài đều dừng giữa đường.
+các gói đó. Máy không ra được PyPI thì cả hai đường cài trên đều dừng giữa đường.
 
-Môi trường không có mạng thì phải dựng kho gói nội bộ trước — xem
-[Thêm driver cho nguồn dữ liệu](../how-to/them-driver-du-lieu.md), mục cuối.
+Máy đích không có mạng thì dùng bản phát hành thứ ba: **ảnh Docker đã dựng sẵn**,
+khoảng 433 MB, nạp bằng `docker load` và không chạm tới PyPI. Xem [Cài trên máy
+không có internet](../how-to/cai-tren-may-khong-co-mang.md).
 :::
+
+## Bản offline cần gì
+
+| | Ảnh Docker dựng sẵn |
+|:---|:---|
+| Python | **không cần** |
+| Mạng ra PyPI | **không cần** |
+| Mạng ra bất cứ đâu | **không cần** — đã kiểm bằng `docker run --network none`, container vẫn healthy |
+| Docker | có |
+| Kiến trúc CPU | phải khớp máy dựng ảnh (hiện là x86_64) |
+| Đĩa trống | ~433 MB cho tệp + ~1,6 GB sau khi nạp |
 
 Bộ pin được **chứng minh trên 3.10 và 3.12**. 3.11 được bộ cài cho qua nhưng
 không nằm trong mốc đã kiểm.
+
+:::note[Mạng chỉ cần lúc cài, không cần lúc chạy]
+Cài xong thì AnalytiX **không gọi ra ngoài internet**. Giao diện gốc của Superset
+nhúng một pixel đo đạc gửi về `apachesuperset.gateway.scarf.sh` mỗi lần tải
+trang; bản này chặn nó bằng Content-Security-Policy, nên request không rời khỏi
+máy. Kiểm được bằng header:
+
+```bash
+curl -sD - -o /dev/null http://127.0.0.1:8088/login/ | grep -i img-src
+```
+
+Không thấy chữ `scarf` nào là đúng. Console trình duyệt in một dòng vi phạm CSP
+mỗi lần tải trang — đó là dấu hiệu chặn thành công, không phải lỗi.
+:::
 
 ## Không cần
 
@@ -58,7 +84,7 @@ Những thứ ở hai dòng cuối không cần để *cài*, nhưng cần để
 | Shillelagh (`shillelagh://`) | ⚠️ bản rút gọn |
 | PostgreSQL, MySQL, Trino, ClickHouse, SQL Server, Oracle, DuckDB, BigQuery, Snowflake, … | ❌ phải cài driver |
 
-:::danger Chỉ SQLite có sẵn
+:::danger[Chỉ SQLite có sẵn]
 Bộ 156 gói đã ghim **không chứa driver database nào** ngoài SQLite. Đây là điều
 người cài sẽ đụng ngay sau khi đăng nhập lần đầu.
 
