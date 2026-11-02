@@ -1,0 +1,9 @@
+{
+  "label": "Tra cứu",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "slug": "/reference",
+    "description": "Bảng tra cứu — biến môi trường, cấu hình, tham số, mã lỗi."
+  }
+}

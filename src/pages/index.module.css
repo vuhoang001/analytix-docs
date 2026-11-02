@@ -1,0 +1,32 @@
+.heroBanner {
+  padding: 4rem 0 2.5rem;
+  text-align: center;
+}
+
+.categories {
+  padding: 1rem 0 3rem;
+}
+
+.card {
+  display: block;
+  height: 100%;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  text-decoration: none;
+  color: var(--ifm-font-color-base);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.card:hover {
+  border-color: var(--ifm-color-primary);
+  text-decoration: none;
+  color: var(--ifm-font-color-base);
+  transform: translateY(-2px);
+}
+
+.cardIcon {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+}

@@ -1,0 +1,9 @@
+{
+  "label": "Giải thích",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "slug": "/explanation",
+    "description": "Vì sao AnalytiX hoạt động theo cách nó đang hoạt động."
+  }
+}

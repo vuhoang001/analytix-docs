@@ -1,0 +1,84 @@
+# Phát hành site tài liệu AnalytiX qua GitHub Pages.
+#
+# Nội dung Docusaurus nằm ở GỐC repo này. `docusaurus.config.js` tự suy ra
+# url/baseUrl từ biến GITHUB_REPOSITORY, nên không phải ghi cứng địa chỉ.
+#
+# Bước "Kiểm bí mật" là chốt chặn: nó đối chiếu bản build với một danh sách
+# mẫu KHÔNG nằm trong repo, cấp qua GitHub Secret. Thiếu secret thì bước này
+# HỎNG chứ không bỏ qua — không kiểm được thì coi như chưa kiểm.
+#
+#   Settings -> Secrets and variables -> Actions -> New repository secret
+#     Name   SECRET_AUDIT_PATTERNS
+#     Value  dan nguyen noi dung tep SECRET_AUDIT.patterns
+
+name: Phát hành tài liệu
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Một lần phát hành tại một thời điểm; không huỷ bản đang chạy giữa đường.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # Node 22: mermaid 12.2.0 khai báo cần >=22.12.0. Node 20 vẫn build
+          # được nhưng npm cảnh báo EBADENGINE mỗi lần.
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci --no-audit --no-fund
+
+      - run: npm run build
+
+      # Chặn rò rỉ trước khi phát hành. Danh sách mẫu không nằm trong git
+      # (xem SECRET_AUDIT.md) nên phải cấp qua GitHub Secret.
+      #
+      # Cách đặt: Settings → Secrets and variables → Actions → New secret
+      #   Name   SECRET_AUDIT_PATTERNS
+      #   Value  dán nguyên nội dung SECRET_AUDIT.patterns
+      #
+      # Thiếu secret thì bước này HỎNG, không phải bỏ qua. Site công khai mà
+      # không kiểm được là rủi ro lớn hơn hẳn so với một pipeline đỏ.
+      - name: Kiểm bí mật
+        env:
+          MAU: ${{ secrets.SECRET_AUDIT_PATTERNS }}
+        run: |
+          set -eu
+          if [ -z "${MAU:-}" ]; then
+            echo "LOI - chua dat secret SECRET_AUDIT_PATTERNS." >&2
+            echo "Xem huong dan trong file workflow nay va SECRET_AUDIT.md." >&2
+            exit 2
+          fi
+          printf '%s\n' "$MAU" > /tmp/mau.txt
+          SECRET_PATTERNS=/tmp/mau.txt ./kiem-bi-mat.sh
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

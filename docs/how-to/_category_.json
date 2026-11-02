@@ -1,0 +1,9 @@
+{
+  "label": "Cách làm",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "slug": "/how-to",
+    "description": "Công thức cho một việc cụ thể, dành cho người đã cài được AnalytiX."
+  }
+}
