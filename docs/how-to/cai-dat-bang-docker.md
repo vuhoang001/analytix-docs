@@ -18,19 +18,54 @@ trước; trang này là bản tra cứu nhanh và các tình huống lệch kh�
 
 ## Các bước
 
+### 1 · Dựng ảnh từ thư mục bundle
+
 ```bash
 cd analytix-<bản>
 docker build -t analytix:<bản> -f Dockerfile .
-docker run -d --name analytix \
-  -p 8088:8088 \
-  -v analytix-data:/app/analytix \
-  analytix:<bản>
-docker logs analytix | grep password      # mật khẩu chỉ in một lần
 ```
 
 Thư mục bundle **là** build context — `Dockerfile` `COPY` wheel, `requirements/`,
 `superset-core/`, `workspace_x_theme.py` và `entrypoint.sh` từ chính nó. Dựng từ
 chỗ khác sẽ thiếu tệp.
+
+![Kết thúc docker build: naming to analytix:6.1.0 done, DONE. Rồi docker images cho thấy ảnh 1.6GB.](./img/cai-docker/01-dung-anh.png)
+
+### 2 · Chạy container
+
+```bash
+docker run -d --name analytix \
+  -p 8088:8088 \
+  -v analytix-data:/app/analytix \
+  analytix:<bản>
+```
+
+Docker in ra mã container rồi trả lại dấu nhắc ngay — ứng dụng khởi tạo ở phía sau.
+
+![Lệnh docker run trả về một chuỗi hex dài là mã container.](./img/cai-docker/02-chay.png)
+
+### 3 · Lấy mật khẩu từ log
+
+```bash
+docker logs analytix | grep '\[analytix\]'
+```
+
+![Log container: viết cấu hình, config nạp AnalytiX en+vi, migrate, tạo admin, in mật khẩu, phiên bản 6.1.0+foxai.18, serving on 0.0.0.0:8088.](./img/cai-docker/03-log.png)
+
+:::danger[Mật khẩu chỉ in một lần]
+Nó nằm trong log của lần khởi tạo đầu tiên. `docker logs` còn đọc lại được tới
+khi nào container chưa bị xoá — nhưng đừng dựa vào đó, lưu ngay.
+:::
+
+### 4 · Mở `http://127.0.0.1:8088`
+
+![Trang đăng nhập AnalytiX với hai ô Username và Password.](./img/cai-offline/04-dang-nhap.png)
+
+### 5 · Đăng nhập rồi đổi mật khẩu
+
+Tài khoản `admin`. Vào xong: **Settings** → **Info** → **Reset my password**.
+
+![Trang chủ AnalytiX sau khi đăng nhập, chưa có dashboard nào.](./img/cai-offline/05-vao-duoc.png)
 
 ## Biến môi trường
 

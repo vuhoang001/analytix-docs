@@ -8,82 +8,117 @@ last_update:
 
 # Cài trên máy không có internet
 
-Trang này cài AnalytiX lên máy **không ra được internet**: mạng nội bộ kín, phòng
-máy cách ly, hoặc chỉ đơn giản là chỗ không tin được đường ra ngoài. Dùng bản
-phát hành dạng **ảnh Docker đã dựng sẵn** — máy đích không cần Python, không cần
-PyPI, không cần registry nào.
+Máy đích chỉ cần **Docker**. Không Python, không PyPI, không registry.
 
-Đừng dùng cách này khi máy đích có mạng bình thường: [Cài bằng
-Docker](./cai-dat-bang-docker.md) và [Cài trên máy](./cai-dat-tren-may.md) cho
-tệp nhỏ hơn nhiều.
-
-Dành cho người triển khai. Cần có trước: máy đích đã cài Docker và tài khoản bạn
-dùng chạy được `docker`; một thư mục phát hành `analytix-<bản>-offline/` chép
-sang (USB, ổ mạng, bất cứ đường nào).
+Đừng dùng cách này khi máy đích có mạng bình thường — [Cài bằng
+Docker](./cai-dat-bang-docker.md) nhẹ hơn nhiều.
 
 ## Các bước
 
-1. Trên **máy có mạng**, cắt bản phát hành:
+### 1 · Chép thư mục phát hành sang máy đích
 
-   ```bash
-   ship/make_bundle.sh <đường-dẫn-wheel>
-   ship/make_image_release.sh /var/tmp/analytix-ship/analytix-<bản>
-   ```
+Bốn tệp, khoảng 433 MB. Chép qua USB hay ổ mạng, đường nào cũng được.
 
-   Ra `/var/tmp/analytix-ship/analytix-<bản>-offline/`, khoảng **433 MB**.
+![Lệnh ls -lh liệt kê bốn tệp: ảnh Docker 434 MB, chay.sh, README.md, SHA256SUMS.](./img/cai-offline/01-thu-muc.png)
 
-2. Chép nguyên thư mục đó sang máy đích.
+### 2 · Kiểm tệp không hỏng dọc đường
 
-3. Trên **máy đích**, kiểm tệp không hỏng dọc đường:
+```bash
+sha256sum -c SHA256SUMS
+```
 
-   ```bash
-   cd analytix-<bản>-offline
-   sha256sum -c SHA256SUMS
-   ```
+Cả ba dòng phải `OK`. Có dòng `FAILED` thì chép lại — đừng nạp ảnh hỏng.
 
-4. Chạy:
+![Kết quả sha256sum: cả ba tệp đều OK.](./img/cai-offline/02-kiem-tep.png)
 
-   ```bash
-   ./chay.sh
-   ```
+### 3 · Chạy
 
-   Script nạp ảnh, dựng container, chờ sẵn sàng, rồi in địa chỉ và mật khẩu quản
-   trị. Đổi cổng bằng `ANALYTIX_PORT=9000 ./chay.sh`.
+```bash
+./chay.sh
+```
 
-🔴 **Mật khẩu quản trị chỉ in một lần.** Lưu ngay khi thấy.
+Script tự nạp ảnh, dựng container, chờ sẵn sàng, rồi in địa chỉ và mật khẩu.
+
+![Output chay.sh: nạp ảnh, tạo container, in địa chỉ http://127.0.0.1:9000, tài khoản admin và mật khẩu.](./img/cai-offline/03-chay.png)
+
+:::danger[Mật khẩu chỉ in một lần]
+Nó không được ghi vào tệp nào. Lưu ngay khi thấy.
+:::
+
+Đổi cổng: `ANALYTIX_PORT=9000 ./chay.sh`
+
+### 4 · Mở địa chỉ script in ra
+
+![Trang đăng nhập AnalytiX với hai ô Username và Password.](./img/cai-offline/04-dang-nhap.png)
+
+### 5 · Đăng nhập
+
+Tài khoản `admin`, mật khẩu ở Bước 3.
+
+![Trang chủ AnalytiX sau khi đăng nhập, chưa có dashboard nào.](./img/cai-offline/05-vao-duoc.png)
+
+### 6 · Mở trang tài khoản
+
+Menu **Settings** trên thanh trên → **Info**.
+
+![Trang Your user information, cuối trang có nút Reset my password.](./img/cai-offline/06-trang-tai-khoan.png)
+
+### 7 · Đổi mật khẩu
+
+Bấm **Reset my password**, gõ mật khẩu mới hai lần, bấm **Save**.
+
+![Form Reset Password với ô Password và Confirm Password.](./img/cai-offline/07-doi-mat-khau.png)
+
+:::caution[Phải vào từ nút, không gõ thẳng URL]
+Gõ `/resetmypassword/form` vào thanh địa chỉ sẽ ra `Access is Denied`. Đi qua
+nút ở Bước 6 thì được.
+:::
 
 ## Kiểm tra là đã đúng
 
-Mở địa chỉ script in ra và đăng nhập được là xong. Muốn chắc là nó thật sự không
-cần mạng, chạy thử một container cắt hẳn đường ra:
+Đăng nhập lại bằng **mật khẩu mới**. Vào được là xong.
+
+Muốn chắc nó thật sự không cần mạng:
 
 ```bash
-docker run -d --network none --name thu-cach-ly analytix:<bản-với-dấu-gạch>
+docker run -d --network none --name thu-cach-ly analytix:6.1.0-foxai.18
 sleep 60
 docker exec thu-cach-ly curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:8088/health
+docker rm -f thu-cach-ly
 ```
 
-Phải ra `200`. Dọn: `docker rm -f thu-cach-ly`.
-
-:::note[Tên tag không có dấu `+`]
-Docker không nhận dấu `+` trong tag, nên `6.1.0+foxai.18` thành
-`analytix:6.1.0-foxai.18`. `chay.sh` tự biết, chỉ khi gõ tay mới phải để ý.
-:::
+Phải ra `200`.
 
 ## Lỗi hay gặp
 
+### Cổng đã có thứ khác dùng
+
+Script dừng và chỉ đúng tiến trình đang giữ cổng:
+
+![Output chay.sh báo cổng 8088 đang có thứ khác dùng, kèm dòng ss chỉ tiến trình, và gợi ý đặt ANALYTIX_PORT.](./img/cai-offline/09-loi-cong.png)
+
+Chạy lại với cổng khác: `ANALYTIX_PORT=9000 ./chay.sh`
+
+### Các lỗi khác
+
 | Hiện tượng | Nguyên nhân | Cách sửa |
 |---|---|---|
-| `khong goi duoc Docker daemon` | Docker chưa chạy, hoặc tài khoản không thuộc nhóm `docker` | `sudo systemctl start docker`, rồi `sudo usermod -aG docker $USER` và đăng nhập lại |
-| `thieu analytix-<bản>-image.tar.gz canh script nay` | Chép thiếu tệp, hoặc chạy `chay.sh` từ thư mục khác | Chép nguyên thư mục, `cd` vào đó rồi mới chạy |
-| `sha256sum -c` báo `FAILED` | Tệp hỏng lúc chép | Chép lại. Đừng nạp ảnh hỏng — nó sẽ chết ở chỗ khó đoán |
-| `exec format error` khi nạp | Ảnh dựng cho kiến trúc CPU khác | Ảnh đã lưu gắn với kiến trúc nó được dựng. Dựng lại trên máy cùng kiến trúc với máy đích |
-| `qua 3 phut van chua san sang` | Máy yếu, lần khởi tạo đầu chạy migration lâu | `docker logs analytix` xem đang ở đâu; chạy lại `./chay.sh` |
-| Mật khẩu không in ra | Tài khoản đã tạo từ lần chạy trước | Mật khẩu cũ vẫn dùng được. Mất thì xoá volume và làm lại: `docker rm -f analytix && docker volume rm analytix-data` |
-| Cài xong chỉ thấy SQLite | Ảnh không mang driver nào khác | Máy không có mạng thì không cài thêm được. Phải dựng ảnh khác từ máy có mạng — xem [Thêm driver cho nguồn dữ liệu](./them-driver-du-lieu.md) |
+| `khong tim thay docker` | Chưa cài Docker | Cài Docker trước |
+| `khong goi duoc Docker daemon` | Docker chưa chạy, hoặc tài khoản ngoài nhóm `docker` | `sudo systemctl start docker`, rồi `sudo usermod -aG docker $USER` và đăng nhập lại |
+| `thieu ...-image.tar.gz canh script nay` | Chép thiếu tệp, hoặc chạy từ thư mục khác | Chép nguyên thư mục, `cd` vào đó rồi chạy |
+| `sha256sum -c` báo `FAILED` | Tệp hỏng lúc chép | Chép lại |
+| `exec format error` | Ảnh dựng cho kiến trúc CPU khác | Dựng lại trên máy cùng kiến trúc với máy đích |
+| `container ... dang gan cong X, khong phai Y` | Ánh xạ cổng đóng cứng lúc tạo container | `docker rm -f analytix` rồi chạy lại với cổng mới. Dữ liệu nằm trong volume nên không mất |
+| Mật khẩu không in ra | Tài khoản đã tạo từ lần chạy trước | Mật khẩu cũ vẫn dùng được. Mất thì `docker rm -f analytix && docker volume rm analytix-data` rồi làm lại |
+| Chỉ thấy SQLite | Ảnh không mang driver nào khác | Máy không có mạng thì không cài thêm được — xem [Thêm driver](./them-driver-du-lieu.md) |
+
+:::note[Trang quản trị chưa mang thương hiệu]
+Các trang ở Bước 6 và 7 vẫn hiện logo và chữ *Superset*. Đó là giao diện quản
+trị kế thừa, bộ vá thương hiệu chưa phủ tới. Chức năng không ảnh hưởng.
+:::
 
 ## Liên quan
 
-- [Đóng gói bản phát hành](./dong-goi-ban-phat-hanh.md) — bước cắt bundle đứng trước bước này
+- [Đóng gói bản phát hành](./dong-goi-ban-phat-hanh.md) — bước cắt bundle đứng trước
 - [Yêu cầu hệ thống](../reference/yeu-cau-he-thong.md) — cái gì cần mạng, cái gì không
 - [Cài bằng Docker](./cai-dat-bang-docker.md) — khi máy đích có mạng

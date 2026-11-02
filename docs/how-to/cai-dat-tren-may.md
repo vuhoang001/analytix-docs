@@ -21,22 +21,66 @@ Không cần `sudo`: mọi thứ nằm trong thư mục của bạn.
 
 ## Các bước
 
+### 1 · Giải nén bản đóng gói
+
 ```bash
+tar xzf analytix-<bản>.tar.gz
 cd analytix-<bản>
+```
+
+Tám mục. Thiếu mục nào thì bộ cài dừng ngay ở bước sau và nói thiếu gì.
+
+![Giải nén tarball rồi ls -lh, thấy tám mục: wheel, Dockerfile, entrypoint.sh, install.sh, README.md, requirements, superset-core, workspace_x_theme.py.](./img/cai-may/01-giai-nen.png)
+
+### 2 · Chạy bộ cài
+
+```bash
 ./install.sh
 ```
 
-Chỉ vậy. Bộ cài tự làm năm việc: kiểm bản đóng gói đủ chưa, dựng venv và cài
-theo đúng thứ tự, viết cấu hình, tạo database và tài khoản quản trị, rồi viết
-một script khởi động.
+Bộ cài tự làm năm việc: kiểm bản đóng gói, dựng venv và cài **đúng thứ tự**,
+viết cấu hình, tạo database và tài khoản quản trị, rồi viết script khởi động.
 
-Chạy xong:
+![Output install.sh: bundle OK, python 3.12, dựng venv, cài bộ pin, cachelib khớp pin, config nạp AnalytiX en+vi, tạo admin, và in mật khẩu.](./img/cai-may/02-cai.png)
+
+Ba dòng đáng nhìn: `cachelib ... matches the pin` chứng minh thứ tự cài đúng,
+`config loads: AnalytiX ['en', 'vi']` chứng minh theme nạp được, và dòng mật
+khẩu màu vàng ở cuối.
+
+### 3 · Khởi động
 
 ```bash
 ~/analytix/start.sh
 ```
 
-Mở `http://127.0.0.1:8088`.
+![Output start.sh: nạp cấu hình, Running on http://127.0.0.1:9100.](./img/cai-may/03-khoi-dong.png)
+
+### 4 · Mở địa chỉ nó in ra
+
+![Trang đăng nhập AnalytiX với hai ô Username và Password.](./img/cai-offline/04-dang-nhap.png)
+
+### 5 · Đăng nhập
+
+Tài khoản `admin`, mật khẩu ở Bước 2.
+
+![Trang chủ AnalytiX sau khi đăng nhập, chưa có dashboard nào.](./img/cai-offline/05-vao-duoc.png)
+
+### 6 · Đổi mật khẩu
+
+Menu **Settings** → **Info** → nút **Reset my password**.
+
+![Trang Your user information, cuối trang có nút Reset my password.](./img/cai-offline/06-trang-tai-khoan.png)
+
+![Form Reset Password với ô Password và Confirm Password.](./img/cai-offline/07-doi-mat-khau.png)
+
+:::caution[Phải vào từ nút, không gõ thẳng URL]
+Gõ `/resetmypassword/form` vào thanh địa chỉ sẽ ra `Access is Denied`.
+:::
+
+:::note[Hai trang trên chưa mang thương hiệu]
+Chúng vẫn hiện logo và chữ *Superset* — giao diện quản trị kế thừa, bộ vá thương
+hiệu chưa phủ tới. Chức năng không ảnh hưởng.
+:::
 
 ## Chọn chỗ cài và tài khoản
 
