@@ -35,6 +35,27 @@ gợi ý trong bài chỉ là ví dụ — diễn đạt cách khác vẫn ra đ
 chính xác là **các con số ở bảng trên**.
 :::
 
+## Một câu nói đi qua những đâu
+
+```mermaid
+sequenceDiagram
+    participant B as Bạn
+    participant AI as Trợ lý AI
+    participant M as Dịch vụ MCP
+    participant A as AnalytiX
+
+    B->>AI: "vẽ doanh thu theo tháng"
+    AI->>M: gọi công cụ generate_chart
+    M->>A: POST /api/v1/chart/<br/><i>dưới tài khoản thật</i>
+    A-->>M: biểu đồ đã lưu, có id
+    M-->>AI: id + đường dẫn
+    AI-->>B: "đã tạo, xem ở đây"
+    Note over A: Biểu đồ nằm trong AnalytiX<br/>sửa tiếp bằng tay như mọi biểu đồ khác
+```
+
+Trợ lý **không** vẽ gì cả. Nó chỉ gọi đúng API mà bạn bấm nút sẽ gọi — nên kết
+quả là một biểu đồ thật, không phải một bức ảnh.
+
 ## Bước 1 — Hỏi xem có dữ liệu gì
 
 > Trong AnalytiX đang có những dataset nào?

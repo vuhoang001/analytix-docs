@@ -51,10 +51,11 @@ Xong bài, bạn có một dashboard như thế này — bốn biểu đồ và 
 
 Và bốn lớp của AnalytiX, mỗi lớp một phần của bài:
 
-```
-DATABASE  ──>  DATASET  ──>  CHART  ──>  DASHBOARD
-kết nối        lấy từ đâu     vẽ gì      xếp lên trang
-một lần        dùng lại       nhiều cái  cho người đọc lọc
+```mermaid
+flowchart LR
+    A["DATABASE<br/>kết nối<br/><i>một lần</i>"] --> B["DATASET<br/>lấy từ đâu<br/><i>dùng lại</i>"]
+    B --> C["CHART<br/>vẽ gì<br/><i>nhiều cái</i>"]
+    C --> D["DASHBOARD<br/>xếp lên trang<br/><i>cho người đọc lọc</i>"]
 ```
 
 ## Phần 1 · Database

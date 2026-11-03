@@ -31,6 +31,27 @@ thành phần là một thứ phải cấu hình và phải trông.
 Bộ cài chọn mục tiêu thứ nhất. Đó là lựa chọn đúng cho việc *giao sản phẩm*, và
 là lý do bạn phải tự làm phần còn lại.
 
+## Bộ cài dựng gì, và thiếu gì
+
+```mermaid
+flowchart LR
+    subgraph CO["Bộ cài dựng sẵn"]
+        W["Flask dev server<br/>HTTP, một tiến trình"]
+        M["SQLite<br/>làm metadata"]
+    end
+    subgraph THIEU["Dùng thật còn cần"]
+        N["nginx + HTTPS"]
+        G["Gunicorn nhiều worker"]
+        C["Redis làm bộ đệm"]
+        Q["Celery chạy việc nền"]
+        P["PostgreSQL<br/>làm metadata"]
+        U["Chạy dưới user thường<br/>không phải root"]
+    end
+    CO -.->|"đủ cho một người thử"| THIEU
+    style CO fill:#dcfce7,stroke:#16a34a
+    style THIEU fill:#fef2f2,stroke:#dc2626
+```
+
 ## Sáu chỗ cụ thể
 
 ### 1. Web server là bản dành cho phát triển

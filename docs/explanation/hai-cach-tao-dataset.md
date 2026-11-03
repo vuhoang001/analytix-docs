@@ -24,10 +24,12 @@ sai chỗ thì sáu tháng sau không ai tìm ra nó.
 AnalytiX không bắt chọn một đường. Nó cho cả hai, và để bạn quyết theo tuổi thọ
 của logic.
 
-```
-SQL Lab  ──┐
-           ├──> DATASET ──> CHART ──> DASHBOARD
-+ Dataset ─┘
+```mermaid
+flowchart LR
+    SQL["SQL Lab<br/><i>lưu câu truy vấn</i>"] --> DS
+    ADD["+ Dataset<br/><i>trỏ thẳng vào bảng/view</i>"] --> DS
+    DS["DATASET"] --> CH["CHART"] --> DA["DASHBOARD"]
+    style DS fill:#dbeafe,stroke:#2563eb
 ```
 
 Biểu đồ **chỉ** đọc được dataset. SQL Lab không phải cửa thứ hai vào dữ liệu — nó là chỗ thử

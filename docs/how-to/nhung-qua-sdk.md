@@ -13,14 +13,12 @@ cách này. Lý do kỹ thuật đứng sau cách làm này được giải thí
 
 Có ba việc, ba bên khác nhau làm:
 
-```
-[1] Đăng ký nhúng   ──>  UUID
-        (phía quản trị AnalytiX, một lần cho mỗi dashboard)
-
-[2] Backend của bạn ──>  vé khách có hạn
-        (giữ tài khoản cấp vé; đặt luật phân quyền ở đây)
-
-[3] Frontend + SDK  ──>  SDK tự dựng iframe và gửi vé vào
+```mermaid
+flowchart TD
+    S1["<b>1 · Đăng ký nhúng</b><br/>phía quản trị AnalytiX<br/><i>một lần cho mỗi dashboard</i>"] -->|"UUID"| S2
+    S2["<b>2 · Backend của bạn</b><br/>giữ tài khoản cấp vé<br/><i>đặt luật phân quyền ở đây</i>"] -->|"vé khách có hạn"| S3
+    S3["<b>3 · Frontend + SDK</b><br/>SDK tự dựng iframe<br/>và gửi vé vào"]
+    style S2 fill:#fef3c7,stroke:#d97706
 ```
 
 ## [1] Đăng ký nhúng, lấy UUID

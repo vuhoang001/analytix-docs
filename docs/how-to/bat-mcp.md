@@ -29,6 +29,23 @@ nguồn `mcp_service/` không tồn tại trước 6.1.0. Bước 1 kiểm đi�
 thay vì tin tài liệu.
 :::
 
+## Sau khi bật, hệ thống trông thế này
+
+```mermaid
+flowchart LR
+    AI["Trợ lý AI<br/><i>Claude, IDE…</i>"] -->|"giao thức MCP"| MCP
+    subgraph MAY["Cùng một máy"]
+        MCP["Dịch vụ MCP<br/>cổng 5008<br/><i>tiến trình riêng</i>"]
+        AX["AnalytiX<br/>cổng 8088"]
+    end
+    MCP -->|"gọi API của AnalytiX<br/>dưới một tài khoản thật"| AX
+    AX --> DB[("Nguồn dữ liệu")]
+    style MCP fill:#dbeafe,stroke:#2563eb
+```
+
+MCP **không** đi vòng qua phân quyền: nó gọi đúng API mà giao diện web gọi,
+dưới một tài khoản có vai trò cụ thể. Tài khoản đó thấy gì thì trợ lý thấy nấy.
+
 ## Các bước
 
 ### 1. Kiểm bản đang chạy và mã nguồn MCP

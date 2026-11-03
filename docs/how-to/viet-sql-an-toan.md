@@ -14,6 +14,22 @@ không ô trống sẽ âm thầm biến thành số `0`.
 Ví dụ dưới đây dùng bảng `doanh_thu` (cột `so_luong`, `doanh_thu`,
 `chiet_khau`, `so_don` đều là số nhưng lưu dưới dạng chữ).
 
+## Đường đi của một ô dữ liệu dạng chữ
+
+```mermaid
+flowchart TD
+    I["Ô dạng chữ<br/>'28.514' · '' · 'N/A' · '0'"] --> N{"NULLIF<br/>bỏ chuỗi rỗng"}
+    N -->|"chuỗi rỗng"| NULL["NULL<br/><i>chưa có số liệu</i>"]
+    N -->|"còn lại"| T{"TRY_CAST<br/>sang số"}
+    T -->|"không đổi được"| NULL
+    T -->|"đổi được"| NUM["Số<br/><i>0 thật vẫn là 0</i>"]
+    style NULL fill:#fef3c7,stroke:#d97706
+    style NUM fill:#dcfce7,stroke:#16a34a
+```
+
+Bỏ `NULLIF`, chuỗi rỗng thành `0` — và "chưa có số liệu" bị đếm lẫn vào
+"bằng 0 thật".
+
 ## Quy tắc: luôn `NULLIF` trước khi `TRY_CAST`
 
 ```sql

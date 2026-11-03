@@ -32,6 +32,27 @@ khoản đó cho bất kỳ ai gọi tới được.
 Chưa có hệ thống định danh thì chọn **HS256**. Nó đủ an toàn khi khoá được giữ
 kín, và không thêm thành phần nào phải vận hành.
 
+## Hai chế độ xác thực
+
+```mermaid
+flowchart TB
+    subgraph DEV["Chế độ dev — mặc định"]
+        D1["Trợ lý AI"] -->|"không kèm token"| D2["MCP nghe 127.0.0.1"]
+        D2 --> D3["Luôn chạy dưới<br/>MCP_DEV_USERNAME"]
+    end
+    subgraph JWT["Chế độ JWT — khi mở ra ngoài localhost"]
+        J1["Trợ lý AI"] -->|"Authorization: Bearer …"| J2{"MCP kiểm chữ ký<br/>MCP_JWT_SECRET<br/>hoặc MCP_JWKS_URI"}
+        J2 -->|"hợp lệ"| J3["Chạy dưới đúng<br/>người dùng trong token"]
+        J2 -->|"sai / hết hạn"| J4["401"]
+    end
+    style DEV fill:#fef2f2,stroke:#dc2626
+    style JWT fill:#dcfce7,stroke:#16a34a
+```
+
+Biên bảo mật của chế độ dev **chỉ là việc nó nghe trên `127.0.0.1`**. Mở ra
+ngoài mà chưa đổi sang JWT nghĩa là ai gọi tới cổng đó cũng thành
+`MCP_DEV_USERNAME`.
+
 ## Các bước
 
 ### 1. Sinh khoá
