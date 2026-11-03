@@ -100,8 +100,12 @@ run` ở trên — nhưng khi đó nó nằm trong lịch sử shell của bạn
 
 Mở `http://127.0.0.1:8088`, đăng nhập bằng `admin` và mật khẩu ở bước 3.
 
+![Trang đăng nhập AnalytiX với hai ô Username và Password.](../how-to/img/cai-offline/04-dang-nhap.png)
+
 **Tự kiểm tra:** góc trên trái là logo và chữ **AnalytiX** — không phải
-"Superset". Nếu thấy "Superset" thì theme chưa được nạp.
+"Superset".
+
+![Trang chủ AnalytiX sau khi đăng nhập, logo AnalytiX ở góc trên trái.](../how-to/img/cai-offline/05-vao-duoc.png)
 
 ## Bước 5 — Tạo một tệp dữ liệu để thử
 
@@ -124,7 +128,7 @@ print('so dong:', c.execute('select count(*) from ban_hang').fetchone()[0])
 PY
 ```
 
-**Tự kiểm tra:** in ra `so dong: 6`.
+![Chạy script python trong container, in ra so dong: 6.](./img/cai-dat/05-tao-du-lieu.png)
 
 ## Bước 6 — Khai báo kết nối dữ liệu
 
@@ -140,16 +144,19 @@ sqlite:////app/analytix/thu.db
 Ba dấu là đường dẫn tương đối và sẽ không tìm thấy tệp.
 :::
 
+![Hộp Connect a database bước 2: Display Name "Dữ liệu thử", SQLAlchemy URI sqlite:////app/analytix/thu.db, nút Test connection, nút Connect đã sáng.](./img/cai-dat/06-ket-noi.png)
+
 Bật **Expose in SQL Lab**, và **để nguyên** *Allow DML* ở trạng thái tắt.
 
-**Tự kiểm tra:** bấm **Test Connection** ra thông báo thành công.
+**Tự kiểm tra:** bấm **Test connection** — không ra lỗi đỏ, và nút **Connect**
+chuyển sang xanh.
 
 ## Bước 7 — Tạo dataset
 
 **Datasets → + Dataset**, chọn kết nối vừa tạo, schema `main`, bảng
-`ban_hang`. Lưu.
+`ban_hang`. Bấm **Create and explore dataset**.
 
-**Tự kiểm tra:** dataset hiện trong danh sách với 3 cột.
+![Màn New dataset: Database "Dữ liệu thử", Schema main, danh sách Table hiện ban_hang.](./img/cai-dat/07-dataset.png)
 
 ## Bước 8 — Dựng biểu đồ
 
@@ -161,8 +168,10 @@ Bật **Expose in SQL Lab**, và **để nguyên** *Allow DML* ở trạng thái
 
 Bấm **Create chart**, rồi **Save** với tên "Doanh thu theo tháng".
 
-**Tự kiểm tra:** 3 cột tháng, mỗi cột tách hai màu theo khu vực. Tổng tháng 3 là
-**305** (175 + 130), và tháng 3 cao nhất.
+![Biểu đồ cột ba tháng, mỗi cột tách hai màu Bắc và Nam, tháng 2026-03 cao nhất.](./img/cai-dat/08-bieu-do.png)
+
+**Tự kiểm tra:** 3 cột tháng, mỗi cột tách hai màu theo khu vực. Tháng 3 cao
+nhất, tổng **305** (175 + 130).
 
 ## Tự kiểm — bảng tổng hợp
 

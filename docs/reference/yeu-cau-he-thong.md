@@ -80,7 +80,7 @@ Những thứ ở hai dòng cuối không cần để *cài*, nhưng cần để
 
 | Nguồn | Trạng thái |
 |:---|:---|
-| SQLite (tệp `.db`) | ✅ dùng được ngay |
+| SQLite (tệp `.db`) | ✅ dùng được ngay — nhờ bản này tắt một chốt, xem Ghi chú |
 | Shillelagh (`shillelagh://`) | ⚠️ bản rút gọn |
 | PostgreSQL, MySQL, Trino, ClickHouse, SQL Server, Oracle, DuckDB, BigQuery, Snowflake, … | ❌ phải cài driver |
 
@@ -89,6 +89,22 @@ Bộ 156 gói đã ghim **không chứa driver database nào** ngoài SQLite. Đ
 người cài sẽ đụng ngay sau khi đăng nhập lần đầu.
 
 [Thêm driver cho nguồn dữ liệu](../how-to/them-driver-du-lieu.md)
+:::
+
+:::caution[Vì sao SQLite dùng được: một chốt đã bị tắt]
+Superset gốc đặt `PREVENT_UNSAFE_DB_CONNECTIONS = True`, nên một URI `sqlite://`
+bị từ chối với *"cannot be used as a data source for security reasons"*.
+
+Bản này tắt nó trong `theme/workspace_x_theme.py`. Không tắt thì sản phẩm **không
+nối được nguồn nào**: không driver nào khác, mà SQLite thì bị chặn.
+
+**Chốt đó chặn cái gì:** URI SQLite là một đường dẫn trên đĩa máy chủ, nên người
+tạo được kết nối database có thể trỏ SQL Lab vào bất kỳ tệp nào tiến trình đọc
+được. Tạo kết nối là quyền quản trị, nên phạm vi là *một quản trị viên đọc tệp
+dưới tài khoản chạy AnalytiX* — không phải người đọc ẩn danh.
+
+**Cài driver thật xong thì bật lại:** xoá dòng đó khỏi theme, khi SQLite không
+còn là đường vào duy nhất.
 :::
 
 ## Cổng
