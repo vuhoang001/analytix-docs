@@ -25,6 +25,8 @@ chỉ việc vẽ ra.**
 1. **Viết SQL dựng HTML.** Trong SQL Lab, viết một câu truy vấn trả về đúng
    một dòng, một cột — cột đó là một chuỗi HTML đã dựng sẵn (ví dụ một dải
    `<div>` có class và style cho từng ô số liệu).
+![SQL Lab chạy câu truy vấn dựng HTML, vùng Results hiện ra hai thẻ KPI Tổng doanh thu 748 và Số tháng 3.](./img/html-sql/01-sql.png)
+
 2. **Lưu thành dataset.** Dùng đúng nút lưu dataset (không nhầm với nút lưu
    câu truy vấn — hai nút khác nhau, nhầm nút là lỗi hay gặp nhất ở bước
    này).
@@ -34,7 +36,13 @@ chỉ việc vẽ ra.**
 4. **Bật hiển thị HTML.** Ở tab Customize, tích ô **Render columns in HTML
    format**, bấm cập nhật rồi lưu. Thiếu bước này, ô sẽ hiện nguyên văn thẻ
    HTML thay vì bản vẽ đẹp.
+![Tab Customize của biểu đồ Table, ô Render columns in HTML format đã tích.](./img/html-sql/03-bat-html.png)
+
 5. **Xếp vào dashboard.** Kéo biểu đồ vào trang dashboard như bình thường.
+
+Kết quả: Table ở chế độ Raw records, một cột `the_kpi`, vẽ ra dải thẻ.
+
+![Màn Explore: Query mode Raw records, cột the_kpi, bên phải là dải KPI đã render.](./img/html-sql/02-ket-qua.png)
 
 ## Chiều cao khối — đặt đúng số ngay từ đầu
 

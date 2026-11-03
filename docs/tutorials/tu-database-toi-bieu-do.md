@@ -473,6 +473,5 @@ không phải lỗi.
 
 - [Thêm driver cho nguồn dữ liệu](../how-to/them-driver-du-lieu.md) — nối vào MySQL, Trino, hay nguồn khác
 - [Viết SQL an toàn](../how-to/viet-sql-an-toan.md) — trước khi mở SQL Lab cho người khác
-- [Ghim báo cáo](../how-to/ghim-bao-cao.md) — để dashboard này thành thứ người ta mở mỗi sáng
 - [Nhúng iframe đơn giản](../how-to/nhung-iframe-don-gian.md) — đưa dashboard sang hệ thống khác
 - [Hai cách tạo dataset](../explanation/hai-cach-tao-dataset.md) — vì sao bài này dẫn bạn đi cả hai đường

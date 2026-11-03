@@ -80,6 +80,8 @@ docker restart analytix
 
 và nhớ rằng nó chỉ sống tới lần dựng ảnh kế tiếp.
 
+![pip install psycopg2-binary trong container: tải wheel, Successfully installed psycopg2-binary-2.9.13.](./img/driver/01-cai.png)
+
 ### 3. Khởi động lại
 
 Driver chỉ được nạp lúc tiến trình khởi động.
@@ -102,6 +104,12 @@ trọng nếu bạn bật [dịch vụ MCP](./bat-mcp.md).
 :::
 
 ## Kiểm tra là đã đúng
+
+![Import psycopg2 in ra phiên bản, và SQLAlchemy nhận dialect postgresql.](./img/driver/02-kiem.png)
+
+Và trong giao diện, loại database mới xuất hiện ở bước chọn:
+
+![Hộp Connect a database bước 1: giờ có hai ô PostgreSQL và SQLite.](./img/driver/03-co-postgres.png)
 
 ```bash
 # cài trên máy

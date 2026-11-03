@@ -29,6 +29,8 @@ Thư mục đích mặc định `/var/tmp/analytix-ship`. Kết quả:
 <đích>/analytix-<bản>.tar.gz    bản nén, khoảng 105 MB
 ```
 
+![Output make_bundle.sh: payload lấy từ ship/vendor, đóng gói xong, tarball 105M, liệt kê 8 mục.](./img/dong-goi/01-bundle.png)
+
 ## Bản đóng gói chứa gì
 
 | Trong bundle | Lấy từ |

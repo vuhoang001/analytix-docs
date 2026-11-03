@@ -112,7 +112,7 @@ const config = {
       navbar: {
         title: 'AnalytiX',
         logo: {
-          alt: 'CoreX Logo',
+          alt: 'AnalytiX Logo',
           src: 'img/logo.svg',
         },
         items: [

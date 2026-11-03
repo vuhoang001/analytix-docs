@@ -1,6 +1,6 @@
 ---
 title: Đổi xác thực MCP sang JWT
-sidebar_position: 12
+sidebar_position: 11
 last_update:
   date: "2026-11-02"
   author: vuhoang001

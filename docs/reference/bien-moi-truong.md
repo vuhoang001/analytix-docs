@@ -25,6 +25,7 @@ Cột cho biết biến có tác dụng ở đường nào — đây là chỗ h
 | `ANALYTIX_PORT` | `8088` | ✅ | ✅ | ✅ |
 | `ANALYTIX_BIND` | `127.0.0.1` | — | ✅ | — |
 | `ANALYTIX_SECRET_KEY` | *sinh ngẫu nhiên lần chạy đầu* | — | — | ✅ |
+| `ANALYTIX_FRAME_ANCESTORS` | *không đặt* — mọi origin khác bị chặn nhúng | — | ✅ | ✅ |
 | `PYTHON` | `python3` | ✅ | — | — |
 
 :::caution[Ba chỗ hay nhầm]
@@ -110,6 +111,26 @@ ANALYTIX_BIND=0.0.0.0 ~/analytix/start.sh
 
 Container luôn nghe `0.0.0.0` bên trong — đó là điều kiện để `-p` hoạt động, và
 biên bảo mật là ranh giới container.
+
+### `ANALYTIX_FRAME_ANCESTORS`
+
+Danh sách origin được phép nhúng AnalytiX vào `iframe`, cách nhau bằng dấu cách.
+Không đặt thì AnalytiX gửi `X-Frame-Options: SAMEORIGIN` và không trang khác
+origin nào nhúng được.
+
+```bash
+ANALYTIX_FRAME_ANCESTORS="https://cong-thong-tin.noi-bo https://intranet.vi-du"
+```
+
+Đặt rồi thì `X-Frame-Options` bị bỏ và CSP mang
+`frame-ancestors 'self' <các origin bạn khai>`.
+
+:::danger[Đừng khai `*`]
+Cho bất kỳ trang nào nhúng AnalytiX vào khung ẩn là mở đường clickjacking.
+Liệt kê đúng origin bạn kiểm soát.
+:::
+
+Xem [Nhúng dashboard bằng iframe đơn giản](../how-to/nhung-iframe-don-gian.md).
 
 ### `ANALYTIX_SECRET_KEY`
 

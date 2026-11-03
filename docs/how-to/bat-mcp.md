@@ -1,6 +1,6 @@
 ---
 title: Bật dịch vụ MCP
-sidebar_position: 11
+sidebar_position: 10
 last_update:
   date: "2026-11-02"
   author: vuhoang001

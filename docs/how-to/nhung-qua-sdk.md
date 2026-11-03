@@ -1,6 +1,6 @@
 ---
 title: Nhúng dashboard qua SDK cho đối tác ngoài
-sidebar_position: 10
+sidebar_position: 9
 ---
 
 # Nhúng dashboard qua SDK cho đối tác ngoài
