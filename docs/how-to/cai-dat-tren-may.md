@@ -10,19 +10,38 @@ last_update:
 
 Cài AnalytiX vào một môi trường ảo Python trên chính máy đó, không qua Docker.
 
-Dành cho người quản trị. Cần có trước:
+Dành cho người quản trị. Thứ duy nhất bạn cần chuẩn bị là **bản đóng gói đã
+giải nén** — không phải cài sẵn gì trên máy.
 
-- **Python 3.10, 3.11 hoặc 3.12** — bộ cài từ chối mọi bản khác
-- Khả năng tạo venv (`python3-venv` trên Debian/Ubuntu)
-- **Mạng ra được PyPI** — bản đóng gói mang theo *danh sách* 156 gói đã ghim, không mang theo chính các gói đó
-- Bản đóng gói `analytix-<bản>` đã giải nén
+Có hai kiểu bản đóng gói, và chúng đòi hỏi khác hẳn nhau:
 
-Không cần `sudo`: mọi thứ nằm trong thư mục của bạn.
+| Bản | Nặng | Máy đích cần gì |
+|:---|:---|:---|
+| **Đầy đủ** `analytix-<bản>-day-du` | ~274 MB | **Không cần gì.** Mang sẵn Python 3.12.16 và cả 158 gói đã ghim |
+| Thường `analytix-<bản>` | ~105 MB | Python 3.10/3.11/3.12, gói `python3-venv`, và mạng ra PyPI |
+
+Bản đầy đủ cài được trên máy **chưa có Python và không có mạng**: giải nén rồi
+chạy, hết. Nó chở theo cây Python của riêng nó nên cũng không đụng tới Python
+của hệ điều hành, và không cần gói `python3-venv` mà Debian/Ubuntu tách riêng.
+
+Không cần `sudo` ở cả hai bản: mọi thứ nằm trong thư mục của bạn.
 
 Chưa có bản đóng gói thì dựng nó trước — [Đóng gói bản phát
-hành](./dong-goi-ban-phat-hanh.md). `bo-cai/dong-goi.sh` để kết quả ở
-`/var/tmp/analytix-ban-phat-hanh/`: thư mục `analytix-<bản>/` và bản nén
-`analytix-<bản>.tar.gz` (khoảng 105 MB) của chính thư mục đó.
+hành](./dong-goi-ban-phat-hanh.md):
+
+```bash
+bo-cai/dong-goi.sh --day-du <đường-dẫn-tới-wheel>   # bản đầy đủ
+bo-cai/dong-goi.sh          <đường-dẫn-tới-wheel>   # bản thường
+```
+
+Kết quả nằm ở `/var/tmp/analytix-ban-phat-hanh/`: một thư mục và một bản nén
+`.tar.gz` của chính thư mục đó.
+
+:::warning[Bản đầy đủ khoá vào một kiến trúc CPU]
+Cây Python đi kèm được dựng cho kiến trúc của máy đóng gói. Đóng gói trên
+`x86_64` thì chỉ cài được lên `x86_64`. Máy đích khác kiến trúc thì phải đóng
+gói lại trên đúng kiến trúc đó.
+:::
 
 :::tip[Chỉ muốn nó chạy thì có đường ngắn hơn]
 `./cai.sh --may` làm đúng mọi bước trang này mô tả, trong một lệnh, rồi khởi
@@ -41,16 +60,17 @@ tar xzf analytix-<bản>.tar.gz
 cd analytix-<bản>
 ```
 
-Mười một mục. Thiếu mục nào thì bộ cài dừng ngay ở bước sau và nói thiếu gì.
+Bản đầy đủ có **mười ba** mục; bản thường có mười một, thiếu `python/` và
+`kho-banh/`. Thiếu mục nào khác thì bộ cài dừng ngay ở bước sau và nói thiếu gì.
 
-```
-apache_superset-6.1.0+foxai.18-py3-none-any.whl   105 MB
-cai.sh  cai-tren-may.sh  go-cai.sh  entrypoint.sh  Dockerfile
-PHIEN-BAN  README.md  workspace_x_theme.py
-requirements/  superset-core/
-```
+![Giải nén tarball rồi ls, thấy mười ba mục của bản đầy đủ: wheel, cai.sh, cai-tren-may.sh, go-cai.sh, Dockerfile, entrypoint.sh, kho-banh, PHIEN-BAN, python, README.md, requirements, superset-core, workspace_x_theme.py.](./img/cai-may/01-giai-nen.png)
 
-![Giải nén tarball rồi ls -lh, thấy tám mục: wheel, Dockerfile, entrypoint.sh, cai-tren-may.sh, README.md, requirements, superset-core, workspace_x_theme.py.](./img/cai-may/01-giai-nen.png)
+Hai mục chỉ bản đầy đủ mới có:
+
+| Mục | Là gì |
+|:---|:---|
+| `python/` | Cây CPython 3.12.16 chạy được ngay, mang sẵn `venv`, `ssl`, `sqlite3` |
+| `kho-banh/` | 158 gói đã ghim, dạng wheel — pip cài từ đây, không đụng PyPI |
 
 ### 2 · Chạy bộ cài
 
@@ -58,14 +78,28 @@ requirements/  superset-core/
 ./cai-tren-may.sh
 ```
 
-Bộ cài tự làm năm việc: kiểm bản đóng gói, dựng venv và cài **đúng thứ tự**,
-viết cấu hình, tạo database và tài khoản quản trị, rồi viết script khởi động.
+Bộ cài tự làm sáu việc: kiểm bản đóng gói, chọn trình thông dịch, dựng venv và
+cài **đúng thứ tự**, viết cấu hình, tạo database và tài khoản quản trị, rồi viết
+script khởi động.
 
-![Output cai-tren-may.sh: bundle OK, python 3.12, dựng venv, cài bộ pin, cachelib khớp pin, config nạp AnalytiX en+vi, tạo admin, và in mật khẩu.](./img/cai-may/02-cai.png)
+![Output cai-tren-may.sh trên bản đầy đủ: chép Python vào thư mục cài, báo python 3.12.16 from the bundle, cài từ kho 158 wheel không dùng PyPI, cachelib khớp pin, config nạp AnalytiX en+vi, tạo admin, và in mật khẩu một lần.](./img/cai-may/02-cai.png)
 
-Ba dòng đáng nhìn: `cachelib ... matches the pin` chứng minh thứ tự cài đúng,
-`config loads: AnalytiX ['en', 'vi']` chứng minh theme nạp được, và dòng mật
-khẩu màu vàng ở cuối.
+Bốn dòng đáng nhìn:
+
+| Dòng | Nó chứng minh gì |
+|:---|:---|
+| `python 3.12.16 from the bundle` | Dùng Python đi kèm, không phải Python của máy |
+| `installing from the bundled wheelhouse (158 wheels); PyPI is not used` | Không một lần ra mạng |
+| `cachelib 0.13.0 matches the pin` | Thứ tự cài đúng — xem *Lỗi hay gặp* nếu dòng này khác |
+| `config loads: AnalytiX ['en', 'vi']` | Theme nạp được |
+
+Dòng đầu tiên, `copying the bundled python into ...`, chép khoảng 113 MB. Nó cố
+ý: venv ghi lại đường dẫn trình thông dịch đã tạo ra nó, nên nếu dựng thẳng từ
+thư mục bộ cài thì xoá thư mục đó đi là bản cài chết. Chép vào trước rồi mới
+dựng venv thì bộ cài là thứ dùng xong vứt được.
+
+Trên **bản thường** hai dòng đầu khác đi: nó báo `python 3.12 from the machine`,
+không có dòng kho wheel, và bước cài bộ pin tải từ PyPI nên lâu hơn nhiều.
 
 ### 3 · Khởi động
 
@@ -73,7 +107,9 @@ khẩu màu vàng ở cuối.
 ~/analytix/khoi-dong.sh
 ```
 
-![Output khoi-dong.sh: nạp cấu hình xong, in dòng Running on kèm địa chỉ.](./img/cai-may/03-khoi-dong.png)
+![Output khoi-dong.sh: nạp cấu hình xong, in dòng Running on kèm địa chỉ http://127.0.0.1:8088.](./img/cai-may/03-khoi-dong.png)
+
+Nó chạy ở tiền cảnh và giữ cửa sổ này. Mở cửa sổ thứ hai để làm tiếp.
 
 ### 4 · Mở địa chỉ nó in ra
 
@@ -191,8 +227,20 @@ sleep 15
 curl -fsS http://127.0.0.1:8088/health          # mong: OK
 ```
 
+![curl tới /health trả về OK.](./img/cai-may/04-kiem-health.png)
+
 Không có `sleep` thì `curl` thường chạy trước khi web server kịp mở cổng, và bạn
 nhận một lỗi kết nối của chính mình chứ không phải lỗi của bản cài.
+
+Với **bản đầy đủ** còn một phép thử đáng giá hơn: xoá hẳn thư mục bộ cài rồi
+chạy lại. Bản cài phải sống tiếp, vì nó đã chép Python vào `$ANALYTIX_HOME`.
+
+```bash
+rm -rf ~/analytix-1.0-day-du
+~/analytix/khoi-dong.sh &
+sleep 15
+curl -fsS http://127.0.0.1:8088/health          # vẫn phải là OK
+```
 
 ## Cài lại lần nữa thì sao
 
@@ -218,13 +266,18 @@ với cùng `ANALYTIX_HOME`.
 Nó in danh sách sắp xoá rồi hỏi `[y/N]`; không có bàn phím mà không có `-y` thì
 nó dừng chứ không xoá.
 
+![Output go-cai.sh: in danh sách sắp xoá gồm venv, python và khoi-dong.sh, mục giữ lại gồm superset.db và superset_config.py, rồi xoá và báo dữ liệu vẫn còn.](./img/cai-may/05-go-cai.png)
+
 | Trong `$ANALYTIX_HOME` | Mặc định | `--ca-du-lieu` |
 |:---|:---|:---|
 | `venv/` | xoá | xoá |
+| `python/` (chỉ bản đầy đủ) | xoá | xoá |
 | `khoi-dong.sh` | xoá | xoá |
 | `superset.db` | **giữ** | xoá |
 | `superset_config.py` | **giữ** | xoá |
 | `workspace_x_theme.py` | **giữ** | xoá |
+
+`python/` nằm ở cột xoá vì nó là phần chương trình, không phải dữ liệu của bạn.
 
 `--ca-du-lieu` xoá cả thư mục `$ANALYTIX_HOME`.
 
