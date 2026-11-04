@@ -25,16 +25,9 @@ nào ở dưới.
 
 Sáu tệp, khoảng 433 MB. Chép qua USB hay ổ mạng, đường nào cũng được.
 
-```
-analytix-1.0-anh.tar.gz    433 MB   ảnh Docker đã dựng sẵn
-cai.sh                              cài
-go-cai.sh                           gỡ
-PHIEN-BAN                           bản gì, kỹ thuật gì
-README.md
-SHA256SUMS
-```
+![Lệnh ls -1 trong thư mục offline, liệt kê sáu tệp: analytix-1.0-anh.tar.gz, cai.sh, go-cai.sh, PHIEN-BAN, README.md, SHA256SUMS.](./img/cai-khong-can-mang/01-thu-muc.png)
 
-Năm tệp sau đều nhỏ; gần như toàn bộ 433 MB nằm ở tệp ảnh.
+Gần như toàn bộ 433 MB nằm ở `analytix-1.0-anh.tar.gz`; năm tệp còn lại đều nhỏ.
 
 `cai.sh` ở đây là **cùng một tệp** với `cai.sh` trong bộ cài thường. Nó thấy tệp
 ảnh nằm bên cạnh nên tự chọn đường offline, nên bạn không phải nhớ hai lệnh khác
@@ -46,13 +39,7 @@ nhau cho hai thư mục phát hành.
 sha256sum -c SHA256SUMS
 ```
 
-```
-analytix-1.0-anh.tar.gz: OK
-cai.sh: OK
-go-cai.sh: OK
-PHIEN-BAN: OK
-README.md: OK
-```
+![Kết quả sha256sum -c SHA256SUMS: cả năm tệp đều OK.](./img/cai-khong-can-mang/02-kiem-tep.png)
 
 Cả năm dòng phải `OK`. Có dòng `FAILED` thì chép lại — đừng nạp ảnh hỏng.
 
@@ -64,23 +51,11 @@ Cả năm dòng phải `OK`. Có dòng `FAILED` thì chép lại — đừng n�
 
 Script nạp ảnh, dựng container, chờ sẵn sàng, rồi in địa chỉ và mật khẩu.
 
-```
-[analytix] chọn đường: offline (thư mục này có ảnh đã lưu, không cần mạng)
-[analytix] ép đường khác bằng ./cai.sh --docker, --may hoặc --offline
-[analytix] nạp ảnh từ analytix-1.0-anh.tar.gz (434M, mất một lúc)
-Loaded image: analytix:1.0
-[analytix] tạo container analytix trên cổng 8088
-[analytix] chờ dịch vụ sẵn sàng (lần đầu khoảng 40 giây)
+![Output cai.sh ở thư mục offline: chọn đường offline, nạp ảnh 434M, Loaded image analytix:1.0, tạo container, chờ sẵn sàng, rồi in địa chỉ, tài khoản admin và mật khẩu.](./img/cai-khong-can-mang/03-chay.png)
 
-[analytix] AnalytiX 1.0 đang chạy tại  http://127.0.0.1:8088
-[analytix] tài khoản quản trị:          admin
-[analytix] mật khẩu:                    -mnQf-OK_BPVnf5c
-[analytix] mật khẩu này chỉ in một lần. Lưu ngay, và đổi nó trước khi mở ra ngoài mạng.
-
-[analytix] dừng:  docker stop analytix
-[analytix] gỡ:    ./go-cai.sh          (giữ dữ liệu)
-[analytix]        ./go-cai.sh --ca-du-lieu   (xoá cả dữ liệu)
-```
+Dòng đầu là chốt đáng nhìn — `chọn đường: offline (thư mục này có ảnh đã lưu,
+không cần mạng)`. Cùng một `cai.sh` đi theo cả hai thư mục phát hành, và ở đây
+nó tự biết phải nạp ảnh thay vì dựng ảnh.
 
 Thấy dòng `đang chạy tại` kèm địa chỉ là đạt. Không thấy thì script đã dừng ở
 trên — đọc bảng Lỗi hay gặp.
@@ -199,12 +174,7 @@ không tạo bản sao lưu nào.
 
 Script dừng và chỉ đúng tiến trình đang giữ cổng:
 
-```
-[analytix] cổng 8088 đang có thứ khác dùng:
-    LISTEN 0      4096         0.0.0.0:8088       0.0.0.0:*
-    LISTEN 0      4096            [::]:8088          [::]:*
-[analytix] LỖI: chọn cổng khác:  ANALYTIX_PORT=9000 ./cai.sh
-```
+![Output cai.sh báo cổng 8088 đang có thứ khác dùng, kèm hai dòng ss chỉ tiến trình đang giữ cổng, và gợi ý đặt ANALYTIX_PORT.](./img/cai-khong-can-mang/09-loi-cong.png)
 
 Chạy lại với cổng khác: `ANALYTIX_PORT=9000 ./cai.sh`
 

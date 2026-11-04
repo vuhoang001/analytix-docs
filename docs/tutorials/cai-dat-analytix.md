@@ -11,8 +11,13 @@ last_update:
 Cài AnalytiX trên máy của bạn, nối vào một nguồn dữ liệu, và dựng biểu đồ đầu
 tiên. Khoảng 20 phút, phần lớn là chờ tải.
 
-LƯU Ý: Máy cần **một** trong hai thứ — Docker gọi được không cần `sudo`, hoặc
-Python 3.10, 3.11 hoặc 3.12. Không cần cả hai.
+LƯU Ý: Máy cần gì là tuỳ bản đóng gói bạn có trong tay. Bản **đầy đủ**
+`analytix-<bản>-day-du` không đòi gì cả — nó mang sẵn Python và cả bộ gói. Bản
+thường `analytix-<bản>` thì máy cần **một** trong hai thứ: Docker gọi được không
+cần `sudo`, hoặc Python 3.10, 3.11 hoặc 3.12. Không cần cả hai.
+
+Bài này đi trên bản thường, vì đó là bản nhỏ nhất và hay gặp nhất. Mọi bước sau
+Bước 2 giống hệt nhau ở cả hai bản.
 
 ## Bước 1: Lấy bộ cài
 
@@ -26,16 +31,11 @@ ls
 
 Kết quả mẫu:
 
-```
-apache_superset-6.1.0+foxai.18-py3-none-any.whl  PHIEN-BAN
-cai.sh                                           README.md
-cai-tren-may.sh                                  requirements
-Dockerfile                                       superset-core
-entrypoint.sh                                    workspace_x_theme.py
-go-cai.sh
-```
+![Giải nén tarball rồi ls -1, thấy mười một mục của bộ cài thường: wheel, cai.sh, cai-tren-may.sh, go-cai.sh, Dockerfile, entrypoint.sh, PHIEN-BAN, README.md, requirements, superset-core, workspace_x_theme.py.](./img/cai-dat/01-bo-cai.png)
 
-Đủ 11 mục là bộ cài lành. Thiếu mục nào thì bước sau sẽ dừng và nói rõ thiếu gì.
+Đủ 11 mục là bộ cài lành. Bản đầy đủ có **13** mục — thêm `python/` (cây Python
+đi kèm) và `kho-banh/` (toàn bộ gói đã ghim). Thiếu mục nào thì bước sau sẽ dừng
+và nói rõ thiếu gì.
 
 ## Bước 2: Cài
 
@@ -47,17 +47,7 @@ Một lệnh. Script tự dò máy bạn có Docker hay có Python rồi chọn 
 
 Kết quả mẫu:
 
-```
-[analytix] chọn đường: docker (máy có Docker)
-[analytix] ép đường khác bằng ./cai.sh --docker, --may hoặc --offline
-[analytix] dựng ảnh analytix:1.0 — bước này lâu nhất, cần mạng ra PyPI
-[analytix] tạo container analytix trên cổng 8088
-[analytix] chờ dịch vụ sẵn sàng (lần đầu khoảng 40 giây)
-
-[analytix] AnalytiX 1.0 đang chạy tại  http://127.0.0.1:8088
-[analytix] tài khoản quản trị:          admin
-[analytix] mật khẩu:                    kJ8vQ2mNxR4t
-```
+![Output cai.sh: chọn đường docker, dựng ảnh analytix:1.0, tạo container trên cổng 8088, chờ sẵn sàng, rồi in địa chỉ, tài khoản admin và mật khẩu sinh ngẫu nhiên.](./img/cai-dat/02-cai-sh.png)
 
 Máy không có Docker thì script đi đường `--may` và **chiếm luôn cửa sổ
 terminal** — dòng cuối nó in bắt đầu bằng `[analytix] đang khởi động. Ctrl-C để
@@ -86,11 +76,7 @@ ANALYTIX_PORT=9000 ./cai.sh
 curl -s http://127.0.0.1:8088/health
 ```
 
-Kết quả mẫu:
-
-```
-OK
-```
+![curl tới /health trả về OK.](./img/cai-dat/03-health.png)
 
 Xem bản vừa cài là bản nào — tệp `PHIEN-BAN` trong thư mục bộ cài giữ cả hai số:
 
@@ -227,8 +213,12 @@ Một lệnh cho cả ba đường cài. Nó tự ngó container, ảnh, volume 
 ./go-cai.sh
 ```
 
+![Output go-cai.sh: in danh sách sắp xoá gồm container và ảnh analytix:1.0, mục giữ lại có volume analytix-data, rồi xoá và báo dữ liệu vẫn còn.](./img/cai-dat/08-don-dep.png)
+
 Mặc định nó xoá container, ảnh `analytix:*` (chỉ ảnh không còn container nào khác
-dùng), `~/analytix/venv` và `~/analytix/khoi-dong.sh`. Nó **giữ** volume
+dùng), `~/analytix/venv`, `~/analytix/khoi-dong.sh`, và `~/analytix/python` nếu
+bạn cài từ bản đầy đủ — cây Python đó là phần chương trình, không phải dữ liệu
+của bạn. Nó **giữ** volume
 `analytix-data`, `~/analytix/superset.db` và `~/analytix/superset_config.py` —
 nên cài lại thì tài khoản, dataset và biểu đồ của bạn vẫn còn. Hai tệp đó luôn
 giữ cùng nhau, vì `SECRET_KEY` trong config là thứ mã hoá mật khẩu các kết nối
@@ -286,10 +276,28 @@ curl -s http://127.0.0.1:8088/health
 Đạt khi đường dẫn nằm trong `~/analytix/venv/`, không nằm trong thư mục bộ cài,
 và `/health` trả `OK`.
 
+Trên **bản đầy đủ** đường này đổi tính chất: nó không cần Python của máy và
+không cần mạng. `cai.sh` thấy `python/` trong bộ cài nên chọn luôn `--may`, với
+lý do in ra là `bộ cài mang sẵn Python và toàn bộ gói, không cần mạng`. Hai dòng
+chứng minh điều đó là `python 3.12.16 from the bundle` và `installing from the
+bundled wheelhouse (158 wheels); PyPI is not used`.
+
 ### Đường 3 — máy không có internet
 
-Hai đường trên đều cần mạng ra PyPI. Máy cách ly thì dùng bản phát hành riêng —
-nó chở theo ảnh đã dựng sẵn thay vì chở công thức.
+Bản thường mang danh sách gói đã ghim, không mang chính các gói, nên hai đường
+trên của nó đều cần mạng ra PyPI. Máy cách ly thì dùng một bản phát hành riêng.
+Chọn bản nào là tuỳ máy đó có Docker hay không.
+
+**Máy đích không có Docker** — dùng bản đầy đủ. Nó chở theo cả Python và cả bộ
+gói, nên chỉ cần giải nén rồi chạy:
+
+```
+cd analytix-1.0-day-du
+./cai.sh
+```
+
+**Máy đích có Docker** — dùng bản offline. Nó chở theo ảnh đã dựng sẵn thay vì
+chở công thức:
 
 ```
 cd analytix-1.0-khong-can-mang
@@ -297,13 +305,14 @@ sha256sum -c SHA256SUMS
 ./cai.sh
 ```
 
-Vẫn là `cai.sh` như hai đường trên. Trong thư mục này nó thấy tệp ảnh
-`analytix-1.0-anh.tar.gz` bên cạnh nên tự chọn đường `--offline` — nạp ảnh đã
-lưu sẵn thay vì dựng. Gõ rõ `./cai.sh --offline` cũng ra đúng đường đó.
+Vẫn là `cai.sh` như hai đường trên, và nó tự biết mình đang ở thư mục nào.
+Trong thư mục này nó thấy tệp ảnh `analytix-1.0-anh.tar.gz` bên cạnh nên tự chọn
+đường `--offline` — nạp ảnh đã lưu sẵn thay vì dựng. Gõ rõ `./cai.sh --offline`
+cũng ra đúng đường đó.
 
-Kiểm rằng nó thật sự không cần mạng. Container `analytix` do `cai.sh` tạo nằm
-trên mạng bridge mặc định, nên nhìn vào nó không kết luận được gì — phải dựng
-một container thứ hai, cắt hẳn mạng:
+Kiểm bản offline rằng nó thật sự không cần mạng. Container `analytix` do
+`cai.sh` tạo nằm trên mạng bridge mặc định, nên nhìn vào nó không kết luận được
+gì — phải dựng một container thứ hai, cắt hẳn mạng:
 
 ```
 docker run -d --network none --name thu-cach-ly analytix:1.0
@@ -314,7 +323,19 @@ docker rm -f thu-cach-ly
 
 Phải ra `200`.
 
-Dựng bản đó: [Đóng gói bản phát hành](../how-to/dong-goi-ban-phat-hanh.md).
+Phép kiểm tương ứng cho bản đầy đủ là xoá hẳn thư mục bộ cài rồi chạy lại — bản
+cài phải sống tiếp, vì nó đã chép cây Python vào `~/analytix`:
+
+```
+rm -rf ~/analytix-1.0-day-du
+~/analytix/khoi-dong.sh &
+sleep 15
+curl -s http://127.0.0.1:8088/health
+```
+
+Vẫn phải ra `OK`.
+
+Dựng ba bản đó: [Đóng gói bản phát hành](../how-to/dong-goi-ban-phat-hanh.md).
 
 ## Xong!
 

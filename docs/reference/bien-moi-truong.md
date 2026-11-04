@@ -31,7 +31,7 @@ flag nghĩa là biến chỉ có tác dụng ở đường đó của `./cai.sh`
 | `ANALYTIX_BIND` | `127.0.0.1` | — | — | — | ✅ | — |
 | `ANALYTIX_SECRET_KEY` | *sinh ngẫu nhiên lần chạy đầu* | — | — | — | — | ✅ |
 | `ANALYTIX_FRAME_ANCESTORS` | *không đặt* — mọi origin khác bị chặn nhúng | — | — | — | ✅ | ✅ |
-| `PYTHON` | `python3` | ✅ | — | ✅ | — | — |
+| `PYTHON` | `python3` — **bỏ qua khi bộ cài có `python/`** | ✅ | — | ✅ | — | — |
 
 Sáu chỗ hay nhầm:
 
@@ -42,9 +42,12 @@ Sáu chỗ hay nhầm:
   bước cuối.
 - **`ANALYTIX_SECRET_KEY` chỉ có ở đường container.** Bản cài tay luôn tự sinh
   khoá và không nhận biến này.
-- **`PYTHON` chỉ có ở bản cài tay.** Container đã ghim Python 3.12. `cai.sh` đọc
-  nó ở mọi đường, nhưng chỉ để dò xem máy có trình thông dịch hợp lệ không —
-  tức để quyết đường `--may` có đi được hay không.
+- **`PYTHON` chỉ có ở bản cài tay, và bộ cài đầy đủ bỏ qua nó.** Container đã
+  ghim Python 3.12. Bộ cài có thư mục `python/` thì cả `cai.sh` lẫn
+  `cai-tren-may.sh` dùng `python/bin/python3` và **không đọc tới `PYTHON`** —
+  xem mục chi tiết bên dưới. Chỉ ở bộ cài thường `cai.sh` mới đọc nó, và cũng
+  chỉ để dò xem máy có trình thông dịch hợp lệ không, tức để quyết đường `--may`
+  có đi được hay không.
 - **`ANALYTIX_HOME` chỉ có ở `--may`.** Hai đường container bỏ qua nó: chỗ ở bên
   trong ảnh đã ghim `/app/analytix`, phía ngoài thì dữ liệu nằm trong
   `ANALYTIX_VOLUME`. **`go-cai.sh` cũng đọc nó** — đó là thư mục nó tìm để dọn.
@@ -93,17 +96,24 @@ Nơi chứa mọi thứ của bản cài:
 | Đường dẫn | Là gì |
 |:---|:---|
 | `venv/` | môi trường ảo Python |
+| `python/` | cây CPython 3.12.16, ~113 MB — **chỉ khi cài từ bộ cài đầy đủ** |
 | `superset_config.py` | cấu hình, quyền **600**, chứa khoá bí mật |
 | `workspace_x_theme.py` | theme — cấu hình `exec()` tệp này |
 | `superset.db` | database metadata (SQLite) |
 | `khoi-dong.sh` | script khởi động (chỉ bản cài tay) |
 
+`python/` là bản chép từ thư mục `python/` của bộ cài, không phải liên kết. Chép
+là cố ý: một venv ghi lại đường dẫn trình thông dịch đã tạo ra nó và nạp thư
+viện chuẩn từ đó, nên venv dựng thẳng từ thư mục bộ cài sẽ chết khi thư mục đó
+bị đổi tên hay xoá. Chép xong thì xoá bộ cài đi bản cài vẫn chạy.
+
 Trong container, đây là đường dẫn phải gắn volume vào để dữ liệu sống qua lần
 chạy sau.
 
-`go-cai.sh` đọc biến này để biết dọn thư mục nào. Mặc định nó xoá `venv/` và
-`khoi-dong.sh`, giữ `superset.db` cùng `superset_config.py`; `--ca-du-lieu` xoá
-cả thư mục.
+`go-cai.sh` đọc biến này để biết dọn thư mục nào. Mặc định nó xoá `venv/`,
+`python/` và `khoi-dong.sh`, giữ `superset.db` cùng `superset_config.py`;
+`--ca-du-lieu` xoá cả thư mục. `python/` nằm ở phía bị xoá vì nó là phần chương
+trình, không phải dữ liệu.
 
 Hai chốt an toàn trong `go-cai.sh`: biến phải là **đường dẫn tuyệt đối**, và nó
 **từ chối** xoá khi giá trị là `/` hoặc đúng bằng `$HOME`. Thư mục chỉ được coi
@@ -231,7 +241,16 @@ Sao lưu `superset_config.py` cùng với `superset.db`.
 
 Trình thông dịch bộ cài dùng để dựng venv. Mặc định `python3`.
 
-Chỉ nhận **3.10, 3.11, 3.12**. Bản khác thì bộ cài dừng:
+**Bộ cài đầy đủ bỏ qua biến này.** Có `python/bin/python3` trong thư mục bộ cài
+thì cả hai script dùng cây Python đó, bất kể `PYTHON` đặt gì:
+
+| Script | Khi bộ cài có `python/` | Khi không có |
+|:---|:---|:---|
+| `cai-tren-may.sh` | chép `python/` vào `$ANALYTIX_HOME/python/` rồi dựng venv từ bản chép; in `python 3.12.16 from the bundle` | đọc `PYTHON`, kiểm phiên bản, in `python <bản> from the machine` |
+| `cai.sh` | coi đường `--may` là đi được, lý do `bộ cài mang sẵn Python` | đọc `PYTHON` để dò xem máy có trình thông dịch hợp lệ không |
+
+Bộ cài thường thì biến có tác dụng, và chỉ nhận **3.10, 3.11, 3.12**. Bản khác
+thì bộ cài dừng:
 
 ```
 python 3.13 is not supported; the pinned set is proven on 3.10 and 3.12
@@ -242,12 +261,23 @@ PYTHON=/usr/bin/python3.12 ./cai.sh --may
 PYTHON=/usr/bin/python3.12 ./cai-tren-may.sh
 ```
 
+Không có `python3` trong `PATH` và cũng không có `python/` thì
+`cai-tren-may.sh` dừng:
+
+```
+python3 not found; set PYTHON to a 3.10, 3.11 or 3.12 interpreter
+```
+
 Gõ rõ `./cai.sh --may` mà không có trình thông dịch hợp lệ thì `cai.sh` dừng
 trước cả khi dựng venv:
 
 ```
-không có Python 3.10/3.11/3.12. Đặt PYTHON=<đường-dẫn>, hoặc dùng ./cai.sh --docker
+không có Python 3.10/3.11/3.12. Đặt PYTHON=<đường-dẫn>.
 ```
+
+Câu `Hoặc dùng ./cai.sh --docker.` chỉ được nối thêm vào cuối khi thư mục đó
+thật sự đủ nguyên liệu cho đường Docker — thư mục không có wheel thì không có
+câu đó, vì nó sẽ dẫn vào đường chết.
 
 ## Biến bộ cài KHÔNG đọc
 

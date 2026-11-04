@@ -8,19 +8,39 @@ last_update:
 
 # Đóng gói bản phát hành
 
-Tạo bản đóng gói `analytix-<bản>.tar.gz` để giao cho người khác cài.
+Tạo bản đóng gói để giao cho người khác cài.
 
-Dành cho người bảo trì AnalytiX. Cần có trước: mã nguồn AnalytiX, và một tệp
-wheel `apache_superset-<bản>-py3-none-any.whl` đã build.
+Dành cho người bảo trì AnalytiX. Cần có trước: mã nguồn AnalytiX, một tệp wheel
+`apache_superset-<bản>-py3-none-any.whl` đã build, và **mạng trên chính máy đóng
+gói**.
 
 Trang này **không** nói cách build wheel — đó là việc khác, cần Node.js và một
 máy build riêng.
 
+## Ba kiểu bản phát hành
+
+Chọn kiểu theo thứ máy đích có, không theo thứ máy đóng gói có:
+
+| Lệnh dựng | Ra thư mục | Tarball | Máy đích cần gì |
+|:---|:---|:---|:---|
+| `bo-cai/dong-goi.sh --day-du <wheel>` | `analytix-<bản>-day-du/` | ~274 MB | **không cần gì** |
+| `bo-cai/dong-goi.sh <wheel>` | `analytix-<bản>/` | ~105 MB | Python 3.10/3.11/3.12 + `python3-venv` + mạng ra PyPI, **hoặc** Docker + mạng |
+| `bo-cai/dong-goi-ban-offline.sh <thư-mục-bộ-cài>` | `analytix-<bản>-khong-can-mang/` | ~433 MB | Docker |
+
+Hai kiểu đi tới được máy cách ly, và chúng khác nhau ở chỗ máy đó có Docker hay
+không. Máy cách ly **không có Docker** thì chỉ `--day-du` đi tới.
+
+`dong-goi-ban-offline.sh` ăn đầu ra của `dong-goi.sh`, nên nó là bước thứ hai chứ
+không phải một lệnh song song — xem cuối trang.
+
 ## Các bước
 
 ```bash
-bo-cai/dong-goi.sh <đường-dẫn-tới-wheel> [thư-mục-đích]
+bo-cai/dong-goi.sh --day-du <đường-dẫn-tới-wheel> [thư-mục-đích]   # bản đầy đủ
+bo-cai/dong-goi.sh          <đường-dẫn-tới-wheel> [thư-mục-đích]   # bản thường
 ```
+
+`--day-du` phải là **đối số đầu tiên**; script chỉ nhìn nó ở vị trí đó.
 
 Thư mục đích mặc định `/var/tmp/analytix-ban-phat-hanh`. Kết quả:
 
@@ -29,7 +49,15 @@ Thư mục đích mặc định `/var/tmp/analytix-ban-phat-hanh`. Kết quả:
 <đích>/analytix-<bản>.tar.gz    bản nén, khoảng 105 MB
 ```
 
-![Output dong-goi.sh: payload lấy từ bo-cai/nguyen-lieu, đóng gói xong, tarball 105M, liệt kê 8 mục.](./img/dong-goi/01-bundle.png)
+Với `--day-du`, cả hai tên mang thêm hậu tố `-day-du`, và tarball khoảng 274 MB
+(thư mục chưa nén khoảng 354 MB).
+
+![Output dong-goi.sh bản thường: nguyên liệu lấy từ bo-cai/nguyen-lieu, dựng analytix-1.0, nén, tarball 105M, rồi liệt kê mười một mục bên trong.](./img/dong-goi/01-bundle.png)
+
+Với `--day-du` nó làm thêm ba việc trước khi nén — tải Python đã ghim, đối chiếu
+mã băm, rồi dựng kho wheel bằng chính Python vừa tải:
+
+![Output dong-goi.sh --day-du: tải Python 3.12.16 cho x86_64, mã băm khớp bản đã ghim, dựng kho wheel bằng Python đi kèm, thêm wheel cho superset-core, kho 158 gói 136M, tarball 274M, rồi liệt kê mười ba mục có cả kho-banh và python.](./img/dong-goi/02-day-du.png)
 
 ## Bản đóng gói chứa gì
 
@@ -46,6 +74,13 @@ Thư mục đích mặc định `/var/tmp/analytix-ban-phat-hanh`. Kết quả:
 | `Dockerfile` | `bo-cai/Dockerfile` |
 | `PHIEN-BAN` | sinh tự động — xem mục dưới |
 | `README.md` | sinh tự động |
+
+Mười một mục đó là bản thường. `--day-du` thêm hai mục nữa, thành mười ba:
+
+| Chỉ có ở `--day-du` | Là gì | Nặng |
+|:---|:---|:---|
+| `python/` | cây CPython 3.12.16 dựng sẵn, tải về rồi giải nén vào bundle | 113 MB |
+| `kho-banh/` | 158 wheel — toàn bộ bộ pin, cộng `wheel` | 136 MB |
 
 **Không** có trong bundle: `patches/`, `translations/` (đã biên dịch vào wheel),
 `gates/`, `tools/`.
@@ -65,6 +100,62 @@ và chúng **không thể lệch nhau**. Đó là lý do build context của `do
 phải là chính thư mục bundle: `cai.sh --docker` chạy `docker build -t
 analytix:<bản> -f Dockerfile .` sau khi đã `cd` vào đó, còn
 `dong-goi-ban-offline.sh` truyền thẳng thư mục bundle làm context.
+
+## `--day-du` lấy `python/` và `kho-banh/` ở đâu
+
+Bản Python được ghim trong `bo-cai/PYTHON-GHIM`, không ghim trong script:
+
+```
+PBS_RELEASE=20261026
+PBS_PYTHON=3.12.16
+PBS_SHA256_x86_64=ce4f6d0a…
+PBS_SHA256_aarch64=bb4b6392…
+```
+
+Script đọc `uname -m` rồi lấy dòng `PBS_SHA256_<kiến-trúc>` tương ứng. Không có
+dòng cho kiến trúc đang đứng thì nó dừng — xem *Lỗi hay gặp*.
+
+Tệp tải về là một bản dựng sẵn của python-build-standalone:
+
+```
+cpython-<bản>+<release>-<kiến-trúc>-unknown-linux-gnu-install_only_stripped.tar.gz
+```
+
+**Script kiểm SHA256 trước khi giải nén**, không phải sau. Một cây Python tải từ
+Internet rồi đem giao cho khách thì phải chứng minh được nó đúng là bản đã ghim,
+và lúc chứng minh được phải là lúc nó còn là một tệp nén chưa ai chạy. Mã băm
+khớp thì script in `mã băm Python khớp bản đã ghim` rồi mới `tar -xzf`.
+
+Giải nén xong nó chạy `import venv, ssl, sqlite3` bằng chính cây vừa bung. Thiếu
+một trong ba là bộ cài sẽ chết ở máy đích chứ không chết ở đây: `venv` để dựng
+môi trường ảo, `ssl` cho pip, `sqlite3` cho database metadata.
+
+Kho wheel được dựng **bằng chính Python đi kèm**, không bằng Python của máy đóng
+gói:
+
+```
+[dong-goi] dựng kho wheel bằng Python đi kèm (bước lâu nhất)
+[dong-goi] thêm wheel — phụ thuộc lúc dựng của superset-core
+[dong-goi] kho wheel: 158 gói, 136M
+```
+
+Lý do là ABI. Wheel nhị phân gắn với phiên bản và ABI của trình thông dịch đã
+dựng ra nó; dựng bằng trình thông dịch khác là mang về một kho mà máy đích cài
+không được — và lỗi đó chỉ lộ ra ở máy đích, nơi không còn mạng để chữa.
+
+Hai chỗ kho wheel không trùng khít với `requirements/base.txt`:
+
+- Dòng `-e ./superset-core` bị cắt ra trước khi gọi `pip wheel`. Đó là mã nguồn
+  đã nằm trong bundle, không phải gói tải về, và `pip wheel` từ chối dòng
+  editable.
+- `wheel` được xin thêm một lượt riêng. `superset-core` cài từ nguồn, và
+  `pyproject.toml` của nó khai `requires = ["setuptools>=76.0.0", "wheel"]`; pip
+  dựng nó trong môi trường cách ly nên hai gói đó phải có sẵn trong kho.
+  `setuptools` đã nằm trong bộ pin, `wheel` thì không. Nên 156 dòng pin ra
+  158 tệp wheel.
+
+Cả hai bước này **cần mạng trên máy đóng gói** — một lượt ra GitHub lấy Python,
+một lượt ra PyPI dựng kho. Máy đích thì không cần gì.
 
 ## Hai phiên bản, đừng lẫn
 
@@ -115,8 +206,17 @@ ls apache_superset-*.whl requirements/base.txt superset-core workspace_x_theme.p
 
 Đủ 11 mục là bundle hoàn chỉnh.
 
+Bản `--day-du` phải có 13 mục — thêm `python/` và `kho-banh/`:
+
+```bash
+cd /var/tmp/analytix-ban-phat-hanh/analytix-<bản>-day-du
+./python/bin/python3 -V                 # mong: Python 3.12.16
+ls kho-banh | wc -l                     # mong: 158
+```
+
 Kiểm thật thì giải nén tarball ra một thư mục khác rồi cài vào một
-`ANALYTIX_HOME` tạm. Bước này cần mạng ra PyPI:
+`ANALYTIX_HOME` tạm. Với bản thường, bước này cần mạng ra PyPI; với bản
+`--day-du` thì không:
 
 ```bash
 tar xzf /var/tmp/analytix-ban-phat-hanh/analytix-<bản>.tar.gz -C /var/tmp
@@ -137,6 +237,18 @@ Bộ cài tự khẳng định bộ pin không bị resolver đè, theme nạp �
 [analytix] installed AnalytiX <kỹ-thuật> in /var/tmp/thu-analytix
 ```
 
+Thử bản `--day-du` thì nhìn thêm hai dòng nữa, ở đầu lượt chạy:
+
+```
+[analytix] python 3.12.16 from the bundle
+[analytix] installing from the bundled wheelhouse (158 wheels); PyPI is not used
+```
+
+Thấy `python 3.12 from the machine` thay cho dòng đầu nghĩa là `python/` không
+vào được bundle, và bạn vừa thử một bản thường đội lốt bản đầy đủ. Muốn chắc nó
+thật sự không chạm mạng thì chạy lượt thử sau một proxy trỏ vào cổng chết, hoặc
+cắt mạng của máy thử.
+
 Dọn bản thử: `rm -rf /var/tmp/thu-analytix /var/tmp/analytix-<bản>`. **Đừng** dùng
 `./go-cai.sh` để dọn nó — `go-cai.sh` cũng ngó container `analytix`, volume
 `analytix-data` và mọi ảnh `analytix:*` trên máy, nên nó có thể chạm vào bản cài
@@ -154,6 +266,20 @@ thật chứ không chỉ bản thử.
 | `thiếu .../nguyen-lieu/requirements/base.txt` | Không có `src/` mà `bo-cai/nguyen-lieu/` cũng thiếu | Lấy lại hai mảnh đó — `bo-cai/nguyen-lieu/README.md` ghi cách |
 | `UPSTREAM không có dòng ANALYTIX_VERSION=` | Thiếu dòng phiên bản sản phẩm | Thêm `ANALYTIX_VERSION=<bản>` vào cuối `UPSTREAM` |
 | Bundle cài được nhưng mất thương hiệu | `workspace_x_theme.py` không được chép vào | Kiểm `theme/workspace_x_theme.py` có trong mã nguồn |
+
+Riêng đường `--day-du`. Mọi lỗi dưới đây đều dừng script, và thư mục bundle dở
+dang vẫn nằm lại ở `<đích>/analytix-<bản>-day-du/` — chạy lại là nó `rm -rf` rồi
+dựng lại từ đầu, không cần tự dọn:
+
+| Hiện tượng | Nguyên nhân | Cách sửa |
+|:---|:---|:---|
+| `thiếu bo-cai/PYTHON-GHIM` | Tệp ghim bản Python không có trong cây mã nguồn | Lấy lại `bo-cai/PYTHON-GHIM` từ repo. Không có nó thì không bản Python nào được ghim, và script từ chối đoán |
+| `PYTHON-GHIM không ghim bản Python cho kiến trúc <kiến-trúc>` | `uname -m` trả về một kiến trúc mà tệp ghim không có dòng `PBS_SHA256_` tương ứng | Hiện chỉ ghim `x86_64` và `aarch64`. Đóng gói trên một trong hai, hoặc thêm dòng mã băm mới cho kiến trúc đó |
+| `không tải được <tệp>` | `curl` không ra được GitHub, hoặc release/phiên bản trong `PYTHON-GHIM` không còn tệp đó | Kiểm mạng trước. Vẫn hỏng thì mở trang release của `PBS_RELEASE` xem tên tệp còn đúng không |
+| `mã băm Python không khớp: <đo-được>, ghim là <đã-ghim>` | Tệp tải về không phải tệp đã ghim — tải thiếu, hoặc bản phát hành đã bị thay | **Đừng đi vòng.** Tải lại một lượt; vẫn lệch thì dừng hẳn và xác minh lại mã băm từ `SHA256SUMS` của chính bản phát hành đó trước khi sửa `PYTHON-GHIM` |
+| `cây Python vừa giải nén thiếu venv/ssl/sqlite3` | Ghim nhầm sang một biến thể rút gọn của python-build-standalone | Ghim đúng biến thể `install_only_stripped` của kiến trúc nền (`x86_64`, không phải `x86_64_v2/v3/v4`) |
+| `dựng kho wheel thất bại` | `pip wheel` không phân giải nổi bộ pin — thường là mất mạng ra PyPI giữa chừng, hoặc một pin không có wheel cho 3.12 | Chạy lại lệnh `pip wheel` bằng `<bundle>/python/bin/python3` không kèm `--quiet` để đọc lỗi thật |
+| `không lấy được phụ thuộc lúc dựng` | Bước xin riêng gói `wheel` thất bại | Cùng cách chữa như trên. Thiếu gói này thì máy đích dừng ở `ERROR: Could not find a version that satisfies the requirement wheel` khi dựng `superset-core` |
 
 Riêng `bo-cai/dong-goi-ban-offline.sh` — bước cắt bản offline ở cuối trang:
 
@@ -181,31 +307,39 @@ tar xzf analytix-<bản>.tar.gz && cd analytix-<bản>
 ./cai.sh
 ```
 
-`cai.sh` dò máy có Docker hay có Python rồi chọn đường, nên người nhận không
-phải tự quyết. Ép đường cụ thể bằng `--docker` hoặc `--may`.
+`cai.sh` dò bộ cài có gì và máy có gì rồi chọn đường, nên người nhận không phải
+tự quyết. Bản `--day-du` luôn rơi vào `--may` với lý do in ra là `bộ cài mang sẵn
+Python và toàn bộ gói, không cần mạng`. Ép đường cụ thể bằng `--docker` hoặc
+`--may`.
 
-Bundle có sẵn `README.md` sinh tự động. Nó nói: hai đường cài ở trên, cách gỡ,
-lệnh kiểm `curl -s http://127.0.0.1:8088/health` phải trả về `OK`, và hai điều
-cần biết — mật khẩu quản trị chỉ in một lần, và cài xong chỉ query được SQLite.
-Nên hai điều đó bạn không phải nhắc lại.
+Bundle có sẵn `README.md` sinh tự động, và nội dung mục "Cần gì" của nó **khác
+nhau giữa hai kiểu bản**:
 
-Nhắc người nhận hai điều `README.md` trong bundle **không** nói:
+| Bản | `README.md` nói máy đích cần gì |
+|:---|:---|
+| `--day-du` | "không cần gì cả — không Python, không Docker, không mạng", kèm một dòng đỏ **chỉ chạy trên `<kiến-trúc>`** |
+| Thường | "Docker gọi được không cần sudo, hoặc Python 3.10/3.11/3.12", kèm một dòng đỏ **cả hai đường đều cần mạng ra PyPI** |
 
-1. **Cả hai đường cài đều cần mạng ra PyPI.** `README.md` chỉ đòi "Docker gọi
-   được không cần sudo, hoặc Python 3.10/3.11/3.12" — nó không nói máy đích phải
-   ra được internet. Máy đích không có mạng thì cắt thêm bản offline ở dưới.
-2. **Máy chủ web đi kèm là bản phát triển của Flask**, không phải WSGI cho vận
-   hành thật. Dùng nội bộ thì được, mở ra Internet thì chưa.
+Phần còn lại giống nhau: cách gỡ, lệnh kiểm `curl -s
+http://127.0.0.1:8088/health` phải trả về `OK`, mật khẩu quản trị chỉ in một
+lần, và cài xong chỉ query được SQLite. Bốn điều đó bạn không phải nhắc lại.
+
+Một điều `README.md` **không** nói, ở cả hai bản: **máy chủ web đi kèm là bản
+phát triển của Flask**, không phải WSGI cho vận hành thật. Dùng nội bộ thì được,
+mở ra Internet thì chưa.
 
 Cần driver cho Postgres/MySQL/Trino thì chỉ người nhận sang
 [Thêm driver](./them-driver-du-lieu.md) — bộ pin không mang driver nào.
 
-:::danger[Cả hai đường trên đều cần mạng ra PyPI]
-Bundle mang theo **danh sách** 156 gói đã ghim, không mang theo chính các gói đó.
-`cai-tren-may.sh` và `docker build` đều phân giải danh sách ấy với PyPI, nên máy đích
-không ra được internet là cả hai dừng giữa chừng.
+:::danger[Bản thường cần mạng ra PyPI, ở cả hai đường cài]
+Bundle thường mang theo **danh sách** 156 gói đã ghim, không mang theo chính các
+gói đó. `cai-tren-may.sh` và `docker build` đều phân giải danh sách ấy với PyPI,
+nên máy đích không ra được internet là cả hai dừng giữa chừng. Bản `--day-du`
+không có chuyện này: nó mang cả 158 wheel và cài với `--no-index`.
 
-Máy đích không có mạng thì cắt thêm một bước nữa:
+Máy đích không có mạng thì có hai lối, chọn theo chỗ đó có Docker hay không.
+Không có Docker thì dùng `--day-du` ở đầu trang. Có Docker thì cắt thêm một bước
+nữa từ một bundle thường:
 
 ```bash
 bo-cai/dong-goi-ban-offline.sh /var/tmp/analytix-ban-phat-hanh/analytix-<bản>

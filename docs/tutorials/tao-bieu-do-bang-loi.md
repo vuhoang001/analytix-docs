@@ -2,7 +2,7 @@
 title: Tạo biểu đồ bằng lời
 sidebar_position: 2
 last_update:
-  date: "2026-11-02"
+  date: "2026-11-04"
   author: vuhoang001
 ---
 
@@ -63,6 +63,8 @@ Trợ lý gọi công cụ `list_datasets`.
 
 **Tự kiểm tra:** thấy dataset `ban_hang`. **Ghi lại ID của nó** — các bước sau cần.
 
+![Kết quả công cụ list_datasets: một dataset ban_hang, id 1, thuộc kết nối Dữ liệu thử, schema main.](./img/bang-loi/01-list-datasets.png)
+
 ## Bước 2 — Hỏi dataset đó có cột gì
 
 > Dataset &lt;ID&gt; có những cột nào, cột nào là số?
@@ -70,6 +72,8 @@ Trợ lý gọi công cụ `list_datasets`.
 Trợ lý gọi `get_dataset_info`.
 
 **Tự kiểm tra:** `thang` và `khu_vuc` là chữ, `doanh_thu` là số.
+
+![Kết quả get_dataset_info: bảng ban_hang có ba cột — thang và khu_vuc kiểu TEXT, doanh_thu kiểu số.](./img/bang-loi/02-dataset-info.png)
 
 ## Bước 3 — Biểu đồ một con số
 
@@ -84,6 +88,8 @@ Ra **124,67** nghĩa là trợ lý chọn `AVG` thay vì `SUM` — bảo nó dù
 nói rõ thì biểu đồ chỉ hiện trong câu trả lời rồi mất — mở AnalytiX ra không
 thấy gì.
 
+![Biểu đồ một con số trong AnalytiX hiển thị 748, metric là Doanh thu, nguồn main.ban_hang.](./img/bang-loi/03-tong-doanh-thu.png)
+
 ## Bước 4 — Biểu đồ cột theo tháng
 
 > Tạo biểu đồ cột, trục ngang là tháng, chiều cao là tổng doanh thu, sắp theo
@@ -93,6 +99,8 @@ thấy gì.
 
 Chỉ thấy 1 cột: trợ lý đã gộp hết thành một, bảo nó tách theo cột `thang`.
 
+![Biểu đồ cột trong AnalytiX: ba cột cho 2026-01, 2026-02, 2026-03, chiều cao tăng dần.](./img/bang-loi/04-cot-theo-thang.png)
+
 ## Bước 5 — Biểu đồ tròn theo khu vực
 
 > Tạo biểu đồ tròn chia theo khu vực, giá trị là tổng doanh thu. Đặt tên
@@ -100,11 +108,15 @@ Chỉ thấy 1 cột: trợ lý đã gộp hết thành một, bảo nó tách t
 
 **Tự kiểm tra:** 2 phần — Bắc **435**, Nam **313**. Bắc lớn hơn.
 
+![Biểu đồ tròn trong AnalytiX chia hai phần: Bắc và Nam.](./img/bang-loi/05-tron-khu-vuc.png)
+
 ## Bước 6 — Gom thành một trang báo cáo
 
 > Gom ba biểu đồ vừa tạo vào một dashboard tên "Báo cáo bán hàng".
 
 **Tự kiểm tra:** mở link trả về, thấy đủ ba biểu đồ trên một trang.
+
+![Trang báo cáo Báo cáo bán hàng gồm ba biểu đồ: con số 748, cột theo tháng, và tròn với Bắc 435 (58.16%) và Nam 313 (41.84%).](./img/bang-loi/06-dashboard.png)
 
 ## Bước 7 — Thử một câu hỏi bằng số liệu
 
@@ -116,6 +128,8 @@ Trợ lý gọi `execute_sql` và trả lời bằng số.
 
 **Tự kiểm tra:** tháng thấp nhất là **2026-01** với **215**, thấp hơn tháng cao
 nhất (**305**) khoảng **29,5%**.
+
+![Kết quả execute_sql: success true, hai dòng — Bắc 435 và Nam 313.](./img/bang-loi/07-execute-sql.png)
 
 ## Bước 8 — Thử một việc nó không được phép làm
 
@@ -130,6 +144,8 @@ Nghĩa là kết nối dữ liệu chưa tắt quyền ghi. Mở khai báo kết
 *Allow DML*, và sửa trước khi cho ai khác dùng. Xem
 [Thêm driver cho nguồn dữ liệu](../how-to/them-driver-du-lieu.md).
 :::
+
+![Kết quả execute_sql với câu INSERT: success false, error DML queries are not allowed on this database.](./img/bang-loi/08-dml-tu-choi.png)
 
 ## Tự kiểm — bảng tổng hợp
 

@@ -429,16 +429,26 @@ Thêm bộ lọc **Đơn vị** trên cột `unit_code` theo đúng cách trên.
 
 ### Bước 15 — Đặt quyền và chia sẻ
 
-Bấm **⋯** góc trên phải → **Edit properties**.
+Bấm **Edit dashboard** trước, rồi mới **⋯** góc trên phải → **Edit properties**.
 
-| Ô | Ý nghĩa |
+:::note[Không vào chế độ sửa thì không thấy mục đó]
+Menu **⋯** của trang ở chế độ xem chỉ có *Refresh dashboard*, *Set auto-refresh*,
+*Enter fullscreen*, *Save as*, *Download*, *Share*. **Edit properties** chỉ xuất
+hiện sau khi bấm **Edit dashboard**.
+:::
+
+![Hộp thoại Dashboard properties với ô Name là "Báo cáo bán hàng", ô URL Slug, và các mục gập lại: Access & ownership, Styling, Refresh settings, Certification, Advanced settings.](./img/buoc/b15-thuoc-tinh.png)
+
+| Mục trong hộp thoại | Ý nghĩa |
 |---|---|
-| **Owners** | Ai sửa được trang này |
-| **Certified by** | Đánh dấu trang đã được duyệt, hiện huy hiệu cạnh tiêu đề |
-| **Published / Draft** | *Draft* chỉ người tạo thấy; *Published* mới hiện trong danh sách chung |
+| **General information** | Tên trang và URL slug |
+| **Access & ownership** | Ai sửa được trang này |
+| **Certification** | Đánh dấu trang đã được duyệt, hiện huy hiệu cạnh tiêu đề |
 
-Dashboard mới luôn ở trạng thái **Draft**. Bấm vào chữ *Draft* cạnh tiêu đề để chuyển sang
-*Published*.
+Trạng thái **Published / Draft** không nằm trong hộp thoại này — nó là nhãn cạnh
+tiêu đề trang. Dashboard mới luôn ở **Draft**; bấm vào chữ đó để chuyển sang
+*Published*. *Draft* chỉ người tạo thấy, *Published* mới hiện trong danh sách chung.
+
 
 Chia sẻ bằng cách gửi thẳng URL. Người nhận phải có tài khoản Superset và có quyền đọc
 dataset bên dưới — chia sẻ link không tự cấp quyền.
