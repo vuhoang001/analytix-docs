@@ -109,11 +109,11 @@ báo lỗi thì gửi cả tệp này. `cai.sh` cũng đọc chính tệp này �
 
 Mở `http://127.0.0.1:8088`, đăng nhập bằng `admin` / `admin`.
 
-![Trang đăng nhập AnalytiX với hai ô Username và Password.](../how-to/cai-dat-van-hanh/img/cai-khong-can-mang/04-dang-nhap.png)
+![Trang đăng nhập AnalytiX với hai ô Username và Password.](../how-to/cai-dat/img/cai-khong-can-mang/04-dang-nhap.png)
 
 Góc trên trái phải là logo và chữ **AnalytiX** — không phải "Superset".
 
-![Trang chủ AnalytiX sau khi đăng nhập, logo AnalytiX ở góc trên trái.](../how-to/cai-dat-van-hanh/img/cai-khong-can-mang/05-vao-duoc.png)
+![Trang chủ AnalytiX sau khi đăng nhập, logo AnalytiX ở góc trên trái.](../how-to/cai-dat/img/cai-khong-can-mang/05-vao-duoc.png)
 
 Rồi đổi mật khẩu ngay — **Settings → Info → Reset my password**. Đây là việc
 bắt buộc, không phải tuỳ chọn: chừng nào mật khẩu còn là `admin`, bản cài này
@@ -361,16 +361,16 @@ curl -s http://127.0.0.1:8088/health
 
 Vẫn phải ra `OK`.
 
-Dựng ba bản đó: [Đóng gói bản phát hành](../how-to/cai-dat-van-hanh/dong-goi-ban-phat-hanh.md).
+Dựng ba bản đó: [Đóng gói bản phát hành](../how-to/cai-dat/dong-goi-ban-phat-hanh.md).
 
 ## Xong!
 
 Bạn đã đi qua ba lớp đầu của AnalytiX: kết nối → dataset → biểu đồ. Lớp thứ tư,
 trang báo cáo, nằm ở bài dài hơn bên dưới. Tiếp theo:
 
-- [Thêm driver cho nguồn dữ liệu](../how-to/cai-dat-van-hanh/them-driver-du-lieu.md) — **gần như
+- [Thêm driver cho nguồn dữ liệu](../how-to/cai-dat/them-driver-du-lieu.md) — **gần như
   chắc chắn bạn cần việc này**, vì dữ liệu thật không nằm trong SQLite
 - [Từ database tới biểu đồ](./tu-database-toi-bieu-do.md) — bài dài hơn, dựng
   một trang báo cáo bốn biểu đồ có bộ lọc dùng chung
 - [Vì sao bản cài chưa sẵn sàng cho môi trường thật](../explanation/chua-san-sang-cho-production.md) — đọc trước khi cho người khác dùng
-- [Bật dịch vụ MCP](../how-to/tro-ly-ai/bat-mcp.md) — hỏi bằng lời, nó tự dựng biểu đồ
+- [Bật dịch vụ MCP](../how-to/mcp/bat-mcp.md) — hỏi bằng lời, nó tự dựng biểu đồ

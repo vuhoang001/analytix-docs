@@ -100,7 +100,7 @@ Database metadata là một tệp SQLite. SQLite cho **một người ghi tại 
 
 Vài người dùng thì không thấy gì. Nhiều người dùng đồng thời thì bắt đầu gặp lỗi
 khoá database. Chuyển sang PostgreSQL là cách giải — nhưng
-[driver Postgres không có sẵn](../how-to/cai-dat-van-hanh/them-driver-du-lieu.md), phải cài thêm.
+[driver Postgres không có sẵn](../how-to/cai-dat/them-driver-du-lieu.md), phải cài thêm.
 
 ### 6. Container chạy bằng `root`
 
@@ -187,8 +187,8 @@ trong một mạng nội bộ khác hẳn một nghìn người qua Internet.
 ## Liên quan
 
 - [AnalytiX là gì](./analytix-la-gi.md)
-- [Cài thực trên máy](../how-to/cai-dat-van-hanh/cai-dat-tren-may.md)
-- [Cài bằng Docker](../how-to/cai-dat-van-hanh/cai-dat-bang-docker.md)
-- [Thêm driver cho nguồn dữ liệu](../how-to/cai-dat-van-hanh/them-driver-du-lieu.md)
+- [Cài thực trên máy](../how-to/cai-dat/cai-dat-tren-may.md)
+- [Cài bằng Docker](../how-to/cai-dat/cai-dat-bang-docker.md)
+- [Thêm driver cho nguồn dữ liệu](../how-to/cai-dat/them-driver-du-lieu.md)
 - [Biến môi trường](../reference/bien-moi-truong.md#analytix_bind) — `ANALYTIX_BIND` và chốt mật khẩu
 - [Yêu cầu hệ thống](../reference/yeu-cau-he-thong.md)

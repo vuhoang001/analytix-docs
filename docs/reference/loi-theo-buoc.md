@@ -14,9 +14,9 @@ Bảng đầu tra nhanh theo số bước; bốn bảng sau đầy đủ hơn, c
 Lỗi lúc **cài** không nằm ở trang này. Những dòng bắt đầu bằng
 `[analytix] LỖI:` là do `./cai.sh` hoặc `./go-cai.sh` in ra — tra ở mục *Lỗi hay
 gặp* của trang cài tương ứng:
-[Cài bằng Docker](../how-to/cai-dat-van-hanh/cai-dat-bang-docker.md),
-[Cài thực trên máy](../how-to/cai-dat-van-hanh/cai-dat-tren-may.md),
-[Cài trên máy không có internet](../how-to/cai-dat-van-hanh/cai-tren-may-khong-co-mang.md).
+[Cài bằng Docker](../how-to/cai-dat/cai-dat-bang-docker.md),
+[Cài thực trên máy](../how-to/cai-dat/cai-dat-tren-may.md),
+[Cài trên máy không có internet](../how-to/cai-dat/cai-tren-may-khong-co-mang.md).
 
 ## Tra nhanh theo bước
 
@@ -94,7 +94,7 @@ ModuleNotFoundError: No module named 'psycopg2'
 ```
 
 Cài `psycopg2-binary` rồi khởi động lại — xem
-[Thêm driver cho nguồn dữ liệu](../how-to/cai-dat-van-hanh/them-driver-du-lieu.md).
+[Thêm driver cho nguồn dữ liệu](../how-to/cai-dat/them-driver-du-lieu.md).
 
 **`Host` khi AnalytiX chạy trong container.** Bài hướng dẫn điền `Host` là
 `127.0.0.1` vì nó giả định AnalytiX và database nằm trên cùng một máy. Cài bằng
@@ -122,5 +122,5 @@ dashboard* — giờ nó trả `No data`, dashboard phải có sẵn.
 ## Liên quan
 
 - [Từ database tới biểu đồ](../tutorials/tu-database-toi-bieu-do.md)
-- [Thêm driver cho nguồn dữ liệu](../how-to/cai-dat-van-hanh/them-driver-du-lieu.md)
+- [Thêm driver cho nguồn dữ liệu](../how-to/cai-dat/them-driver-du-lieu.md)
 - [Yêu cầu hệ thống](./yeu-cau-he-thong.md)

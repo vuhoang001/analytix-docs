@@ -72,7 +72,7 @@ bản cài tay không thể lệch nhau.
 **Không mang theo driver database nào ngoài SQLite.** Cài xong, AnalytiX query
 được tệp SQLite — và gần như chỉ thế. Nối Postgres, MySQL, Trino hay bất cứ gì
 khác đều phải cài thêm driver bằng tay. Xem
-[Thêm driver cho nguồn dữ liệu](../how-to/cai-dat-van-hanh/them-driver-du-lieu.md).
+[Thêm driver cho nguồn dữ liệu](../how-to/cai-dat/them-driver-du-lieu.md).
 
 **Không phải bản sẵn sàng cho môi trường thật.** Cả hai đường cài đều chạy bằng
 web server dành cho phát triển, không có reverse proxy, không HTTPS. Xem
@@ -116,6 +116,6 @@ thật](./chua-san-sang-cho-production.md).
 ## Liên quan
 
 - [Cài AnalytiX lần đầu](../tutorials/cai-dat-analytix.md) — đi từ đầu đến cuối
-- [Cài bằng Docker](../how-to/cai-dat-van-hanh/cai-dat-bang-docker.md)
-- [Cài thực trên máy](../how-to/cai-dat-van-hanh/cai-dat-tren-may.md)
+- [Cài bằng Docker](../how-to/cai-dat/cai-dat-bang-docker.md)
+- [Cài thực trên máy](../how-to/cai-dat/cai-dat-tren-may.md)
 - [Yêu cầu hệ thống](../reference/yeu-cau-he-thong.md)

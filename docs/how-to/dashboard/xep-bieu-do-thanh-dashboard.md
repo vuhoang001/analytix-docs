@@ -1,6 +1,6 @@
 ---
 title: Xếp biểu đồ thành dashboard
-sidebar_position: 4
+sidebar_position: 1
 last_update:
   date: "2026-11-04"
   author: vuhoang001
@@ -11,7 +11,7 @@ last_update:
 Trang này đưa nhiều biểu đồ đã lưu lên cùng một trang và sắp bố cục cho chúng.
 Không dùng trang này khi bạn chỉ cần một biểu đồ đứng riêng — biểu đồ lưu xong
 là đã xem được, không cần dashboard — hoặc khi cần nhúng trang ra ngoài, việc đó
-ở [Nhúng dashboard bằng iframe đơn giản](../nhung-bao-cao/nhung-iframe-don-gian.md).
+ở [Nhúng dashboard bằng iframe đơn giản](../nhung/nhung-iframe-don-gian.md).
 
 Dành cho người dựng báo cáo. Cần có trước: ít nhất hai biểu đồ đã lưu, và quyền
 đọc dataset mà chúng dùng.
@@ -75,8 +75,8 @@ Mở **Dashboards** trên thanh trên rồi vào trang vừa dựng. Đúng là:
 
 ## Liên quan
 
-- [Tạo biểu đồ](./tao-bieu-do.md) — việc phải làm trước trang này
+- [Tạo biểu đồ](../bieu-do/tao-bieu-do.md) — việc phải làm trước trang này
 - [Thêm bộ lọc dùng chung](./them-bo-loc-dung-chung.md) — cho người đọc lọc cả trang cùng lúc
 - [Đặt quyền và chia sẻ dashboard](./dat-quyen-va-chia-se-dashboard.md) — chuyển *Draft* sang *Published* và cấp quyền
-- [Dùng dashboard HTML trong SQL](./dung-dashboard-html-trong-sql.md)
+- [Dựng biểu đồ tuỳ chỉnh bằng HTML trong SQL](../bieu-do/bieu-do-tuy-chinh-html.md)
 - [Lỗi theo bước](../../reference/loi-theo-buoc.md) — bảng lỗi đầy đủ cho lớp Dashboard

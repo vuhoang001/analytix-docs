@@ -1,9 +1,12 @@
 ---
-title: Dựng dashboard theo phong cách tuỳ chỉnh (Table-viz + HTML trong SQL)
-sidebar_position: 8
+title: Dựng biểu đồ tuỳ chỉnh bằng HTML trong SQL
+sidebar_position: 2
+last_update:
+  date: "2026-11-04"
+  author: vuhoang001
 ---
 
-# Dựng dashboard theo phong cách tuỳ chỉnh
+# Dựng biểu đồ tuỳ chỉnh bằng HTML trong SQL
 
 Dashboard mặc định dùng các loại biểu đồ có sẵn (Bar, Pie, Big Number…). Khi
 cần một bố cục tuỳ chỉnh hơn — ví dụ dải ô số liệu lớn có màu theo trạng
@@ -77,7 +80,7 @@ cao phụ thuộc vào kiểu chữ và độ dài nội dung thật.
    trong khối. Một khối vừa khít lúc xem sẽ cuộn ngay khi mở ra sửa — công
    thức ở trên đã tính sẵn phần này.
 3. **`raw_value` không phải số để hiển thị.** Đó là chữ thô, chưa quy đổi —
-   xem [Viết SQL an toàn với cột dạng chữ](./viet-sql-an-toan.md) để biết
+   xem [Viết SQL an toàn với cột dạng chữ](../dataset/viet-sql-an-toan.md) để biết
    cách ép kiểu đúng trước khi đưa vào HTML hiển thị.
 
 ## Tự tạo theme CSS riêng của bạn

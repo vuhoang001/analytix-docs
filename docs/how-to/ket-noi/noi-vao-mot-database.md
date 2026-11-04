@@ -10,7 +10,7 @@ last_update:
 
 Trang này khai một kết nối database mới trên giao diện AnalytiX, làm một lần rồi
 cả hệ thống dùng chung. Chưa cài driver cho loại database đó thì đừng bắt đầu từ
-đây — cài driver trước, xem [Thêm driver cho nguồn dữ liệu](../cai-dat-van-hanh/them-driver-du-lieu.md).
+đây — cài driver trước, xem [Thêm driver cho nguồn dữ liệu](../cai-dat/them-driver-du-lieu.md).
 
 Dành cho người quản trị hoặc người dựng báo cáo. Cần có trước: AnalytiX đang
 chạy, một database có dữ liệu, một tài khoản chỉ đọc, và driver tương ứng đã cài.
@@ -104,7 +104,7 @@ Rồi mở **SQL** → **SQL Lab**, chọn kết nối vừa tạo, chạy `SELE
 
 | Hiện tượng | Nguyên nhân | Cách sửa |
 |:---|:---|:---|
-| `Please re-enter the password` mà mật khẩu đúng | Thiếu driver Postgres — thông báo sai hướng hoàn toàn | Cài `psycopg2-binary` rồi khởi động lại, xem [Thêm driver](../cai-dat-van-hanh/them-driver-du-lieu.md) |
+| `Please re-enter the password` mà mật khẩu đúng | Thiếu driver Postgres — thông báo sai hướng hoàn toàn | Cài `psycopg2-binary` rồi khởi động lại, xem [Thêm driver](../cai-dat/them-driver-du-lieu.md) |
 | `Could not connect to database` | Sai `Host`. Bản cài thực trên máy: điền địa chỉ LAN thay vì `127.0.0.1` | Sửa `Host` thành `127.0.0.1` |
 | `Could not connect to database` mà `Host` đã là `127.0.0.1` | AnalytiX chạy trong container — ở đó `127.0.0.1` là chính container | Xem Ghi chú *`Host` khi AnalytiX chạy trong container* ở [Lỗi theo bước](../../reference/loi-theo-buoc.md) |
 | `password authentication failed` | Sai mật khẩu, hoặc sai tên tài khoản | Đối chiếu lại với từ điển dữ liệu |
@@ -114,7 +114,7 @@ Rồi mở **SQL** → **SQL Lab**, chọn kết nối vừa tạo, chạy `SELE
 
 ## Liên quan
 
-- [Thêm driver cho nguồn dữ liệu](../cai-dat-van-hanh/them-driver-du-lieu.md) — làm trước trang này
-- [Tạo dataset](./tao-dataset.md) — bước kế tiếp
+- [Thêm driver cho nguồn dữ liệu](../cai-dat/them-driver-du-lieu.md) — làm trước trang này
+- [Tạo dataset](../dataset/tao-dataset.md) — bước kế tiếp
 - [Lỗi theo bước](../../reference/loi-theo-buoc.md)
 - [Từ database tới biểu đồ](../../tutorials/tu-database-toi-bieu-do.md)

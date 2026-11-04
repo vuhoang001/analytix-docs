@@ -1,0 +1,9 @@
+{
+  "label": "Kết nối database",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "slug": "/how-to/ket-noi",
+    "description": "Khai một database để AnalytiX đọc. Làm một lần, cả hệ thống dùng chung."
+  }
+}

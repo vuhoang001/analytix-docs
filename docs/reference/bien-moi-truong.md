@@ -306,7 +306,7 @@ Cho bất kỳ trang nào nhúng AnalytiX vào khung ẩn là mở đường cli
 Liệt kê đúng origin bạn kiểm soát.
 :::
 
-Xem [Nhúng dashboard bằng iframe đơn giản](../how-to/nhung-bao-cao/nhung-iframe-don-gian.md).
+Xem [Nhúng dashboard bằng iframe đơn giản](../how-to/nhung/nhung-iframe-don-gian.md).
 
 ### `ANALYTIX_SECRET_KEY`
 
@@ -371,7 +371,7 @@ khi cài, hoặc dựng thêm ở ngoài.
 
 ## Liên quan
 
-- [Cài thực trên máy](../how-to/cai-dat-van-hanh/cai-dat-tren-may.md)
-- [Cài bằng Docker](../how-to/cai-dat-van-hanh/cai-dat-bang-docker.md)
+- [Cài thực trên máy](../how-to/cai-dat/cai-dat-tren-may.md)
+- [Cài bằng Docker](../how-to/cai-dat/cai-dat-bang-docker.md)
 - [Yêu cầu hệ thống](./yeu-cau-he-thong.md)
 - [Cấu hình MCP](./mcp-cau-hinh.md) — các biến `MCP_*`, đặt trong `superset_config.py`

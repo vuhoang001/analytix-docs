@@ -18,7 +18,7 @@ Lý do làm lại thứ đã làm: bạn **đã biết đáp án đúng**. Nhờ
 Dành cho người đã đi hết bài cài đặt. Cần có trước:
 
 - Bảng `ban_hang` và dataset của nó từ bài cài đặt vẫn còn
-- Dịch vụ MCP đã chạy — xem [Bật dịch vụ MCP](../how-to/tro-ly-ai/bat-mcp.md)
+- Dịch vụ MCP đã chạy — xem [Bật dịch vụ MCP](../how-to/mcp/bat-mcp.md)
 - Một trợ lý AI đã nối được vào dịch vụ đó
 
 ## Kết quả cuối cùng
@@ -142,7 +142,7 @@ Việc này **phải thất bại**:
 :::danger[Nếu bước này THÀNH CÔNG thì dừng lại ngay]
 Nghĩa là kết nối dữ liệu chưa tắt quyền ghi. Mở khai báo kết nối, bỏ chọn
 *Allow DML*, và sửa trước khi cho ai khác dùng. Xem
-[Thêm driver cho nguồn dữ liệu](../how-to/cai-dat-van-hanh/them-driver-du-lieu.md).
+[Thêm driver cho nguồn dữ liệu](../how-to/cai-dat/them-driver-du-lieu.md).
 :::
 
 ![Kết quả execute_sql với câu INSERT: success false, error DML queries are not allowed on this database.](./img/bang-loi/08-dml-tu-choi.png)
@@ -182,6 +182,6 @@ MCP chỉ xoá được biểu đồ và dashboard, **không** xoá được d�
 
 ## Bước tiếp theo
 
-- [Đổi xác thực MCP sang JWT](../how-to/tro-ly-ai/mcp-doi-sang-jwt.md) — bắt buộc trước khi mở cho người khác dùng
+- [Đổi xác thực MCP sang JWT](../how-to/mcp/mcp-doi-sang-jwt.md) — bắt buộc trước khi mở cho người khác dùng
 - [Công cụ MCP](../reference/mcp-cong-cu.md) — 24 công cụ, tham số đầy đủ
 - [Vì sao MCP là một dịch vụ riêng](../explanation/vi-sao-mcp-la-service-rieng.md)

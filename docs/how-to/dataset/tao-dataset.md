@@ -1,6 +1,6 @@
 ---
 title: Tạo dataset
-sidebar_position: 2
+sidebar_position: 1
 last_update:
   date: "2026-11-04"
   author: vuhoang001
@@ -120,7 +120,7 @@ dòng này phải khớp với số dòng SQL Lab trả về ở bước 3.
 ## Liên quan
 
 - [Hai cách tạo dataset](../../explanation/hai-cach-tao-dataset.md) — vì sao có hai đường, và chọn đường nào
-- [Nối vào một database](./noi-vao-mot-database.md) — việc phải làm trước trang này
-- [Tạo biểu đồ](./tao-bieu-do.md) — việc làm tiếp sau khi có dataset
+- [Nối vào một database](../ket-noi/noi-vao-mot-database.md) — việc phải làm trước trang này
+- [Tạo biểu đồ](../bieu-do/tao-bieu-do.md) — việc làm tiếp sau khi có dataset
 - [Viết SQL an toàn với cột dạng chữ](./viet-sql-an-toan.md) — ép kiểu đúng cách cho câu SQL ở Đường A
 - [Lỗi theo bước](../../reference/loi-theo-buoc.md) — bảng lỗi đầy đủ cho mọi lớp

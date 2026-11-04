@@ -1,6 +1,6 @@
 ---
 title: Tạo biểu đồ
-sidebar_position: 3
+sidebar_position: 1
 last_update:
   date: "2026-11-04"
   author: vuhoang001
@@ -9,9 +9,9 @@ last_update:
 # Tạo biểu đồ
 
 Trang này dựng một biểu đồ từ dataset đã có: chọn loại, khai dữ liệu, lưu lại. Biểu đồ chỉ đọc
-dataset, không đọc thẳng database — chưa có dataset thì sang [Tạo dataset](./tao-dataset.md)
+dataset, không đọc thẳng database — chưa có dataset thì sang [Tạo dataset](../dataset/tao-dataset.md)
 trước. Cần bố cục không loại nào có sẵn thì không dùng cách này, xem
-[Dựng dashboard tuỳ chỉnh](./dung-dashboard-html-trong-sql.md).
+[Dựng biểu đồ tuỳ chỉnh](./bieu-do-tuy-chinh-html.md).
 
 Dành cho người làm báo cáo. Cần có trước: một dataset đã lưu, và quyền đọc dataset đó.
 
@@ -44,7 +44,7 @@ Bốn loại là bốn cách AnalytiX đòi khai dữ liệu. Nắm đủ bốn 
 
 **Ô `Add to dashboard` chỉ chọn được dashboard đã tồn tại.** Ở bản 6.1.0 nó không còn tạo
 dashboard mới từ tên bạn gõ — gõ tên chưa có thì danh sách trả về `No data`. Lưu biểu đồ trước,
-dựng dashboard sau rồi gắn vào: [Xếp biểu đồ thành dashboard](./xep-bieu-do-thanh-dashboard.md).
+dựng dashboard sau rồi gắn vào: [Xếp biểu đồ thành dashboard](../dashboard/xep-bieu-do-thanh-dashboard.md).
 
 ### Ba tab khai metric
 
@@ -153,8 +153,8 @@ Nhìn số `N rows` ở góc phải màn **Explore** — nó nói ngay biểu đ
 
 ## Liên quan
 
-- [Tạo dataset](./tao-dataset.md)
-- [Xếp biểu đồ thành dashboard](./xep-bieu-do-thanh-dashboard.md)
-- [Dựng dashboard theo phong cách tuỳ chỉnh](./dung-dashboard-html-trong-sql.md)
+- [Tạo dataset](../dataset/tao-dataset.md)
+- [Xếp biểu đồ thành dashboard](../dashboard/xep-bieu-do-thanh-dashboard.md)
+- [Dựng biểu đồ tuỳ chỉnh bằng HTML trong SQL](./bieu-do-tuy-chinh-html.md)
 - [Lỗi theo bước](../../reference/loi-theo-buoc.md)
 - [Từ database tới biểu đồ](../../tutorials/tu-database-toi-bieu-do.md)

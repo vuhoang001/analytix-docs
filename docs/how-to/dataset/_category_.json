@@ -1,0 +1,9 @@
+{
+  "label": "Dataset",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "slug": "/how-to/dataset",
+    "description": "Lớp trả lời \"lấy dữ liệu từ đâu, cột tên là gì\". Biểu đồ chỉ đọc được dataset, không đọc thẳng database."
+  }
+}

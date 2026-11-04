@@ -37,7 +37,7 @@ docker exec <ten-container> pip install psycopg2-binary && docker restart <ten-c
 ~/analytix/venv/bin/pip install psycopg2-binary
 ```
 
-Chi tiết: [Thêm driver cho nguồn dữ liệu](../how-to/cai-dat-van-hanh/them-driver-du-lieu.md).
+Chi tiết: [Thêm driver cho nguồn dữ liệu](../how-to/cai-dat/them-driver-du-lieu.md).
 :::
 
 ## Kết quả cuối cùng
@@ -485,16 +485,16 @@ Mười lăm bước trên đây, mỗi việc còn một trang công thức ri�
 
 | Việc | Trang |
 |:---|:---|
-| Nối vào một database khác | [Nối vào một database](../how-to/dung-bao-cao/noi-vao-mot-database.md) |
-| Tạo dataset | [Tạo dataset](../how-to/dung-bao-cao/tao-dataset.md) |
-| Vẽ thêm biểu đồ | [Tạo biểu đồ](../how-to/dung-bao-cao/tao-bieu-do.md) |
-| Xếp lên một trang mới | [Xếp biểu đồ thành dashboard](../how-to/dung-bao-cao/xep-bieu-do-thanh-dashboard.md) |
-| Thêm ô lọc | [Thêm bộ lọc dùng chung](../how-to/dung-bao-cao/them-bo-loc-dung-chung.md) |
-| Cho người khác xem | [Đặt quyền và chia sẻ dashboard](../how-to/dung-bao-cao/dat-quyen-va-chia-se-dashboard.md) |
+| Nối vào một database khác | [Nối vào một database](../how-to/ket-noi/noi-vao-mot-database.md) |
+| Tạo dataset | [Tạo dataset](../how-to/dataset/tao-dataset.md) |
+| Vẽ thêm biểu đồ | [Tạo biểu đồ](../how-to/bieu-do/tao-bieu-do.md) |
+| Xếp lên một trang mới | [Xếp biểu đồ thành dashboard](../how-to/dashboard/xep-bieu-do-thanh-dashboard.md) |
+| Thêm ô lọc | [Thêm bộ lọc dùng chung](../how-to/dashboard/them-bo-loc-dung-chung.md) |
+| Cho người khác xem | [Đặt quyền và chia sẻ dashboard](../how-to/dashboard/dat-quyen-va-chia-se-dashboard.md) |
 
 Và bốn việc bài này không chạm tới:
 
-- [Thêm driver cho nguồn dữ liệu](../how-to/cai-dat-van-hanh/them-driver-du-lieu.md) — nối vào MySQL, Trino, hay nguồn khác
-- [Viết SQL an toàn](../how-to/dung-bao-cao/viet-sql-an-toan.md) — trước khi mở SQL Lab cho người khác
-- [Nhúng iframe đơn giản](../how-to/nhung-bao-cao/nhung-iframe-don-gian.md) — đưa dashboard sang hệ thống khác
+- [Thêm driver cho nguồn dữ liệu](../how-to/cai-dat/them-driver-du-lieu.md) — nối vào MySQL, Trino, hay nguồn khác
+- [Viết SQL an toàn](../how-to/dataset/viet-sql-an-toan.md) — trước khi mở SQL Lab cho người khác
+- [Nhúng iframe đơn giản](../how-to/nhung/nhung-iframe-don-gian.md) — đưa dashboard sang hệ thống khác
 - [Hai cách tạo dataset](../explanation/hai-cach-tao-dataset.md) — vì sao bài này dẫn bạn đi cả hai đường

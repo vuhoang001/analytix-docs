@@ -60,7 +60,7 @@ Máy đích không có mạng thì chọn theo chỗ đó có Docker hay không:
   chính `./cai.sh`; thấy tệp ảnh bên cạnh thì nó tự đi đường `--offline`, tức là
   `docker load` rồi chạy container.
 
-Xem [Cài trên máy không có internet](../how-to/cai-dat-van-hanh/cai-tren-may-khong-co-mang.md).
+Xem [Cài trên máy không có internet](../how-to/cai-dat/cai-tren-may-khong-co-mang.md).
 :::
 
 ## Giới hạn của bản đầy đủ
@@ -116,7 +116,7 @@ Những thứ ở hai dòng cuối không cần để *cài*, nhưng cần để
 Bộ 156 gói đã ghim **không chứa driver database nào** ngoài SQLite. Đây là điều
 người cài sẽ đụng ngay sau khi đăng nhập lần đầu.
 
-[Thêm driver cho nguồn dữ liệu](../how-to/cai-dat-van-hanh/them-driver-du-lieu.md)
+[Thêm driver cho nguồn dữ liệu](../how-to/cai-dat/them-driver-du-lieu.md)
 :::
 
 :::danger[Vì sao SQLite dùng được: một chốt đã bị tắt]
@@ -166,8 +166,8 @@ dọn bảng nhật ký khi cần.
 
 ## Liên quan
 
-- [Cài thực trên máy](../how-to/cai-dat-van-hanh/cai-dat-tren-may.md)
-- [Cài bằng Docker](../how-to/cai-dat-van-hanh/cai-dat-bang-docker.md)
-- [Đóng gói bản phát hành](../how-to/cai-dat-van-hanh/dong-goi-ban-phat-hanh.md) — dựng ra ba kiểu ở đầu trang
+- [Cài thực trên máy](../how-to/cai-dat/cai-dat-tren-may.md)
+- [Cài bằng Docker](../how-to/cai-dat/cai-dat-bang-docker.md)
+- [Đóng gói bản phát hành](../how-to/cai-dat/dong-goi-ban-phat-hanh.md) — dựng ra ba kiểu ở đầu trang
 - [Biến môi trường](./bien-moi-truong.md)
-- [Thêm driver cho nguồn dữ liệu](../how-to/cai-dat-van-hanh/them-driver-du-lieu.md)
+- [Thêm driver cho nguồn dữ liệu](../how-to/cai-dat/them-driver-du-lieu.md)

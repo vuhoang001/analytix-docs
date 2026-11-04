@@ -85,7 +85,7 @@ lúc 2 giờ sáng. Cái giá của việc tách tiến trình là phải vận 
 không kiểm token — nó chạy dưới một tài khoản cố định. An toàn **chỉ vì** nó
 nghe trên `127.0.0.1`, tức biên bảo mật là ranh giới máy, không phải token. Mở
 ra ngoài localhost mà không đổi sang JWT là mở một cửa không khoá; xem
-[Đổi xác thực MCP sang JWT](../how-to/tro-ly-ai/mcp-doi-sang-jwt.md).
+[Đổi xác thực MCP sang JWT](../how-to/mcp/mcp-doi-sang-jwt.md).
 
 **Quyền hiện là của một tài khoản, không của người đang hỏi.** Mọi người dùng
 chung một danh tính phía MCP, nên ai hỏi cũng thấy đúng những gì tài khoản đó
@@ -94,7 +94,7 @@ thực theo người dùng.
 
 ## Liên quan
 
-- [Bật dịch vụ MCP](../how-to/tro-ly-ai/bat-mcp.md) — các bước bật
+- [Bật dịch vụ MCP](../how-to/mcp/bat-mcp.md) — các bước bật
 - [Tạo biểu đồ bằng lời](../tutorials/tao-bieu-do-bang-loi.md) — bài học đi từ đầu
 - [Cấu hình MCP](../reference/mcp-cau-hinh.md) — bảng biến cấu hình
 - [Công cụ MCP](../reference/mcp-cong-cu.md) — 24 công cụ và cách gọi

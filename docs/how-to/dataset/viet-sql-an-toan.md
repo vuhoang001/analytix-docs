@@ -1,6 +1,6 @@
 ---
 title: Viết SQL an toàn với cột dạng chữ
-sidebar_position: 7
+sidebar_position: 2
 ---
 
 # Viết SQL an toàn với cột dạng chữ

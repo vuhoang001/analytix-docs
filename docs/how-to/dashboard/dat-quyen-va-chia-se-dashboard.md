@@ -1,6 +1,6 @@
 ---
 title: Đặt quyền và chia sẻ dashboard
-sidebar_position: 6
+sidebar_position: 3
 last_update:
   date: "2026-11-04"
   author: vuhoang001
@@ -10,7 +10,7 @@ last_update:
 
 Trang này cho người khác xem một dashboard khi họ **có tài khoản AnalytiX**.
 Người xem không có tài khoản thì đây là trang sai — việc đó ở
-[Nhúng dashboard bằng iframe đơn giản](../nhung-bao-cao/nhung-iframe-don-gian.md).
+[Nhúng dashboard bằng iframe đơn giản](../nhung/nhung-iframe-don-gian.md).
 
 Dành cho người dựng báo cáo. Cần có trước: một dashboard đã dựng xong, và danh
 sách người cần xem nó.
@@ -59,7 +59,7 @@ Việc cấp quyền đọc dataset cho một người là **việc của quản
 ## URL slug và việc nhúng
 
 URL slug đặt ở **General information** chính là mã trang dùng khi nhúng `iframe`
-— xem [Nhúng dashboard bằng iframe đơn giản](../nhung-bao-cao/nhung-iframe-don-gian.md).
+— xem [Nhúng dashboard bằng iframe đơn giản](../nhung/nhung-iframe-don-gian.md).
 
 ## Kiểm tra là đã đúng
 
@@ -76,11 +76,11 @@ Hai thứ phải đúng:
 | Người khác không thấy trang | Trang vẫn ở trạng thái *Draft* | Bấm chữ *Draft* cạnh tiêu đề để chuyển sang *Published* |
 | Người khác mở được trang nhưng biểu đồ lỗi | Họ không có quyền trên dataset | Nhờ quản trị cấp quyền đọc dataset |
 | Menu **⋯** không có **Edit properties** | Chưa bấm **Edit dashboard** | Bấm **Edit dashboard** trước, rồi mở lại menu **⋯** |
-| Người nhận link bị đẩy về trang đăng nhập | Họ không có tài khoản AnalytiX | Nhúng trang thay vì chia sẻ link — xem [Nhúng dashboard bằng iframe đơn giản](../nhung-bao-cao/nhung-iframe-don-gian.md) |
+| Người nhận link bị đẩy về trang đăng nhập | Họ không có tài khoản AnalytiX | Nhúng trang thay vì chia sẻ link — xem [Nhúng dashboard bằng iframe đơn giản](../nhung/nhung-iframe-don-gian.md) |
 
 ## Liên quan
 
 - [Xếp biểu đồ thành dashboard](./xep-bieu-do-thanh-dashboard.md) — việc phải làm trước trang này
-- [Nhúng dashboard bằng iframe đơn giản](../nhung-bao-cao/nhung-iframe-don-gian.md) — cho người xem không có tài khoản
-- [Nhúng dashboard qua SDK cho đối tác ngoài](../nhung-bao-cao/nhung-qua-sdk.md) — khi cần phân quyền theo người xem
+- [Nhúng dashboard bằng iframe đơn giản](../nhung/nhung-iframe-don-gian.md) — cho người xem không có tài khoản
+- [Nhúng dashboard qua SDK cho đối tác ngoài](../nhung/nhung-qua-sdk.md) — khi cần phân quyền theo người xem
 - [Lỗi theo bước](../../reference/loi-theo-buoc.md) — bảng lỗi đầy đủ cho lớp Dashboard

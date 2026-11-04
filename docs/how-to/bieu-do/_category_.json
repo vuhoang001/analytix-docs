@@ -1,0 +1,9 @@
+{
+  "label": "Biểu đồ",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "slug": "/how-to/bieu-do",
+    "description": "Vẽ một biểu đồ từ dataset đã có — bốn loại, bốn cách khai dữ liệu khác nhau."
+  }
+}

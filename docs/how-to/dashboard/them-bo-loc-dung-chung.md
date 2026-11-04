@@ -1,6 +1,6 @@
 ---
 title: Thêm bộ lọc dùng chung cho dashboard
-sidebar_position: 5
+sidebar_position: 2
 last_update:
   date: "2026-11-04"
   author: vuhoang001
@@ -75,6 +75,6 @@ lỗi.
 ## Liên quan
 
 - [Xếp biểu đồ thành dashboard](./xep-bieu-do-thanh-dashboard.md)
-- [Tạo biểu đồ](./tao-bieu-do.md)
-- [Tạo dataset](./tao-dataset.md)
+- [Tạo biểu đồ](../bieu-do/tao-bieu-do.md)
+- [Tạo dataset](../dataset/tao-dataset.md)
 - [Lỗi theo bước](../../reference/loi-theo-buoc.md)
