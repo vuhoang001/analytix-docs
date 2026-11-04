@@ -1,9 +1,9 @@
 {
-  "label": "Học theo hướng dẫn",
+  "label": "Bắt đầu",
   "position": 1,
   "link": {
     "type": "generated-index",
     "slug": "/tutorials",
-    "description": "Bài học dắt tay từng bước, có kết quả cụ thể để tự kiểm tra."
+    "description": "Bạn mới dùng AnalytiX. Dắt tay từng bước, cuối bài có kết quả tự kiểm được."
   }
 }

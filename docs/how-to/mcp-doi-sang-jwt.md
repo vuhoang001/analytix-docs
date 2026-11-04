@@ -103,12 +103,10 @@ quan — tài khoản đó phải **tồn tại** và có đúng quyền cần t
 MCP_REQUIRED_SCOPES = ["superset:read"]
 ```
 
-:::note[Scope gác ở tầng token, không phân quyền từng công cụ]
 Biến này **được thực thi thật**: token thiếu scope trong danh sách sẽ bị từ chối
-hoàn toàn, không vào được dịch vụ. Nhưng nó **không** quyết định token đó gọi
-được công cụ nào — việc đó do phân quyền của AnalytiX làm. Đừng dùng
-scope thay cho vai trò.
-:::
+hoàn toàn, không vào được dịch vụ. Nhưng scope chỉ gác ở **tầng token** — nó
+**không** quyết định token đó gọi được công cụ nào, việc đó do phân quyền của
+AnalytiX làm. Đừng dùng scope thay cho vai trò.
 
 ### 5. Khởi động lại và gửi token
 

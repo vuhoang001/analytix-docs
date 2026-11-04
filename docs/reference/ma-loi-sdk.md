@@ -19,8 +19,6 @@ Gặp sự cố khi nhúng bằng SDK + vé khách, đối chiếu bảng này t
 | Lỗi **CORS** trong console trình duyệt | Gọi thẳng sang AnalytiX từ trình duyệt thay vì gọi qua backend của chính mình | Phía tích hợp (đối tác) — xem [Vì sao nhúng cần vé khách](../explanation/vi-sao-nhung-can-ve-khach.md) |
 | Khung trắng, không báo lỗi | SDK chưa gắn được; mở DevTools xem hàm xin vé (`fetchGuestToken`) trả về gì | Phía tích hợp (đối tác) |
 
-:::tip
 Mở thẳng `/embedded/<uuid>` bằng trình duyệt hay `curl` **không phải** phép
 thử hợp lệ. Kết quả `200` chỉ là vỏ HTML rỗng — dashboard chỉ nạp sau khi
 nhận vé qua `postMessage`, việc mà chỉ SDK làm được.
-:::

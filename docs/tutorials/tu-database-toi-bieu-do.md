@@ -17,14 +17,12 @@ Mọi ảnh trong bài là ảnh chụp chính AnalytiX, không phải ảnh d�
 **Cần có trước:** một bản AnalytiX đang chạy ([Cài đặt AnalytiX](./cai-dat-analytix.md)),
 một database PostgreSQL có dữ liệu, và tài khoản chỉ đọc vào database đó.
 
-:::note[Dữ liệu trong bài]
-Mọi con số dưới đây chạy trên một bộ dữ liệu demo bạn dựng lại được — xem
-`docs/du-lieu-demo/` trong mã nguồn. Dựng nó lên thì từng con số trong bài khớp
-đúng: 131 dòng, Big Number ra 220, nhóm `DU` ở mức 33.
+**Dữ liệu trong bài.** Mọi con số dưới đây chạy trên một bộ dữ liệu demo bạn
+dựng lại được — xem `docs/du-lieu-demo/` trong mã nguồn. Dựng nó lên thì từng
+con số trong bài khớp đúng: 131 dòng, Big Number ra 220, nhóm `DU` ở mức 33.
 
 Đang dùng dữ liệu của chính bạn thì tên bảng và con số sẽ khác; các bước thì
 không đổi.
-:::
 
 :::danger[Cài driver Postgres trước khi bắt đầu]
 Bản cài mặc định **không mang driver Postgres**. Chưa cài thì Bước 3 treo ở nút
@@ -35,7 +33,7 @@ Bản cài mặc định **không mang driver Postgres**. Chưa cài thì Bướ
 # chay bang Docker
 docker exec <ten-container> pip install psycopg2-binary && docker restart <ten-container>
 
-# hoac cai bang install.sh
+# hoac cai bang cai-tren-may.sh
 ~/analytix/venv/bin/pip install psycopg2-binary
 ```
 
@@ -83,7 +81,7 @@ Bấm **+ Database** ở góc trên bên phải.
 
 Chọn **PostgreSQL** ở ô ngoài cùng bên trái.
 
-Nếu danh sách của bạn không có PostgreSQL trong ba ô lớn, mở ô **Supported databases** bên
+Nếu danh sách của bạn không có PostgreSQL trong hai ô lớn, mở ô **Supported databases** bên
 dưới và tìm trong đó.
 
 ### Bước 3 — Điền thông tin kết nối
@@ -135,7 +133,7 @@ Chưa bấm **Finish** vội. Mở nhóm **SQL Lab** để xem ba ô quan trọn
 | Allow this database to be explored | **bật** | Cho phép dựng dataset từ một câu SQL thay vì từ bảng có sẵn |
 | Allow DDL and DML | **tắt** | Cho phép ghi. Tài khoản `analytix_ro` vốn không ghi được, nhưng tắt ở đây là lớp chặn thứ hai |
 
-Superset 6.0.0 **bật sẵn hai ô đầu**, nên thường bạn không phải làm gì. Vẫn nên mở ra nhìn
+Superset 6.1.0 **bật sẵn hai ô đầu**, nên thường bạn không phải làm gì. Vẫn nên mở ra nhìn
 một lần, vì nếu ai đó tắt đi thì Phần 2 sẽ hỏng mà không có thông báo rõ ràng.
 
 Bấm **Finish**.

@@ -155,12 +155,11 @@ Khung khác tên miền **không tự co giãn theo nội dung**. Giữ cố đ�
 Mỗi UUID mang một danh sách tên miền được phép nhúng. AnalytiX so
 khớp **nguyên văn chuỗi origin**.
 
-:::caution[`localhost` KHÁC `127.0.0.1`]
-Khai `http://localhost:5173` rồi mở trang bằng `http://127.0.0.1:5173` sẽ
-cho khung hiện JSON `403 Forbidden` — trình duyệt coi hai origin này hoàn
-toàn khác nhau. Khai đủ mọi địa chỉ mà đội phát triển thực sự dùng để mở
-trang, kể cả khi chỉ khác nhau ở `localhost` so với `127.0.0.1`.
-:::
+Nghĩa là **`localhost` KHÁC `127.0.0.1`**: khai `http://localhost:5173` rồi mở
+trang bằng `http://127.0.0.1:5173` sẽ cho khung hiện JSON `403 Forbidden` —
+trình duyệt coi hai origin này hoàn toàn khác nhau. Khai đủ mọi địa chỉ mà đội
+phát triển thực sự dùng để mở trang, kể cả khi chỉ khác nhau ở `localhost` so
+với `127.0.0.1`.
 
 Sửa `allowed_domains` **không làm đổi UUID** — cấu hình phía nhúng không
 cần sửa theo khi danh sách tên miền thay đổi.

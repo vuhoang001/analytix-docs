@@ -2,7 +2,7 @@
 title: Lỗi theo bước
 sidebar_position: 8
 last_update:
-  date: "2026-11-02"
+  date: "2026-11-04"
   author: vuhoang001
 ---
 
@@ -11,11 +11,18 @@ last_update:
 Tra thông báo lỗi gặp khi làm [Từ database tới biểu đồ](../tutorials/tu-database-toi-bieu-do.md).
 Bảng đầu tra nhanh theo số bước; bốn bảng sau đầy đủ hơn, chia theo lớp.
 
+Lỗi lúc **cài** không nằm ở trang này. Những dòng bắt đầu bằng
+`[analytix] LỖI:` là do `./cai.sh` hoặc `./go-cai.sh` in ra — tra ở mục *Lỗi hay
+gặp* của trang cài tương ứng:
+[Cài bằng Docker](../how-to/cai-dat-bang-docker.md),
+[Cài thực trên máy](../how-to/cai-dat-tren-may.md),
+[Cài trên máy không có internet](../how-to/cai-tren-may-khong-co-mang.md).
+
 ## Tra nhanh theo bước
 
 | Bước | Thông báo | Sửa |
 |---|---|---|
-| 3 | `Could not connect to database` | `Host` phải là `127.0.0.1` |
+| 3 | `Could not connect to database` | `Host` là `127.0.0.1` — trừ khi AnalytiX chạy trong container, xem Ghi chú |
 | 3 | `Please re-enter the password` mà mật khẩu đúng | Thiếu driver Postgres — xem Ghi chú bên dưới |
 | 3 | Nút *Connect* mờ | Bấm `Tab` để rời ô cuối |
 | 5 | Panel trái không thấy schema | Đổi database sang `Demo Postgres` |
@@ -29,7 +36,8 @@ Bảng đầu tra nhanh theo số bước; bốn bảng sau đầy đủ hơn, c
 
 | Thông báo | Nguyên nhân | Sửa |
 |---|---|---|
-| `Could not connect to database` | Sai `Host`. Điền địa chỉ LAN thay vì `127.0.0.1` | Sửa `Host` thành `127.0.0.1` |
+| `Could not connect to database` | Sai `Host`. Bản cài thực trên máy: điền địa chỉ LAN thay vì `127.0.0.1` | Sửa `Host` thành `127.0.0.1` |
+| `Could not connect to database` mà `Host` đã là `127.0.0.1` | AnalytiX chạy trong container — ở đó `127.0.0.1` là chính container | Xem Ghi chú *`Host` khi AnalytiX chạy trong container* |
 | `password authentication failed` | Sai mật khẩu, hoặc sai tên tài khoản | Đối chiếu lại với từ điển dữ liệu |
 | `database "demo" does not exist` | Gõ nhầm tên database | Kiểm lại tên, phân biệt chữ hoa chữ thường |
 | Nút `Connect` không sáng | Con trỏ còn nằm trong ô cuối | Bấm `Tab` hoặc click ra chỗ trống |
@@ -87,6 +95,21 @@ ModuleNotFoundError: No module named 'psycopg2'
 
 Cài `psycopg2-binary` rồi khởi động lại — xem
 [Thêm driver cho nguồn dữ liệu](../how-to/them-driver-du-lieu.md).
+
+**`Host` khi AnalytiX chạy trong container.** Bài hướng dẫn điền `Host` là
+`127.0.0.1` vì nó giả định AnalytiX và database nằm trên cùng một máy. Cài bằng
+`./cai.sh --docker` hoặc `./cai.sh --offline` thì không còn đúng: AnalytiX nằm
+trong container, và `127.0.0.1` ở đó là chính container chứ không phải máy chủ.
+`cai.sh` dựng container trên mạng bridge mặc định và **không** thêm
+`--add-host`, nên có hai đường:
+
+- điền địa chỉ LAN của máy chủ vào ô `Host`;
+- hoặc tạo lại container kèm `--add-host=host.docker.internal:host-gateway` rồi
+  điền `host.docker.internal`.
+
+Cả hai chỉ chạy được khi database thật sự nghe ra ngoài `127.0.0.1` của máy
+chủ. Database chỉ nghe trên `127.0.0.1` thì container không với tới được, điền
+địa chỉ nào cũng vậy.
 
 **Bấm Connect một lần, chờ.** Bấm lần thứ hai khi lần đầu còn đang kiểm tham số
 thì cú bấm đầu bị bỏ. Nút sáng lại mới là lúc nó rảnh.

@@ -2,7 +2,7 @@
 title: Yêu cầu hệ thống
 sidebar_position: 2
 last_update:
-  date: "2026-11-02"
+  date: "2026-11-04"
   author: vuhoang001
 ---
 
@@ -11,6 +11,13 @@ last_update:
 Những gì máy đích phải có để cài được AnalytiX.
 
 ## Bắt buộc
+
+Hai cột dưới là của **bộ cài thường** (`analytix-<bản>/`). Máy cần **một** trong
+hai, không cần cả hai. `./cai.sh` tự dò xem máy có gì rồi chọn đường tương ứng;
+thiếu cả hai thì nó dừng và in ra từng đường kèm lý do không đi được.
+
+Bản offline là đường thứ ba, `./cai.sh --offline`, và nó **chỉ cần Docker** —
+không cần Python, không cần mạng. Xem bảng dưới.
 
 | | Cài thực trên máy | Docker |
 |:---|:---|:---|
@@ -27,8 +34,10 @@ Bản đóng gói mang theo **danh sách** 156 gói đã ghim, **không** mang t
 các gói đó. Máy không ra được PyPI thì cả hai đường cài trên đều dừng giữa đường.
 
 Máy đích không có mạng thì dùng bản phát hành thứ ba: **ảnh Docker đã dựng sẵn**,
-khoảng 433 MB, nạp bằng `docker load` và không chạm tới PyPI. Xem [Cài trên máy
-không có internet](../how-to/cai-tren-may-khong-co-mang.md).
+khoảng 433 MB, không chạm tới PyPI. Thư mục đó mang chính `./cai.sh` — thấy tệp
+ảnh bên cạnh thì nó tự đi đường `--offline`, tức là `docker load` rồi chạy
+container. Xem [Cài trên máy không có
+internet](../how-to/cai-tren-may-khong-co-mang.md).
 :::
 
 ## Bản offline cần gì
@@ -45,11 +54,10 @@ không có internet](../how-to/cai-tren-may-khong-co-mang.md).
 Bộ pin được **chứng minh trên 3.10 và 3.12**. 3.11 được bộ cài cho qua nhưng
 không nằm trong mốc đã kiểm.
 
-:::note[Mạng chỉ cần lúc cài, không cần lúc chạy]
-Cài xong thì AnalytiX **không gọi ra ngoài internet**. Giao diện gốc của Superset
-nhúng một pixel đo đạc gửi về `apachesuperset.gateway.scarf.sh` mỗi lần tải
-trang; bản này chặn nó bằng Content-Security-Policy, nên request không rời khỏi
-máy. Kiểm được bằng header:
+Mạng chỉ cần lúc cài, **không cần lúc chạy**. Cài xong thì AnalytiX **không gọi
+ra ngoài internet**. Giao diện gốc của Superset nhúng một pixel đo đạc gửi về
+`apachesuperset.gateway.scarf.sh` mỗi lần tải trang; bản này chặn nó bằng
+Content-Security-Policy, nên request không rời khỏi máy. Kiểm được bằng header:
 
 ```bash
 curl -sD - -o /dev/null http://127.0.0.1:8088/login/ | grep -i img-src
@@ -57,7 +65,6 @@ curl -sD - -o /dev/null http://127.0.0.1:8088/login/ | grep -i img-src
 
 Không thấy chữ `scarf` nào là đúng. Console trình duyệt in một dòng vi phạm CSP
 mỗi lần tải trang — đó là dấu hiệu chặn thành công, không phải lỗi.
-:::
 
 ## Không cần
 
@@ -91,7 +98,7 @@ người cài sẽ đụng ngay sau khi đăng nhập lần đầu.
 [Thêm driver cho nguồn dữ liệu](../how-to/them-driver-du-lieu.md)
 :::
 
-:::caution[Vì sao SQLite dùng được: một chốt đã bị tắt]
+:::danger[Vì sao SQLite dùng được: một chốt đã bị tắt]
 Superset gốc đặt `PREVENT_UNSAFE_DB_CONNECTIONS = True`, nên một URI `sqlite://`
 bị từ chối với *"cannot be used as a data source for security reasons"*.
 

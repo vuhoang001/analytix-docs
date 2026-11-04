@@ -29,11 +29,10 @@ Dành cho người đã đi hết bài cài đặt. Cần có trước:
 | 2 | Cột — doanh thu theo tháng | T1 **215** · T2 **228** · T3 **305** |
 | 3 | Tròn — doanh thu theo khu vực | Bắc **435**, Nam **313** |
 
-:::note[Lời của bạn không cần giống y hệt trong bài]
-Khác với bấm nút, hỏi trợ lý AI **không cho kết quả giống nhau từng lần**. Câu
-gợi ý trong bài chỉ là ví dụ — diễn đạt cách khác vẫn ra được. Thứ phải khớp
-chính xác là **các con số ở bảng trên**.
-:::
+**Lời của bạn không cần giống y hệt trong bài.** Khác với bấm nút, hỏi trợ lý
+AI **không cho kết quả giống nhau từng lần**. Câu gợi ý trong bài chỉ là ví dụ —
+diễn đạt cách khác vẫn ra được. Thứ phải khớp chính xác là **các con số ở bảng
+trên**.
 
 ## Một câu nói đi qua những đâu
 
@@ -81,10 +80,9 @@ Trợ lý gọi `get_dataset_info`.
 
 Ra **124,67** nghĩa là trợ lý chọn `AVG` thay vì `SUM` — bảo nó dùng tổng.
 
-:::caution[Nhớ nói "lưu lại"]
-Công cụ `generate_chart` mặc định **không lưu**. Không nói rõ thì biểu đồ chỉ
-hiện trong câu trả lời rồi mất — mở AnalytiX ra không thấy gì.
-:::
+**Nhớ nói "lưu lại".** Công cụ `generate_chart` mặc định **không lưu**. Không
+nói rõ thì biểu đồ chỉ hiện trong câu trả lời rồi mất — mở AnalytiX ra không
+thấy gì.
 
 ## Bước 4 — Biểu đồ cột theo tháng
 

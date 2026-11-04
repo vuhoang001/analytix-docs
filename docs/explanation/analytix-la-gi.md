@@ -57,7 +57,7 @@ sửa dữ liệu ở lớp biểu đồ thay vì lớp dataset.
 | | Docker | Cài thực trên máy |
 |:---|:---|:---|
 | Cần sẵn | Docker | Python 3.10, 3.11 **hoặc** 3.12 |
-| Lệnh | `docker run -p 8088:8088 analytix:<bản>` | `./install.sh` |
+| Lệnh | `docker run -p 8088:8088 analytix:<bản>` | `./cai-tren-may.sh` |
 | Cài vào đâu | trong container, `/app/analytix` | `$HOME/analytix` (đổi được) |
 | Nghe ở | `0.0.0.0` trong container — biên là container | `127.0.0.1` — chỉ máy đó |
 | Giữ dữ liệu qua lần chạy sau | phải gắn volume vào `/app/analytix` | mặc định đã giữ |

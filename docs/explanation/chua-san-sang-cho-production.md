@@ -23,7 +23,7 @@ chưa đủ, và sáu chỗ dưới đây là lý do.
 
 ## Vấn đề
 
-Bộ cài có một mục tiêu rõ: `./install.sh` hoặc `docker run` là ra một bản chạy
+Bộ cài có một mục tiêu rõ: `./cai-tren-may.sh` hoặc `docker run` là ra một bản chạy
 được, không hỏi gì thêm, không cần dịch vụ phụ. Mục tiêu đó va với mục tiêu
 "chịu tải nhiều người dùng" — thứ hai đòi thêm ít nhất bốn thành phần nữa, mỗi
 thành phần là một thứ phải cấu hình và phải trông.

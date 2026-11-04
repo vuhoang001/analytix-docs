@@ -1,9 +1,9 @@
 {
-  "label": "Tra cứu",
+  "label": "Tra bảng và tham số",
   "position": 3,
   "link": {
     "type": "generated-index",
     "slug": "/reference",
-    "description": "Bảng tra cứu — biến môi trường, cấu hình, tham số, mã lỗi."
+    "description": "Bạn đã biết tên thứ cần tìm — biến môi trường, tham số, mã lỗi."
   }
 }

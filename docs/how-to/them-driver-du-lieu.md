@@ -14,14 +14,12 @@ database thật của bạn.
 Dành cho người quản trị. Cần có trước: AnalytiX đã cài và chạy được, và mạng ra
 được PyPI (hoặc một kho gói nội bộ).
 
-:::danger[Đây là việc gần như ai cũng phải làm]
-Bộ 156 gói đã ghim của AnalytiX **không chứa driver nào** ngoài SQLite. Không
-`psycopg2`, không `PyMySQL`, không `trino`, không `pyodbc`, không
-`clickhouse-connect`, không `snowflake`, không `bigquery`.
+Gần như ai cũng phải làm bước này: bộ 156 gói đã ghim của AnalytiX **không chứa
+driver nào** ngoài SQLite. Không `psycopg2`, không `PyMySQL`, không `trino`,
+không `pyodbc`, không `clickhouse-connect`, không `snowflake`, không `bigquery`.
 
 Thử nối Postgres mà chưa cài driver thì AnalytiX báo lỗi thiếu module, và thông
 báo đó không nói rõ phải cài gói nào.
-:::
 
 ## Có sẵn những gì
 
@@ -87,7 +85,7 @@ và nhớ rằng nó chỉ sống tới lần dựng ảnh kế tiếp.
 Driver chỉ được nạp lúc tiến trình khởi động.
 
 ```bash
-# cài trên máy: dừng start.sh rồi chạy lại
+# cài trên máy: dừng khoi-dong.sh rồi chạy lại
 # docker:
 docker restart analytix
 ```
@@ -97,7 +95,7 @@ docker restart analytix
 **Settings → Database Connections → + Database**, chọn loại database, điền chuỗi
 kết nối. Bấm **Test Connection** trước khi lưu.
 
-:::caution[Tắt quyền ghi trừ khi thật sự cần]
+:::danger[Tắt quyền ghi trừ khi thật sự cần]
 Bỏ chọn **Allow DML**, **Allow CTAS**, **Allow CVAS**. Đây là chốt chặn thật —
 nó chặn ở tầng kết nối, không dựa vào việc người dùng tự giữ mình. Đặc biệt quan
 trọng nếu bạn bật [dịch vụ MCP](./bat-mcp.md).

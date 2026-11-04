@@ -2,7 +2,7 @@
 title: Cài trên máy không có internet
 sidebar_position: 3
 last_update:
-  date: "2026-11-02"
+  date: "2026-11-04"
   author: vuhoang001
 ---
 
@@ -17,9 +17,28 @@ Docker](./cai-dat-bang-docker.md) nhẹ hơn nhiều.
 
 ### 1 · Chép thư mục phát hành sang máy đích
 
-Bốn tệp, khoảng 433 MB. Chép qua USB hay ổ mạng, đường nào cũng được.
+Thư mục đó tên `analytix-<bản>-khong-can-mang/`. Nó không tự có: người bảo trì
+cắt nó ra bằng `bo-cai/dong-goi-ban-offline.sh`, và mặc định nó nằm ở
+`/var/tmp/analytix-ban-phat-hanh/` trên máy đóng gói — xem [Đóng gói bản phát
+hành](./dong-goi-ban-phat-hanh.md). Chưa có thư mục đó thì chưa làm được bước
+nào ở dưới.
 
-![Lệnh ls -lh liệt kê bốn tệp: ảnh Docker 434 MB, chay.sh, README.md, SHA256SUMS.](./img/cai-offline/01-thu-muc.png)
+Sáu tệp, khoảng 433 MB. Chép qua USB hay ổ mạng, đường nào cũng được.
+
+```
+analytix-1.0-anh.tar.gz    433 MB   ảnh Docker đã dựng sẵn
+cai.sh                              cài
+go-cai.sh                           gỡ
+PHIEN-BAN                           bản gì, kỹ thuật gì
+README.md
+SHA256SUMS
+```
+
+Năm tệp sau đều nhỏ; gần như toàn bộ 433 MB nằm ở tệp ảnh.
+
+`cai.sh` ở đây là **cùng một tệp** với `cai.sh` trong bộ cài thường. Nó thấy tệp
+ảnh nằm bên cạnh nên tự chọn đường offline, nên bạn không phải nhớ hai lệnh khác
+nhau cho hai thư mục phát hành.
 
 ### 2 · Kiểm tệp không hỏng dọc đường
 
@@ -27,52 +46,81 @@ Bốn tệp, khoảng 433 MB. Chép qua USB hay ổ mạng, đường nào cũng
 sha256sum -c SHA256SUMS
 ```
 
-Cả ba dòng phải `OK`. Có dòng `FAILED` thì chép lại — đừng nạp ảnh hỏng.
-
-![Kết quả sha256sum: cả ba tệp đều OK.](./img/cai-offline/02-kiem-tep.png)
-
-### 3 · Chạy
-
-```bash
-./chay.sh
+```
+analytix-1.0-anh.tar.gz: OK
+cai.sh: OK
+go-cai.sh: OK
+PHIEN-BAN: OK
+README.md: OK
 ```
 
-Script tự nạp ảnh, dựng container, chờ sẵn sàng, rồi in địa chỉ và mật khẩu.
+Cả năm dòng phải `OK`. Có dòng `FAILED` thì chép lại — đừng nạp ảnh hỏng.
 
-![Output chay.sh: nạp ảnh, tạo container, in địa chỉ http://127.0.0.1:9000, tài khoản admin và mật khẩu.](./img/cai-offline/03-chay.png)
+### 3 · Cài
+
+```bash
+./cai.sh
+```
+
+Script nạp ảnh, dựng container, chờ sẵn sàng, rồi in địa chỉ và mật khẩu.
+
+```
+[analytix] chọn đường: offline (thư mục này có ảnh đã lưu, không cần mạng)
+[analytix] ép đường khác bằng ./cai.sh --docker, --may hoặc --offline
+[analytix] nạp ảnh từ analytix-1.0-anh.tar.gz (434M, mất một lúc)
+Loaded image: analytix:1.0
+[analytix] tạo container analytix trên cổng 8088
+[analytix] chờ dịch vụ sẵn sàng (lần đầu khoảng 40 giây)
+
+[analytix] AnalytiX 1.0 đang chạy tại  http://127.0.0.1:8088
+[analytix] tài khoản quản trị:          admin
+[analytix] mật khẩu:                    -mnQf-OK_BPVnf5c
+[analytix] mật khẩu này chỉ in một lần. Lưu ngay, và đổi nó trước khi mở ra ngoài mạng.
+
+[analytix] dừng:  docker stop analytix
+[analytix] gỡ:    ./go-cai.sh          (giữ dữ liệu)
+[analytix]        ./go-cai.sh --ca-du-lieu   (xoá cả dữ liệu)
+```
+
+Thấy dòng `đang chạy tại` kèm địa chỉ là đạt. Không thấy thì script đã dừng ở
+trên — đọc bảng Lỗi hay gặp.
 
 :::danger[Mật khẩu chỉ in một lần]
 Nó không được ghi vào tệp nào. Lưu ngay khi thấy.
 :::
 
-Đổi cổng: `ANALYTIX_PORT=9000 ./chay.sh`
+Đổi cổng: `ANALYTIX_PORT=9000 ./cai.sh`
+
+Nói rõ đường cũng được — `./cai.sh --offline` làm đúng việc trên.
+
+Chạy lần thứ hai thì dòng `nạp ảnh từ ...` không in lại nữa, thay vào đó là
+`[analytix] ảnh analytix:1.0 đã có sẵn, bỏ qua bước nạp`. Đó là bình thường: ảnh
+đã nằm trong Docker rồi.
 
 ### 4 · Mở địa chỉ script in ra
 
-![Trang đăng nhập AnalytiX với hai ô Username và Password.](./img/cai-offline/04-dang-nhap.png)
+![Trang đăng nhập AnalytiX với hai ô Username và Password.](./img/cai-khong-can-mang/04-dang-nhap.png)
 
 ### 5 · Đăng nhập
 
 Tài khoản `admin`, mật khẩu ở Bước 3.
 
-![Trang chủ AnalytiX sau khi đăng nhập, chưa có dashboard nào.](./img/cai-offline/05-vao-duoc.png)
+![Trang chủ AnalytiX sau khi đăng nhập, chưa có dashboard nào.](./img/cai-khong-can-mang/05-vao-duoc.png)
 
 ### 6 · Mở trang tài khoản
 
 Menu **Settings** trên thanh trên → **Info**.
 
-![Trang Your user information, cuối trang có nút Reset my password.](./img/cai-offline/06-trang-tai-khoan.png)
+![Trang Your user information, cuối trang có nút Reset my password.](./img/cai-khong-can-mang/06-trang-tai-khoan.png)
 
 ### 7 · Đổi mật khẩu
 
 Bấm **Reset my password**, gõ mật khẩu mới hai lần, bấm **Save**.
 
-![Form Reset Password với ô Password và Confirm Password.](./img/cai-offline/07-doi-mat-khau.png)
+![Form Reset Password với ô Password và Confirm Password.](./img/cai-khong-can-mang/07-doi-mat-khau.png)
 
-:::caution[Phải vào từ nút, không gõ thẳng URL]
-Gõ `/resetmypassword/form` vào thanh địa chỉ sẽ ra `Access is Denied`. Đi qua
-nút ở Bước 6 thì được.
-:::
+Phải vào từ nút, **đừng gõ thẳng URL** — gõ `/resetmypassword/form` vào thanh
+địa chỉ sẽ ra `Access is Denied`. Đi qua nút ở Bước 6 thì được.
 
 ## Kiểm tra là đã đúng
 
@@ -81,13 +129,69 @@ nút ở Bước 6 thì được.
 Muốn chắc nó thật sự không cần mạng:
 
 ```bash
-docker run -d --network none --name thu-cach-ly analytix:6.1.0-foxai.18
-sleep 60
+docker run -d --network none --name thu-cach-ly analytix:1.0
+
+# Chờ tới khi Docker báo healthy, tối đa 3 phút.
+for _ in $(seq 1 60); do
+  [ "$(docker inspect -f '{{.State.Health.Status}}' thu-cach-ly)" = healthy ] && break
+  sleep 3
+done
+
+docker inspect -f 'NetworkMode: {{.HostConfig.NetworkMode}}' thu-cach-ly
 docker exec thu-cach-ly curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:8088/health
 docker rm -f thu-cach-ly
 ```
 
-Phải ra `200`.
+Phải ra `NetworkMode: none` rồi `200`.
+
+Vòng chờ thay cho một con số `sleep` cứng là có lý do: `HEALTHCHECK` trong ảnh
+đặt `--start-period=90s`, nên một con số đoán sẵn sẽ hụt trên máy chậm và bạn
+nhận lỗi kết nối thay vì `200` — rồi tưởng bản cài hỏng.
+
+## Gỡ
+
+```bash
+./go-cai.sh
+```
+
+Nó in danh sách sắp xoá rồi hỏi lại trước khi xoá. Thêm `-y` để bỏ qua câu hỏi.
+
+```
+[analytix] sẽ xoá:
+[analytix]   · xoá container analytix
+[analytix]   · xoá ảnh analytix:1.0
+
+[analytix] giữ lại:
+[analytix]   · volume analytix-data (dữ liệu của bản chạy bằng Docker)
+[analytix] xoá cả những thứ đó:  ./go-cai.sh --ca-du-lieu
+
+[analytix] đồng ý xoá? [y/N]
+```
+
+Chỉ `y`, `Y`, `yes` hay `YES` là đồng ý; gõ gì khác, hay chỉ Enter, thì script in
+`huỷ, không xoá gì.` rồi thoát. Đồng ý thì hai dòng cuối là:
+
+```
+[analytix] đã gỡ AnalytiX.
+[analytix] dữ liệu vẫn còn. Cài lại bằng ./cai.sh là vào đúng dữ liệu cũ.
+```
+
+**Mặc định giữ dữ liệu.** Volume `analytix-data` không bị xoá, nên chạy lại
+`./cai.sh` là vào đúng dashboard cũ — kể cả mật khẩu quản trị cũ.
+
+Xoá cả dữ liệu:
+
+```bash
+./go-cai.sh --ca-du-lieu
+```
+
+:::danger[Không lấy lại được]
+`--ca-du-lieu` xoá luôn dashboard, biểu đồ, dataset và kết nối database. Script
+không tạo bản sao lưu nào.
+:::
+
+Ảnh `analytix:*` còn container khác đang dùng thì **không** bị xoá; script nói ra
+ảnh nào nó giữ và container nào đang giữ.
 
 ## Lỗi hay gặp
 
@@ -95,27 +199,56 @@ Phải ra `200`.
 
 Script dừng và chỉ đúng tiến trình đang giữ cổng:
 
-![Output chay.sh báo cổng 8088 đang có thứ khác dùng, kèm dòng ss chỉ tiến trình, và gợi ý đặt ANALYTIX_PORT.](./img/cai-offline/09-loi-cong.png)
+```
+[analytix] cổng 8088 đang có thứ khác dùng:
+    LISTEN 0      4096         0.0.0.0:8088       0.0.0.0:*
+    LISTEN 0      4096            [::]:8088          [::]:*
+[analytix] LỖI: chọn cổng khác:  ANALYTIX_PORT=9000 ./cai.sh
+```
 
-Chạy lại với cổng khác: `ANALYTIX_PORT=9000 ./chay.sh`
+Chạy lại với cổng khác: `ANALYTIX_PORT=9000 ./cai.sh`
+
+### Máy đích chưa có Docker
+
+`./cai.sh` không flag thì script thử cả ba đường, in lý do từng đường trượt, rồi
+dừng:
+
+```
+[analytix] thư mục này chưa cài được trên máy này. Cần MỘT trong ba:
+[analytix]   · --offline: bộ cài đủ, nhưng chưa cài Docker. Cài Docker trước, hoặc dùng ./cai.sh --may
+[analytix]   · --docker: bộ cài thiếu Dockerfile entrypoint.sh workspace_x_theme.py requirements/base.txt superset-core apache_superset-*-py3-none-any.whl
+[analytix]   · --may: bộ cài thiếu cai-tren-may.sh workspace_x_theme.py requirements/base.txt superset-core apache_superset-*-py3-none-any.whl
+[analytix] LỖI: không đường nào đi được
+```
+
+Đọc dòng `--offline`: nguyên liệu đủ, chỉ thiếu Docker. Cài Docker rồi chạy lại.
+
+Câu `hoặc dùng ./cai.sh --may` trong dòng đó **không áp dụng cho thư mục này**.
+Đó là câu chung của `cai.sh`, còn thư mục phát hành offline không mang wheel nên
+đường `--may` không đi được — chính hai dòng dưới nói ra điều đó. Thư mục này chỉ
+có một đường, và đường đó cần Docker.
 
 ### Các lỗi khác
 
 | Hiện tượng | Nguyên nhân | Cách sửa |
 |---|---|---|
-| `khong tim thay docker` | Chưa cài Docker | Cài Docker trước |
-| `khong goi duoc Docker daemon` | Docker chưa chạy, hoặc tài khoản ngoài nhóm `docker` | `sudo systemctl start docker`, rồi `sudo usermod -aG docker $USER` và đăng nhập lại |
-| `thieu ...-image.tar.gz canh script nay` | Chép thiếu tệp, hoặc chạy từ thư mục khác | Chép nguyên thư mục, `cd` vào đó rồi chạy |
+| `không gọi được Docker daemon` | Docker chưa chạy, hoặc tài khoản ngoài nhóm `docker` | `sudo systemctl start docker`, rồi `sudo usermod -aG docker $USER` và đăng nhập lại |
+| `thiếu tệp PHIEN-BAN; đây có phải thư mục bộ cài không?` | Chép thiếu `PHIEN-BAN`, hoặc đang chạy từ thư mục khác | Chép nguyên sáu tệp, `cd` vào thư mục đó rồi chạy |
+| `PHIEN-BAN không có dòng ANALYTIX_VERSION=` | Tệp `PHIEN-BAN` bị sửa hoặc chép hỏng | Chép lại `PHIEN-BAN` từ thư mục gốc |
+| `đường --offline cần những thứ thư mục này không có: analytix-*-anh.tar.gz` | Chép thiếu tệp ảnh, hoặc chạy từ thư mục khác | Chép nguyên thư mục, `cd` vào đó rồi chạy |
+| `không nạp được ...-anh.tar.gz. Tệp có thể chép thiếu hoặc hỏng.` | Tệp ảnh hỏng dọc đường | `sha256sum -c SHA256SUMS` để biết tệp nào, rồi chép lại |
 | `sha256sum -c` báo `FAILED` | Tệp hỏng lúc chép | Chép lại |
 | `exec format error` | Ảnh dựng cho kiến trúc CPU khác | Dựng lại trên máy cùng kiến trúc với máy đích |
-| `container ... dang gan cong X, khong phai Y` | Ánh xạ cổng đóng cứng lúc tạo container | `docker rm -f analytix` rồi chạy lại với cổng mới. Dữ liệu nằm trong volume nên không mất |
-| Mật khẩu không in ra | Tài khoản đã tạo từ lần chạy trước | Mật khẩu cũ vẫn dùng được. Mất thì `docker rm -f analytix && docker volume rm analytix-data` rồi làm lại |
+| `container ... đã có sẵn và đang gắn cổng X, không phải Y` | Ánh xạ cổng đóng cứng lúc tạo container | `docker rm -f analytix` rồi chạy lại với cổng mới. Dữ liệu nằm trong volume nên không mất |
+| `container báo unhealthy`, hoặc `quá 3 phút vẫn chưa sẵn sàng` | Container dựng được nhưng dịch vụ không lên | Script đã in `docker logs --tail 30` ngay trên dòng lỗi — đọc đoạn đó. Thử lại: `docker rm -f analytix && ./cai.sh` |
+| `mật khẩu:                    đã tạo từ trước, không in lại được` | Tài khoản đã tạo từ lần chạy trước | Mật khẩu cũ vẫn dùng được. Mất thì `./go-cai.sh --ca-du-lieu` rồi cài lại |
+| `không có bàn phím để hỏi. Thêm -y nếu thật sự muốn xoá.` | Chạy `./go-cai.sh` mà đầu vào không phải bàn phím (script, đường ống) | Thêm `-y`: `./go-cai.sh -y` |
+| `không hiểu tham số '...'. Chạy ./cai.sh --giup` | Gõ sai flag | Chỉ có `--docker`, `--may`, `--offline`, `--giup`. `./cai.sh --giup` in đủ danh sách |
 | Chỉ thấy SQLite | Ảnh không mang driver nào khác | Máy không có mạng thì không cài thêm được — xem [Thêm driver](./them-driver-du-lieu.md) |
 
-:::note[Trang quản trị chưa mang thương hiệu]
-Các trang ở Bước 6 và 7 vẫn hiện logo và chữ *Superset*. Đó là giao diện quản
-trị kế thừa, bộ vá thương hiệu chưa phủ tới. Chức năng không ảnh hưởng.
-:::
+Trang quản trị chưa mang thương hiệu: các trang ở Bước 6 và 7 vẫn hiện logo và
+chữ *Superset*. Đó là giao diện quản trị kế thừa, bộ vá thương hiệu chưa phủ
+tới. Chức năng không ảnh hưởng.
 
 ## Liên quan
 

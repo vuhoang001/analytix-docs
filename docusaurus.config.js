@@ -54,9 +54,9 @@ const config = {
   baseUrl: siteBaseUrl,
 
   // Chỉ dùng cho lệnh `docusaurus deploy` của GitHub — ta không dùng lệnh đó,
-  // phát hành bằng GitLab Pages (xem .gitlab-ci.yml). Giữ lại cho đủ cấu hình.
-  organizationName: 'hdos',
-  projectName: 'analytix',
+  // phát hành bằng GitHub Actions (xem .github/workflows/pages.yml).
+  organizationName: 'vuhoang001',
+  projectName: 'analytix-docs',
 
   onBrokenLinks: 'throw',
 

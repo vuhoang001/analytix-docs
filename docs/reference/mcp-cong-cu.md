@@ -14,14 +14,11 @@ nhất.
 Danh sách lấy từ **lời gọi `tools/list` thật** vào dịch vụ bản 6.1.0 với
 `MCP_TOOL_SEARCH_CONFIG` đã tắt, không lấy theo tài liệu thượng nguồn.
 
-:::caution[Hai lỗi gọi sai hay gặp nhất]
-**1. Hầu hết công cụ bọc tham số trong một object tên `request`.** Gọi `{}`
-trực tiếp sẽ bị `Missing required argument [request]`. Đúng là
-`{"request": { ... }}`. Ngoại lệ: `health_check` và `get_chart_type_schema`
-nhận tham số phẳng.
-
-**2. `get_chart_info` dùng `identifier`, không dùng `chart_id`.**
-:::
+Hai lỗi gọi sai hay gặp nhất. Một, **hầu hết công cụ bọc tham số trong một
+object tên `request`** — gọi `{}` trực tiếp sẽ bị
+`Missing required argument [request]`, đúng là `{"request": { ... }}`; ngoại lệ
+là `health_check` và `get_chart_type_schema`, hai công cụ này nhận tham số
+phẳng. Hai, **`get_chart_info` dùng `identifier`, không dùng `chart_id`**.
 
 ## Danh sách 24 công cụ
 
@@ -43,22 +40,19 @@ Dịch vụ còn cung cấp một *prompt* tên `quickstart`.
 | `dataset_id` | **bắt buộc** | ID hoặc UUID của dataset |
 | `config` | **bắt buộc** | Cấu hình biểu đồ; **phải** có khoá `chart_type` |
 | `chart_name` | tự sinh | Tên biểu đồ, tối đa 255 ký tự |
-| `save_chart` | **`false`** | `true` mới lưu thật vào AnalytiX |
-| `generate_preview` | `true` | Sinh ảnh xem trước |
+| `save_chart` | **`false`** | **Bắt buộc truyền `true` nếu muốn lưu thật vào AnalytiX** |
+| `generate_preview` | `true` | Sinh ảnh xem trước; cần Chromium |
 | `use_cache` | `true` | Dùng bộ đệm nếu có |
 | `force_refresh` | `false` | Bỏ đệm, lấy dữ liệu mới |
 | `cache_timeout` | — | Ghi đè thời gian đệm, giây |
 
-:::danger[`save_chart` mặc định là `false`]
-Không truyền `save_chart: true` thì biểu đồ **không được lưu** — gọi xong, mở
-AnalytiX ra không thấy gì. Đây là lỗi hay gặp nhất khi mới dùng.
-:::
+`save_chart` mặc định là `false`: không truyền `save_chart: true` thì biểu đồ
+**không được lưu** — gọi xong, mở AnalytiX ra không thấy gì. Đây là lỗi hay gặp
+nhất khi mới dùng.
 
-:::note[`generate_preview` mặc định `true` và cần Chromium]
-Sinh ảnh xem trước dùng trình duyệt không giao diện. Bản gốc bỏ Chromium khỏi
-ảnh mặc định từ 6.0, nên nếu chưa cài thì đặt `generate_preview: false` —
-các công cụ khác vẫn chạy bình thường.
-:::
+`generate_preview` mặc định `true` và sinh ảnh xem trước bằng trình duyệt không
+giao diện. Bản gốc bỏ Chromium khỏi ảnh mặc định từ 6.0, nên nếu chưa cài thì
+đặt `generate_preview: false` — các công cụ khác vẫn chạy bình thường.
 
 ### Bảy kiểu biểu đồ
 
@@ -91,11 +85,10 @@ và ví dụ của từng kiểu. Đây là cách đúng — đừng đoán tên
 | `x_axis`, `y_axis` | — | `title`, `scale` (`linear`/`log`), `format` |
 | `legend` | — | `show`, `position` |
 
-:::caution[Bộ lọc phải dùng dạng có cấu trúc]
-Trường `filters` nhận `{column, op, value}`. **Không** truyền SQL thô hay
-`adhoc_filters`. Toán tử cho phép: `=`, `>`, `<`, `>=`, `<=`, `!=`, `LIKE`,
-`ILIKE`, `NOT LIKE`, `IN`, `NOT IN`. Với `IN`/`NOT IN` thì `value` là danh sách.
-:::
+Bộ lọc **phải dùng dạng có cấu trúc**: trường `filters` nhận
+`{column, op, value}`, **không** truyền SQL thô hay `adhoc_filters`. Toán tử cho
+phép: `=`, `>`, `<`, `>=`, `<=`, `!=`, `LIKE`, `ILIKE`, `NOT LIKE`, `IN`,
+`NOT IN`. Với `IN`/`NOT IN` thì `value` là danh sách.
 
 ### Cách khai một cột
 

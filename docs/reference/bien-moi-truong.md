@@ -2,7 +2,7 @@
 title: Biến môi trường
 sidebar_position: 1
 last_update:
-  date: "2026-11-02"
+  date: "2026-11-04"
   author: vuhoang001
 ---
 
@@ -10,33 +10,79 @@ last_update:
 
 Các biến điều khiển bộ cài, script khởi động và container.
 
-Giá trị mặc định dưới đây **đọc trực tiếp từ `ship/install.sh`,
-`ship/entrypoint.sh` và `ship/Dockerfile`** của bộ cài, không lấy theo tài liệu.
+Giá trị mặc định dưới đây **đọc trực tiếp từ `bo-cai/cai.sh`,
+`bo-cai/go-cai.sh`, `bo-cai/cai-tren-may.sh`, `bo-cai/entrypoint.sh`,
+`bo-cai/Dockerfile` và `theme/workspace_x_theme.py`** của bộ cài, không lấy theo
+tài liệu.
 
 ## Dùng ở đâu
 
-Cột cho biết biến có tác dụng ở đường nào — đây là chỗ hay nhầm nhất.
+Cột cho biết biến có tác dụng ở đường nào — đây là chỗ hay nhầm nhất. Ô ghi tên
+flag nghĩa là biến chỉ có tác dụng ở đường đó của `./cai.sh`.
 
-| Biến | Mặc định | `install.sh` | `start.sh` | Container |
-|:---|:---|:--:|:--:|:--:|
-| `ANALYTIX_HOME` | `$HOME/analytix` · container: `/app/analytix` | ✅ | — | ✅ |
-| `ANALYTIX_ADMIN_USER` | `admin` | ✅ | — | ✅ |
-| `ANALYTIX_ADMIN_PASSWORD` | *sinh ngẫu nhiên, in một lần* | ✅ | — | ✅ |
-| `ANALYTIX_PORT` | `8088` | ✅ | ✅ | ✅ |
-| `ANALYTIX_BIND` | `127.0.0.1` | — | ✅ | — |
-| `ANALYTIX_SECRET_KEY` | *sinh ngẫu nhiên lần chạy đầu* | — | — | ✅ |
-| `ANALYTIX_FRAME_ANCESTORS` | *không đặt* — mọi origin khác bị chặn nhúng | — | ✅ | ✅ |
-| `PYTHON` | `python3` | ✅ | — | — |
+| Biến | Mặc định | `cai.sh` | `go-cai.sh` | `cai-tren-may.sh` | `khoi-dong.sh` | Container |
+|:---|:---|:--:|:--:|:--:|:--:|:--:|
+| `ANALYTIX_HOME` | `$HOME/analytix` · container: `/app/analytix` | `--may` | ✅ | ✅ | — | ✅ |
+| `ANALYTIX_ADMIN_USER` | `admin` | — | — | ✅ | — | ✅ |
+| `ANALYTIX_ADMIN_PASSWORD` | *sinh ngẫu nhiên, in một lần* | ✅ | — | ✅ | — | ✅ |
+| `ANALYTIX_PORT` | `8088` | ✅ | — | ✅ | ✅ | ✅ |
+| `ANALYTIX_NAME` | `analytix` | `--docker` `--offline` | ✅ | — | — | — |
+| `ANALYTIX_VOLUME` | `analytix-data` | `--docker` `--offline` | ✅ | — | — | — |
+| `ANALYTIX_BIND` | `127.0.0.1` | — | — | — | ✅ | — |
+| `ANALYTIX_SECRET_KEY` | *sinh ngẫu nhiên lần chạy đầu* | — | — | — | — | ✅ |
+| `ANALYTIX_FRAME_ANCESTORS` | *không đặt* — mọi origin khác bị chặn nhúng | — | — | — | ✅ | ✅ |
+| `PYTHON` | `python3` | ✅ | — | ✅ | — | — |
 
-:::caution[Ba chỗ hay nhầm]
-**`ANALYTIX_BIND` không có tác dụng lúc cài.** Chỉ `start.sh` đọc nó. Đặt lúc
-chạy `./install.sh` là không có gì xảy ra.
+Sáu chỗ hay nhầm:
 
-**`ANALYTIX_SECRET_KEY` chỉ có ở đường container.** Bản cài tay luôn tự sinh khoá
-và không nhận biến này.
+- **`ANALYTIX_BIND` không có tác dụng lúc cài.** Chỉ `khoi-dong.sh` đọc nó. Đặt lúc
+  chạy `./cai-tren-may.sh` là không có gì xảy ra — script đó chỉ ghi
+  `${ANALYTIX_BIND:-127.0.0.1}` vào `khoi-dong.sh` chứ không đọc giá trị. Đi qua
+  `./cai.sh --may` thì có tác dụng, vì script đó `exec` sang `khoi-dong.sh` ở
+  bước cuối.
+- **`ANALYTIX_SECRET_KEY` chỉ có ở đường container.** Bản cài tay luôn tự sinh
+  khoá và không nhận biến này.
+- **`PYTHON` chỉ có ở bản cài tay.** Container đã ghim Python 3.12. `cai.sh` đọc
+  nó ở mọi đường, nhưng chỉ để dò xem máy có trình thông dịch hợp lệ không —
+  tức để quyết đường `--may` có đi được hay không.
+- **`ANALYTIX_HOME` chỉ có ở `--may`.** Hai đường container bỏ qua nó: chỗ ở bên
+  trong ảnh đã ghim `/app/analytix`, phía ngoài thì dữ liệu nằm trong
+  `ANALYTIX_VOLUME`. **`go-cai.sh` cũng đọc nó** — đó là thư mục nó tìm để dọn.
+- **`ANALYTIX_NAME` và `ANALYTIX_VOLUME` dùng cho cả `--docker` và `--offline`**
+  (hai đường đó chạy chung một đoạn dựng container), **và cả `go-cai.sh`** — nó
+  lấy hai biến này ra để biết container và volume nào là của mình. Gọi
+  `docker run` tay thì đặt `--name` và `-v` trực tiếp, hai biến này không đọc tới.
+- **`ANALYTIX_ADMIN_USER` không đi qua `cai.sh`.** Script không hề đọc biến này,
+  nên nó không được chuyển sang container ở `--docker` hay `--offline`. Cần tên
+  quản trị khác thì gọi `docker run -e ANALYTIX_ADMIN_USER=...` tay, hoặc dùng
+  `./cai.sh --may` (biến được kế thừa qua môi trường sang `cai-tren-may.sh`).
+  `ANALYTIX_ADMIN_PASSWORD` thì khác: `cai.sh` chuyển nó sang container bằng
+  `-e` nếu được đặt.
 
-**`PYTHON` chỉ có ở bản cài tay.** Container đã ghim Python 3.12.
-:::
+## Flag của hai lệnh
+
+Để tra cứu nhanh — hướng dẫn dùng nằm ở các trang How-to.
+
+`./cai.sh`:
+
+| Flag | Làm gì |
+|:---|:---|
+| *không flag* | tự dò, theo thứ tự `--offline` → `--docker` → `--may` |
+| `--docker` | dựng ảnh từ wheel rồi chạy container |
+| `--may` | cài thực vào một môi trường ảo Python |
+| `--offline` | nạp ảnh đã lưu sẵn rồi chạy container |
+| `--giup` | in hướng dẫn (`-h`, `--help` cũng được) |
+
+`./go-cai.sh` — một lệnh gỡ được cả ba đường, **không có flag chọn đường**:
+
+| Flag | Làm gì |
+|:---|:---|
+| *không flag* | gỡ, **giữ** dữ liệu |
+| `--ca-du-lieu` | gỡ, xoá luôn volume và cả thư mục `ANALYTIX_HOME` |
+| `-y` | không hỏi lại (`--dong-y` cũng được) |
+| `--giup` | in hướng dẫn (`-h`, `--help` cũng được) |
+
+Không có `-y` mà cũng không có bàn phím thì `go-cai.sh` **dừng**, không xoá gì.
 
 ## Chi tiết từng biến
 
@@ -50,10 +96,18 @@ Nơi chứa mọi thứ của bản cài:
 | `superset_config.py` | cấu hình, quyền **600**, chứa khoá bí mật |
 | `workspace_x_theme.py` | theme — cấu hình `exec()` tệp này |
 | `superset.db` | database metadata (SQLite) |
-| `start.sh` | script khởi động (chỉ bản cài tay) |
+| `khoi-dong.sh` | script khởi động (chỉ bản cài tay) |
 
 Trong container, đây là đường dẫn phải gắn volume vào để dữ liệu sống qua lần
 chạy sau.
+
+`go-cai.sh` đọc biến này để biết dọn thư mục nào. Mặc định nó xoá `venv/` và
+`khoi-dong.sh`, giữ `superset.db` cùng `superset_config.py`; `--ca-du-lieu` xoá
+cả thư mục.
+
+Hai chốt an toàn trong `go-cai.sh`: biến phải là **đường dẫn tuyệt đối**, và nó
+**từ chối** xoá khi giá trị là `/` hoặc đúng bằng `$HOME`. Thư mục chỉ được coi
+là bản cài AnalytiX khi có `venv/bin/superset` hoặc `superset_config.py`.
 
 ### `ANALYTIX_ADMIN_USER`
 
@@ -64,6 +118,32 @@ Tên đăng nhập của tài khoản quản trị đầu tiên. Bộ cài cũng
 
 Tài khoản đã tồn tại thì **không** tạo lại và **không** in mật khẩu mới.
 
+### `ANALYTIX_NAME`
+
+Tên container mà `./cai.sh` tạo ra ở `--docker` và `--offline`. Mặc định
+`analytix`. `go-cai.sh` cũng tìm container theo tên này.
+
+Đổi nó khi muốn chạy nhiều bản cạnh nhau — nhớ đổi cả `ANALYTIX_PORT` và
+`ANALYTIX_VOLUME`, nếu không hai bản sẽ giành cổng và dùng chung dữ liệu.
+
+```bash
+ANALYTIX_NAME=ax-thu ANALYTIX_PORT=9000 ANALYTIX_VOLUME=ax-thu-data ./cai.sh
+```
+
+Container trùng tên đã tồn tại thì `cai.sh` **khởi động lại cái cũ** chứ không
+tạo mới — kể cả khi bạn đặt `ANALYTIX_PORT` khác, vì ánh xạ cổng được đóng cứng
+lúc tạo container. Đổi cổng thật thì phải xoá rồi tạo lại.
+
+### `ANALYTIX_VOLUME`
+
+Tên volume Docker giữ dữ liệu, gắn vào `/app/analytix`. Mặc định `analytix-data`.
+
+Dữ liệu **không** nằm trong container: xoá container không mất gì, xoá volume là
+mất cả khoá bí mật, tài khoản, dataset và biểu đồ.
+
+`go-cai.sh` đọc biến này nhưng mặc định **không** xoá volume — chỉ
+`./go-cai.sh --ca-du-lieu` xoá.
+
 ### `ANALYTIX_ADMIN_PASSWORD`
 
 Không đặt thì bộ cài sinh một mật khẩu ngẫu nhiên và **in ra một lần duy nhất**:
@@ -73,14 +153,13 @@ Không đặt thì bộ cài sinh một mật khẩu ngẫu nhiên và **in ra m
 [analytix] this is printed once and is written to no file. Save it now.
 ```
 
-:::danger[Không có mật khẩu mặc định]
-Đây là chủ ý của sản phẩm. Không có `admin/admin`.
+**Không có mật khẩu mặc định.** Đây là chủ ý của sản phẩm. Không có
+`admin/admin`.
 
 Mất mật khẩu thì đặt lại:
 ```bash
 ~/analytix/venv/bin/superset fab reset-password --username admin
 ```
-:::
 
 Đặt tay thì nó nằm trong lịch sử shell và trong danh sách tiến trình lúc chạy.
 
@@ -88,22 +167,25 @@ Mất mật khẩu thì đặt lại:
 
 Cổng ứng dụng nghe. Mặc định `8088`.
 
-:::danger[Đổi cổng làm healthcheck của container báo sai]
-Healthcheck trong ảnh **ghim cứng** `http://127.0.0.1:8088/health`. Đổi
-`ANALYTIX_PORT` thì ứng dụng chạy đúng nhưng Docker báo `unhealthy` mãi.
+Trong `khoi-dong.sh`, giá trị dự phòng không phải `8088` mà là **cổng lúc cài** —
+`cai-tren-may.sh` ghi cứng nó vào script khi sinh ra. Cài bằng
+`ANALYTIX_PORT=9000` thì `khoi-dong.sh` không có biến cũng nghe 9000.
+
+**Đổi cổng làm healthcheck của container báo sai.** Healthcheck trong ảnh **ghim
+cứng** `http://127.0.0.1:8088/health`. Đổi `ANALYTIX_PORT` thì ứng dụng chạy đúng
+nhưng Docker báo `unhealthy` mãi.
 
 Đổi cổng phía ngoài bằng ánh xạ, đừng đổi cổng bên trong:
 ```bash
 docker run -p 9000:8088 ...        # đúng
 ```
-:::
 
 ### `ANALYTIX_BIND`
 
-Chỉ `start.sh` đọc. Mặc định `127.0.0.1` — chỉ chính máy đó vào được.
+Chỉ `khoi-dong.sh` đọc. Mặc định `127.0.0.1` — chỉ chính máy đó vào được.
 
 ```bash
-ANALYTIX_BIND=0.0.0.0 ~/analytix/start.sh
+ANALYTIX_BIND=0.0.0.0 ~/analytix/khoi-dong.sh
 ```
 
 **Đổi mật khẩu quản trị trước khi mở ra mạng**, và đọc
@@ -156,7 +238,15 @@ python 3.13 is not supported; the pinned set is proven on 3.10 and 3.12
 ```
 
 ```bash
-PYTHON=/usr/bin/python3.12 ./install.sh
+PYTHON=/usr/bin/python3.12 ./cai.sh --may
+PYTHON=/usr/bin/python3.12 ./cai-tren-may.sh
+```
+
+Gõ rõ `./cai.sh --may` mà không có trình thông dịch hợp lệ thì `cai.sh` dừng
+trước cả khi dựng venv:
+
+```
+không có Python 3.10/3.11/3.12. Đặt PYTHON=<đường-dẫn>, hoặc dùng ./cai.sh --docker
 ```
 
 ## Biến bộ cài KHÔNG đọc

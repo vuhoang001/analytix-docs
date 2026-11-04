@@ -2,7 +2,7 @@
 title: Cài thực trên máy
 sidebar_position: 2
 last_update:
-  date: "2026-11-02"
+  date: "2026-11-04"
   author: vuhoang001
 ---
 
@@ -19,6 +19,19 @@ Dành cho người quản trị. Cần có trước:
 
 Không cần `sudo`: mọi thứ nằm trong thư mục của bạn.
 
+Chưa có bản đóng gói thì dựng nó trước — [Đóng gói bản phát
+hành](./dong-goi-ban-phat-hanh.md). `bo-cai/dong-goi.sh` để kết quả ở
+`/var/tmp/analytix-ban-phat-hanh/`: thư mục `analytix-<bản>/` và bản nén
+`analytix-<bản>.tar.gz` (khoảng 105 MB) của chính thư mục đó.
+
+:::tip[Chỉ muốn nó chạy thì có đường ngắn hơn]
+`./cai.sh --may` làm đúng mọi bước trang này mô tả, trong một lệnh, rồi khởi
+động luôn. Xem [Bắt đầu nhanh](../tutorials/cai-dat-analytix.md).
+
+Trang này dành cho khi bạn cần biết từng bước làm gì — để sửa khi nó hỏng, hoặc
+để đổi một tham số mà `cai.sh` không mở ra.
+:::
+
 ## Các bước
 
 ### 1 · Giải nén bản đóng gói
@@ -28,20 +41,27 @@ tar xzf analytix-<bản>.tar.gz
 cd analytix-<bản>
 ```
 
-Tám mục. Thiếu mục nào thì bộ cài dừng ngay ở bước sau và nói thiếu gì.
+Mười một mục. Thiếu mục nào thì bộ cài dừng ngay ở bước sau và nói thiếu gì.
 
-![Giải nén tarball rồi ls -lh, thấy tám mục: wheel, Dockerfile, entrypoint.sh, install.sh, README.md, requirements, superset-core, workspace_x_theme.py.](./img/cai-may/01-giai-nen.png)
+```
+apache_superset-6.1.0+foxai.18-py3-none-any.whl   105 MB
+cai.sh  cai-tren-may.sh  go-cai.sh  entrypoint.sh  Dockerfile
+PHIEN-BAN  README.md  workspace_x_theme.py
+requirements/  superset-core/
+```
+
+![Giải nén tarball rồi ls -lh, thấy tám mục: wheel, Dockerfile, entrypoint.sh, cai-tren-may.sh, README.md, requirements, superset-core, workspace_x_theme.py.](./img/cai-may/01-giai-nen.png)
 
 ### 2 · Chạy bộ cài
 
 ```bash
-./install.sh
+./cai-tren-may.sh
 ```
 
 Bộ cài tự làm năm việc: kiểm bản đóng gói, dựng venv và cài **đúng thứ tự**,
 viết cấu hình, tạo database và tài khoản quản trị, rồi viết script khởi động.
 
-![Output install.sh: bundle OK, python 3.12, dựng venv, cài bộ pin, cachelib khớp pin, config nạp AnalytiX en+vi, tạo admin, và in mật khẩu.](./img/cai-may/02-cai.png)
+![Output cai-tren-may.sh: bundle OK, python 3.12, dựng venv, cài bộ pin, cachelib khớp pin, config nạp AnalytiX en+vi, tạo admin, và in mật khẩu.](./img/cai-may/02-cai.png)
 
 Ba dòng đáng nhìn: `cachelib ... matches the pin` chứng minh thứ tự cài đúng,
 `config loads: AnalytiX ['en', 'vi']` chứng minh theme nạp được, và dòng mật
@@ -50,37 +70,35 @@ khẩu màu vàng ở cuối.
 ### 3 · Khởi động
 
 ```bash
-~/analytix/start.sh
+~/analytix/khoi-dong.sh
 ```
 
-![Output start.sh: nạp cấu hình xong, in dòng Running on kèm địa chỉ.](./img/cai-may/03-khoi-dong.png)
+![Output khoi-dong.sh: nạp cấu hình xong, in dòng Running on kèm địa chỉ.](./img/cai-may/03-khoi-dong.png)
 
 ### 4 · Mở địa chỉ nó in ra
 
-![Trang đăng nhập AnalytiX với hai ô Username và Password.](./img/cai-offline/04-dang-nhap.png)
+![Trang đăng nhập AnalytiX với hai ô Username và Password.](./img/cai-khong-can-mang/04-dang-nhap.png)
 
 ### 5 · Đăng nhập
 
 Tài khoản `admin`, mật khẩu ở Bước 2.
 
-![Trang chủ AnalytiX sau khi đăng nhập, chưa có dashboard nào.](./img/cai-offline/05-vao-duoc.png)
+![Trang chủ AnalytiX sau khi đăng nhập, chưa có dashboard nào.](./img/cai-khong-can-mang/05-vao-duoc.png)
 
 ### 6 · Đổi mật khẩu
 
 Menu **Settings** → **Info** → nút **Reset my password**.
 
-![Trang Your user information, cuối trang có nút Reset my password.](./img/cai-offline/06-trang-tai-khoan.png)
+![Trang Your user information, cuối trang có nút Reset my password.](./img/cai-khong-can-mang/06-trang-tai-khoan.png)
 
-![Form Reset Password với ô Password và Confirm Password.](./img/cai-offline/07-doi-mat-khau.png)
+![Form Reset Password với ô Password và Confirm Password.](./img/cai-khong-can-mang/07-doi-mat-khau.png)
 
-:::caution[Phải vào từ nút, không gõ thẳng URL]
-Gõ `/resetmypassword/form` vào thanh địa chỉ sẽ ra `Access is Denied`.
-:::
+Phải vào từ nút, **đừng gõ thẳng URL** — gõ `/resetmypassword/form` vào thanh
+địa chỉ sẽ ra `Access is Denied`.
 
-:::note[Hai trang trên chưa mang thương hiệu]
-Chúng vẫn hiện logo và chữ *Superset* — giao diện quản trị kế thừa, bộ vá thương
-hiệu chưa phủ tới. Chức năng không ảnh hưởng.
-:::
+Hai trang trên chưa mang thương hiệu: chúng vẫn hiện logo và chữ *Superset* —
+giao diện quản trị kế thừa, bộ vá thương hiệu chưa phủ tới. Chức năng không ảnh
+hưởng.
 
 ## Chọn chỗ cài và tài khoản
 
@@ -91,7 +109,7 @@ ANALYTIX_HOME=/opt/analytix \
 ANALYTIX_ADMIN_USER=quantri \
 ANALYTIX_PORT=9000 \
 PYTHON=python3.12 \
-./install.sh
+./cai-tren-may.sh
 ```
 
 | Biến | Mặc định |
@@ -102,7 +120,7 @@ PYTHON=python3.12 \
 | `ANALYTIX_PORT` | `8088` |
 | `PYTHON` | `python3` |
 
-`ANALYTIX_BIND` **không** dùng lúc cài — nó chỉ được `start.sh` đọc, xem phần
+`ANALYTIX_BIND` **không** dùng lúc cài — nó chỉ được `khoi-dong.sh` đọc, xem phần
 dưới. Bảng đầy đủ: [Biến môi trường](../reference/bien-moi-truong.md).
 
 :::danger[Mật khẩu in một lần, không ghi vào tệp nào]
@@ -130,20 +148,18 @@ Không có tài khoản mặc định nào — đây là chủ ý của sản ph
 | `$ANALYTIX_HOME/superset_config.py` | cấu hình, **quyền 600**, chứa khoá bí mật |
 | `$ANALYTIX_HOME/workspace_x_theme.py` | theme — cấu hình `exec()` tệp này |
 | `$ANALYTIX_HOME/superset.db` | database metadata (SQLite) |
-| `$ANALYTIX_HOME/start.sh` | script khởi động |
+| `$ANALYTIX_HOME/khoi-dong.sh` | script khởi động |
 
-:::note[Theme là tệp thứ hai, không nằm trong wheel]
-`superset_config.py` có dòng `exec(open(.../workspace_x_theme.py).read())`. Nghĩa
-là **xoá tệp theme là mất thương hiệu** và AnalytiX trở lại thành Superset. Hai
-tệp phải đi cùng nhau.
-:::
+Theme là tệp thứ hai, không nằm trong wheel: `superset_config.py` có dòng
+`exec(open(.../workspace_x_theme.py).read())`. Nghĩa là **xoá tệp theme là mất
+thương hiệu** và AnalytiX trở lại thành Superset. Hai tệp phải đi cùng nhau.
 
 ## Cho máy khác truy cập
 
-`start.sh` mặc định nghe `127.0.0.1` — chỉ chính máy đó vào được. Mở ra mạng:
+`khoi-dong.sh` mặc định nghe `127.0.0.1` — chỉ chính máy đó vào được. Mở ra mạng:
 
 ```bash
-ANALYTIX_BIND=0.0.0.0 ~/analytix/start.sh
+ANALYTIX_BIND=0.0.0.0 ~/analytix/khoi-dong.sh
 ```
 
 :::danger[Đổi mật khẩu quản trị TRƯỚC khi mở ra mạng]
@@ -156,52 +172,109 @@ Và biết rằng bạn đang mở một web server dành cho phát triển, kh�
 Bộ cài tự in ba dòng xác nhận trong lúc chạy:
 
 ```
-[analytix] bundle OK, version <bản>
+[analytix] bundle OK, version 6.1.0+foxai.18
 [analytix] config loads: AnalytiX ['en', 'vi']
-[analytix] installed AnalytiX <bản> in <thư-mục>
+[analytix] installed AnalytiX 6.1.0+foxai.18 in /home/<bạn>/analytix
 ```
 
 Dòng giữa là dòng quan trọng — nó chứng minh theme nạp được và tên sản phẩm đúng.
 
+Số in ra ở hai dòng kia là **phiên bản kỹ thuật**, suy từ tên tệp wheel, nên nó
+không trùng với phiên bản sản phẩm trên tên bản đóng gói (`analytix-1.0`). Cả hai
+nằm cạnh nhau trong tệp `PHIEN-BAN`.
+
 Rồi tự kiểm:
 
 ```bash
-~/analytix/start.sh &
+~/analytix/khoi-dong.sh &
+sleep 15
 curl -fsS http://127.0.0.1:8088/health          # mong: OK
 ```
 
+Không có `sleep` thì `curl` thường chạy trước khi web server kịp mở cổng, và bạn
+nhận một lỗi kết nối của chính mình chứ không phải lỗi của bản cài.
+
 ## Cài lại lần nữa thì sao
 
-Chạy `./install.sh` lần hai là **an toàn**:
+Chạy `./cai-tren-may.sh` lần hai là **an toàn**:
 
 - venv có rồi thì dùng lại, không dựng lại
 - `superset_config.py` có rồi thì **giữ nguyên** — khoá bí mật không bị sinh lại
 - tài khoản quản trị có rồi thì không tạo lại, không in mật khẩu mới
 - `db upgrade` chạy lại, và nó vốn an toàn khi chạy nhiều lần
 
-Nên nâng cấp lên bản mới chính là: giải nén bundle mới, chạy lại `./install.sh`
+Nên nâng cấp lên bản mới chính là: giải nén bundle mới, chạy lại `./cai-tren-may.sh`
 với cùng `ANALYTIX_HOME`.
+
+## Gỡ ra khỏi máy
+
+Đừng `rm -rf ~/analytix` — bundle có sẵn một lệnh gỡ:
+
+```bash
+./go-cai.sh                 # gỡ, GIỮ dữ liệu
+./go-cai.sh --ca-du-lieu    # gỡ, xoá luôn dữ liệu
+```
+
+Nó in danh sách sắp xoá rồi hỏi `[y/N]`; không có bàn phím mà không có `-y` thì
+nó dừng chứ không xoá.
+
+| Trong `$ANALYTIX_HOME` | Mặc định | `--ca-du-lieu` |
+|:---|:---|:---|
+| `venv/` | xoá | xoá |
+| `khoi-dong.sh` | xoá | xoá |
+| `superset.db` | **giữ** | xoá |
+| `superset_config.py` | **giữ** | xoá |
+| `workspace_x_theme.py` | **giữ** | xoá |
+
+`--ca-du-lieu` xoá cả thư mục `$ANALYTIX_HOME`.
+
+Có tiến trình đang chạy từ `$ANALYTIX_HOME/venv` thì nó dừng tiến trình đó trước
+khi xoá — không cần tự tắt.
+
+Cùng một lệnh gỡ được cả ba đường cài: nó không có flag chọn đường, mà tự ngó
+container `analytix`, volume `analytix-data`, ảnh `analytix:*` và thư mục
+`$ANALYTIX_HOME`. Nên trên máy vừa có bản cài thực vừa có bản chạy bằng Docker,
+`./go-cai.sh` xoá luôn container và ảnh — chỉ volume `analytix-data` là được giữ
+tới khi có `--ca-du-lieu`. Danh sách nó in ra trước khi hỏi `[y/N]` là đúng
+những gì nó sắp xoá; đọc danh sách đó, đừng gõ `y` theo phản xạ.
+
+Hai tệp giữ lại phải giữ **cùng nhau**: `SECRET_KEY` trong `superset_config.py`
+mã hoá mật khẩu các kết nối database đã lưu trong `superset.db`. Xoá một cái và
+giữ cái kia thì những kết nối đó mở không ra nữa, và lỗi nổ ở lần cài sau.
+
+Đặt `ANALYTIX_HOME` khi cài ở chỗ khác mặc định thì phải đặt lại lúc gỡ:
+
+```bash
+ANALYTIX_HOME=/opt/analytix ./go-cai.sh
+```
+
+Lúc gỡ, `ANALYTIX_HOME` phải là **đường dẫn tuyệt đối** — đường dẫn tương đối bị
+từ chối thẳng. Script cũng từ chối khi nó trỏ vào `/` hoặc vào thư mục nhà, và
+chỉ coi một thư mục là bản cài khi trong đó có `venv/bin/superset` hoặc
+`superset_config.py`.
 
 ## Lỗi hay gặp
 
 | Hiện tượng | Nguyên nhân | Cách sửa |
 |:---|:---|:---|
-| `python3 not found; set PYTHON to a 3.10, 3.11 or 3.12 interpreter` | Không có `python3` trong `PATH` | `PYTHON=/usr/bin/python3.12 ./install.sh` |
+| `python3 not found; set PYTHON to a 3.10, 3.11 or 3.12 interpreter` | Không có `python3` trong `PATH` | `PYTHON=/usr/bin/python3.12 ./cai-tren-may.sh` |
 | `python 3.13 is not supported` | Bản Python ngoài khoảng được kiểm | Dùng 3.10, 3.11 hoặc 3.12. Bộ pin chỉ được chứng minh trên 3.10 và 3.12 |
-| `no apache_superset-*.whl beside this script` | Chạy không đúng thư mục, hoặc bundle thiếu | `cd` vào thư mục bundle rồi chạy `./install.sh` |
+| `no apache_superset-*.whl beside this script` | Chạy không đúng thư mục, hoặc bundle thiếu | `cd` vào thư mục bundle rồi chạy `./cai-tren-may.sh` |
 | `cachelib is X but the pin is Y; the resolver overrode a pin` | Thứ tự cài bị phá | Đừng cài tiếp. Đóng gói lại — sai thứ tự làm `superset fab create-admin` hỏng về sau |
 | Dừng ở bước cài gói, lỗi mạng | Không ra được PyPI | Bundle **không** mang theo gói. Cần mạng, hoặc dựng một kho gói nội bộ |
 | `AssertionError` ở bước `config loads` | Theme không nạp được, hoặc tên/ngôn ngữ sai | Kiểm `workspace_x_theme.py` có trong bundle và đọc được |
 | Nối database bên ngoài báo thiếu driver | Chỉ SQLite có sẵn | [Thêm driver cho nguồn dữ liệu](./them-driver-du-lieu.md) |
 | Mất mật khẩu quản trị | Nó chỉ in một lần | `~/analytix/venv/bin/superset fab reset-password --username admin` |
+| `./go-cai.sh` in `không tìm thấy gì để gỡ.` | Cài ở chỗ khác mặc định, hoặc thư mục đó không còn `venv/bin/superset` lẫn `superset_config.py` | Chỉ rõ chỗ cài: `ANALYTIX_HOME=/opt/analytix ./go-cai.sh`. Dòng `đã ngó:` ngay dưới cho biết nó vừa tìm ở đâu |
+| `ANALYTIX_HOME phải là đường dẫn tuyệt đối, đang là '...'` | Gỡ với đường dẫn tương đối | Gõ đường dẫn tuyệt đối, ví dụ `/opt/analytix` |
 
 ## Những gì bộ cài KHÔNG tạo
 
 Không có unit `systemd`, không nginx, không HTTPS, không Redis, không tiến trình
-chạy việc nền, không tệp `.env`. Chỉ có `start.sh`.
+chạy việc nền, không tệp `.env`. Chỉ có `khoi-dong.sh`.
 
 Muốn nó tự chạy lại sau khi khởi động máy thì phải tự viết unit `systemd` gọi
-`start.sh`.
+`khoi-dong.sh`.
 
 ## Liên quan
 

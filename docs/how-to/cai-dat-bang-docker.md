@@ -2,7 +2,7 @@
 title: Cài bằng Docker
 sidebar_position: 1
 last_update:
-  date: "2026-11-02"
+  date: "2026-11-04"
   author: vuhoang001
 ---
 
@@ -12,6 +12,20 @@ Dựng ảnh container từ bản đóng gói và chạy. Không cần Python tr
 
 Dành cho người quản trị. Cần có trước: Docker, và bản đóng gói
 `analytix-<bản>` (thư mục đã giải nén — nó chính là build context).
+
+Chưa có bản đóng gói thì dựng nó trước — [Đóng gói bản phát
+hành](./dong-goi-ban-phat-hanh.md). `bo-cai/dong-goi.sh` để kết quả ở
+`/var/tmp/analytix-ban-phat-hanh/`: thư mục `analytix-<bản>/` và bản nén
+`analytix-<bản>.tar.gz` (khoảng 105 MB) của chính thư mục đó.
+
+:::tip[Chỉ muốn nó chạy thì có đường ngắn hơn]
+`./cai.sh --docker` làm đúng mọi bước trang này mô tả, trong một lệnh: dựng ảnh,
+tạo container, chờ healthy, in địa chỉ và mật khẩu. Xem [Bắt đầu
+nhanh](../tutorials/cai-dat-analytix.md).
+
+Trang này dành cho khi bạn cần biết từng bước làm gì — để sửa khi nó hỏng, hoặc
+để đổi một tham số mà `cai.sh` không mở ra.
+:::
 
 Chưa cài lần nào thì đi [Cài AnalytiX lần đầu](../tutorials/cai-dat-analytix.md)
 trước; trang này là bản tra cứu nhanh và các tình huống lệch khỏi đường thẳng.
@@ -28,6 +42,12 @@ docker build -t analytix:<bản> -f Dockerfile .
 Thư mục bundle **là** build context — `Dockerfile` `COPY` wheel, `requirements/`,
 `superset-core/`, `workspace_x_theme.py` và `entrypoint.sh` từ chính nó. Dựng từ
 chỗ khác sẽ thiếu tệp.
+
+`<bản>` là dòng `ANALYTIX_VERSION=` trong tệp `PHIEN-BAN` của bundle — bản `1.0`
+thì thẻ tag là `analytix:1.0`. Đó cũng là thẻ `./cai.sh --docker` tự suy ra, nên
+dùng đúng nó thì sau này `./go-cai.sh` dọn được ảnh (nó tìm `analytix:*`). Thẻ
+tag của Docker không chứa được dấu `+`, nên **đừng** lấy phiên bản kỹ thuật
+`6.1.0+foxai.18` trong `PHIEN-BAN` làm thẻ tag.
 
 ![Kết thúc docker build: naming to analytix:6.1.0 done, DONE. Rồi docker images cho thấy ảnh 1.6GB.](./img/cai-docker/01-dung-anh.png)
 
@@ -50,6 +70,24 @@ Docker in ra mã container rồi trả lại dấu nhắc ngay — ứng dụng 
 docker logs analytix | grep '\[analytix\]'
 ```
 
+Lần chạy đầu in ra:
+
+```
+[analytix] writing /app/analytix/superset_config.py
+[analytix] config loads: AnalytiX ['en', 'vi']
+[analytix] applying database migrations
+[analytix] creating administrator admin
+[analytix] administrator admin password: <chuỗi>
+[analytix] printed once, written to no file. Save it now.
+[analytix] initialising roles and permissions
+[analytix] version: 6.1.0+foxai.18
+[analytix] serving on 0.0.0.0:8088
+```
+
+`serving on 0.0.0.0:8088` là dòng cuối. Chưa thấy nó thì container còn đang
+khởi tạo — lần đầu khoảng 40 giây. Những lần chạy sau không có dòng `writing`
+và dòng mật khẩu nữa, chỉ còn `administrator admin already exists`.
+
 ![Log container: viết cấu hình, config nạp AnalytiX en+vi, migrate, tạo admin, in mật khẩu, phiên bản 6.1.0+foxai.18, serving on 0.0.0.0:8088.](./img/cai-docker/03-log.png)
 
 :::danger[Mật khẩu chỉ in một lần]
@@ -59,13 +97,13 @@ khi nào container chưa bị xoá — nhưng đừng dựa vào đó, lưu ngay
 
 ### 4 · Mở `http://127.0.0.1:8088`
 
-![Trang đăng nhập AnalytiX với hai ô Username và Password.](./img/cai-offline/04-dang-nhap.png)
+![Trang đăng nhập AnalytiX với hai ô Username và Password.](./img/cai-khong-can-mang/04-dang-nhap.png)
 
 ### 5 · Đăng nhập rồi đổi mật khẩu
 
 Tài khoản `admin`. Vào xong: **Settings** → **Info** → **Reset my password**.
 
-![Trang chủ AnalytiX sau khi đăng nhập, chưa có dashboard nào.](./img/cai-offline/05-vao-duoc.png)
+![Trang chủ AnalytiX sau khi đăng nhập, chưa có dashboard nào.](./img/cai-khong-can-mang/05-vao-duoc.png)
 
 ## Biến môi trường
 
@@ -79,18 +117,15 @@ Tài khoản `admin`. Vào xong: **Settings** → **Info** → **Reset my passwo
 
 Bảng đầy đủ: [Biến môi trường](../reference/bien-moi-truong.md).
 
-:::danger[Đổi `ANALYTIX_PORT` làm healthcheck báo sai]
-Healthcheck trong ảnh **ghim cứng** `http://127.0.0.1:8088/health`. Đổi
-`ANALYTIX_PORT` sang cổng khác thì ứng dụng chạy đúng nhưng Docker báo
-`unhealthy` mãi.
-
-Muốn đổi cổng phía ngoài thì đổi phần ánh xạ, **đừng** đổi cổng bên trong:
+Đổi `ANALYTIX_PORT` làm healthcheck báo sai. Healthcheck trong ảnh **ghim cứng**
+`http://127.0.0.1:8088/health`, nên đổi `ANALYTIX_PORT` sang cổng khác thì ứng
+dụng chạy đúng nhưng Docker báo `unhealthy` mãi. Muốn đổi cổng phía ngoài thì
+đổi phần ánh xạ, **đừng** đổi cổng bên trong:
 
 ```bash
 docker run -p 9000:8088 ...        # đúng
 docker run -p 9000:9000 -e ANALYTIX_PORT=9000 ...   # sẽ báo unhealthy
 ```
-:::
 
 ## Giữ dữ liệu qua lần chạy sau
 
@@ -105,12 +140,38 @@ session và mọi dashboard đã nhúng đều hỏng.
 Thư mục đó chứa `superset.db`, `superset_config.py` (có khoá bí mật) và
 `workspace_x_theme.py`.
 
+## Gỡ ra khỏi máy
+
+Đừng gõ tay `docker rm` rồi `docker volume rm` — bộ cài có sẵn một lệnh gỡ:
+
+```bash
+./go-cai.sh                 # gỡ, GIỮ dữ liệu
+./go-cai.sh --ca-du-lieu    # gỡ, xoá luôn dữ liệu
+```
+
+`go-cai.sh` **không** có flag chọn đường: nó tự ngó container `$ANALYTIX_NAME`,
+volume `$ANALYTIX_VOLUME`, ảnh `analytix:*` và thư mục `$ANALYTIX_HOME`, rồi dọn
+đúng những thứ tìm thấy. Nó in danh sách sắp xoá và hỏi `[y/N]` trước khi xoá;
+không có bàn phím mà không có `-y` thì nó dừng chứ không xoá.
+
+| | Mặc định | `--ca-du-lieu` |
+|:---|:---|:---|
+| container `analytix` | xoá | xoá |
+| ảnh `analytix:*` | xoá, trừ ảnh còn container khác dùng | như bên trái |
+| volume `analytix-data` | **giữ** | xoá |
+
+Nên mặc định là đường nâng cấp: gỡ rồi `./cai.sh` lại là vào đúng dữ liệu cũ, mật
+khẩu cũ vẫn đăng nhập được.
+
 ## Kiểm tra là đã đúng
 
 ```bash
 docker ps --filter name=analytix --format '{{.Status}}'      # mong: Up ... (healthy)
 curl -fsS http://127.0.0.1:8088/health                        # mong: OK
 ```
+
+Healthcheck trong ảnh có `--start-period=90s`, nên trong khoảng 90 giây đầu
+`docker ps` hiện `(health: starting)` — đó chưa phải lỗi, chờ thêm rồi xem lại.
 
 Mở trang và xác nhận góc trên trái là chữ **AnalytiX**. Thấy "Superset" tức
 theme chưa nạp — và entrypoint lẽ ra đã phải dừng với lỗi, nên đó là dấu hiệu ảnh
@@ -121,11 +182,12 @@ theme chưa nạp — và entrypoint lẽ ra đã phải dừng với lỗi, nê
 | Hiện tượng | Nguyên nhân | Cách sửa |
 |:---|:---|:---|
 | Build hỏng ở `cachelib ... != pin` | Bộ giải phụ thuộc đã ghi đè một phiên bản đã ghim | Bản đóng gói sai hoặc `requirements/base.txt` bị sửa. Đóng gói lại, đừng cố cài tiếp |
-| Build hỏng `ModuleNotFoundError: No module named 'superset_core'` | Build context thiếu thư mục `superset-core/` | Dựng từ **trong** thư mục bundle |
-| Container khởi động rồi thoát, log có `theme module missing` | `workspace_x_theme.py` không có trong `/app/analytix` | Ảnh dựng sai — dựng lại từ bundle đầy đủ |
+| Build dừng ngay ở bước `COPY superset-core ./superset-core` | Build context thiếu thư mục `superset-core/` | Dựng từ **trong** thư mục bundle, đừng dựng từ thư mục khác |
+| Build hỏng `ModuleNotFoundError: No module named 'superset_core'` ở bước cuối (`rm -rf /build` rồi `import superset_core`) | Bước cài lại `superset-core` dạng không-editable bị bỏ, nên `superset_core` chỉ còn là con trỏ vào `/build` vừa bị xoá | Đừng sửa `Dockerfile`; dựng lại bằng `Dockerfile` trong bundle |
+| Container khởi động rồi thoát, log có `ERROR: theme module missing at /app/analytix/workspace_x_theme.py` | Thư mục `/app/analytix` bị một bind-mount rỗng che mất tệp theme của ảnh, hoặc ảnh dựng từ context thiếu `workspace_x_theme.py` | Gắn **volume có tên** (`-v analytix-data:/app/analytix`), đừng bind-mount thư mục rỗng. Context thiếu tệp thì dựng lại từ bundle đầy đủ |
 | `docker ps` mãi `unhealthy` nhưng web mở được | Đã đổi `ANALYTIX_PORT` | Giữ cổng trong là 8088, chỉ đổi ánh xạ ngoài |
 | Chạy lại thì mất tài khoản và dữ liệu | Không gắn volume | Gắn `-v ... :/app/analytix` và cài lại |
-| Không thấy dòng mật khẩu trong log | Tài khoản đã tồn tại từ lần chạy trước | Đặt lại bằng `docker exec analytix superset fab reset-password --username admin` |
+| Không thấy dòng mật khẩu trong log | Tài khoản đã tồn tại từ lần chạy trước (log có `administrator admin already exists`), hoặc bạn đã tự đặt `ANALYTIX_ADMIN_PASSWORD` — mật khẩu tự đặt thì entrypoint không in lại | Đặt lại bằng `docker exec analytix superset fab reset-password --username admin` |
 | Nối database bên ngoài báo thiếu driver | Chỉ SQLite có sẵn | [Thêm driver cho nguồn dữ liệu](./them-driver-du-lieu.md) |
 
 ## Hai điều phải biết
@@ -141,6 +203,8 @@ là ranh giới container chứ không phải địa chỉ nghe. Ánh xạ ra ng
 
 - [Cài AnalytiX lần đầu](../tutorials/cai-dat-analytix.md)
 - [Cài thực trên máy](./cai-dat-tren-may.md) — đường không dùng Docker
+- [Cài trên máy không có internet](./cai-tren-may-khong-co-mang.md) — máy đích không ra được PyPI
+- [Đóng gói bản phát hành](./dong-goi-ban-phat-hanh.md) — lấy bản đóng gói ở đâu
 - [Thêm driver cho nguồn dữ liệu](./them-driver-du-lieu.md)
 - [Biến môi trường](../reference/bien-moi-truong.md)
 - [Vì sao bản cài chưa sẵn sàng cho môi trường thật](../explanation/chua-san-sang-cho-production.md)

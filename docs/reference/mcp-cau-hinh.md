@@ -12,13 +12,10 @@ Các biến đặt trong `superset_config.py` để điều khiển dịch vụ 
 
 Mọi giá trị mặc định dưới đây **đọc trực tiếp từ `mcp_service/mcp_config.py` và
 `mcp_service/constants.py`** của bản 6.1.0 đang cài, không lấy theo tài liệu
-thượng nguồn.
-
-:::warning[Tài liệu thượng nguồn sai hai chỗ]
-Trang tài liệu bản `master` ghi `MCP_RESPONSE_SIZE_CONFIG["max_bytes"]` —
-bản 6.1.0 dùng **`token_limit`**. Trang đó cũng ghi yêu cầu "Superset 5.0+",
-trong khi mã nguồn MCP **không tồn tại** ở 6.0.0 và cũ hơn. Sàn thật là 6.1.0.
-:::
+thượng nguồn. Trang tài liệu bản `master` **sai hai chỗ**: nó ghi
+`MCP_RESPONSE_SIZE_CONFIG["max_bytes"]` trong khi bản 6.1.0 dùng
+**`token_limit`**, và nó ghi yêu cầu "Superset 5.0+" trong khi mã nguồn MCP
+**không tồn tại** ở 6.0.0 và cũ hơn. Sàn thật là 6.1.0.
 
 ## Mạng và địa chỉ
 
@@ -29,14 +26,12 @@ trong khi mã nguồn MCP **không tồn tại** ở 6.0.0 và cũ hơn. Sàn th
 | `MCP_SERVICE_URL` | *(không đặt)* | Địa chỉ công khai của dịch vụ, dùng khi sinh link. Có đặt thì thắng mọi suy luận khác |
 | `SUPERSET_WEBSERVER_ADDRESS` | `"http://localhost:9001"` | Địa chỉ AnalytiX |
 | `WEBDRIVER_BASEURL` | `"http://localhost:9001/"` | Địa chỉ nội bộ để chụp ảnh biểu đồ |
-| `WEBDRIVER_BASEURL_USER_FRIENDLY` | *(bằng `WEBDRIVER_BASEURL`)* | **Biến sinh link trả về cho người dùng** |
+| `WEBDRIVER_BASEURL_USER_FRIENDLY` | *(bằng `WEBDRIVER_BASEURL`)* | **Bắt buộc đặt tường minh** — biến sinh link trả về cho người dùng |
 
-:::danger[`WEBDRIVER_BASEURL_USER_FRIENDLY` phải đặt tường minh]
-AnalytiX gán biến này từ mặc định riêng của nó **trước khi**
-`superset_config.py` chạy. Nên đặt `WEBDRIVER_BASEURL` là **không đủ** — link
-biểu đồ MCP trả về sẽ trỏ về địa chỉ mặc định và không mở được. Phải đặt thẳng
-biến `_USER_FRIENDLY`.
-:::
+AnalytiX gán `WEBDRIVER_BASEURL_USER_FRIENDLY` từ mặc định riêng của nó **trước
+khi** `superset_config.py` chạy. Nên đặt `WEBDRIVER_BASEURL` là **không đủ** —
+link biểu đồ MCP trả về sẽ trỏ về địa chỉ mặc định và không mở được. Phải đặt
+thẳng biến `_USER_FRIENDLY`.
 
 ## Xác thực và phân quyền
 
@@ -55,12 +50,10 @@ biến `_USER_FRIENDLY`.
 | `MCP_JWT_DEBUG_ERRORS` | `False` | Ghi lý do từ chối token vào log. **Chỉ bật tạm khi gỡ lỗi** |
 | `MCP_AUTH_FACTORY` | `None` | Hàm tự viết thay toàn bộ cơ chế xác thực |
 
-:::note[`MCP_REQUIRED_SCOPES` gác ở tầng token]
-Biến này được thực thi thật — token thiếu scope bị từ chối hoàn toàn
-(`jwt_verifier.py`, bước 7: scope bắt buộc phải là tập con của scope trong
-token). Nhưng nó **không** quyết định token gọi được công cụ nào; việc đó do
-phân quyền của AnalytiX làm. Đừng dùng scope thay cho vai trò.
-:::
+`MCP_REQUIRED_SCOPES` gác ở tầng token và được thực thi thật — token thiếu scope
+bị từ chối hoàn toàn (`jwt_verifier.py`, bước 7: scope bắt buộc phải là tập con
+của scope trong token). Nhưng nó **không** quyết định token gọi được công cụ nào;
+việc đó do phân quyền của AnalytiX làm. Đừng dùng scope thay cho vai trò.
 
 Bản 6.1.0 **không có** xác thực bằng vé khách (guest token) cho MCP. Đó là tính
 năng của bản sau.
@@ -123,12 +116,9 @@ Cả hai **tắt** mặc định. Chạy một bản duy nhất thì giữ nguy�
 
 `MCP_SESSION_CONFIG` mặc định: `SESSION_COOKIE_HTTPONLY: True`,
 `SESSION_COOKIE_SECURE: **False**`, `SESSION_COOKIE_SAMESITE: "Lax"`,
-`PERMANENT_SESSION_LIFETIME: 86400`.
-
-:::caution[`SESSION_COOKIE_SECURE` mặc định là `False`]
-Phục vụ qua HTTPS thì phải đổi thành `True`, nếu không cookie phiên đi được trên
-kết nối không mã hoá.
-:::
+`PERMANENT_SESSION_LIFETIME: 86400`. Phục vụ qua HTTPS thì **phải đổi
+`SESSION_COOKIE_SECURE` thành `True`**, nếu không cookie phiên đi được trên kết
+nối không mã hoá.
 
 ## Hai cách khởi động
 
@@ -141,11 +131,9 @@ Cách thứ hai mặc định là `stdio`, dành cho client chỉ nói được 
 `FASTMCP_TRANSPORT` sang giao thức HTTP thì nó đọc `FASTMCP_HOST` (mặc định
 `127.0.0.1`) và `FASTMCP_PORT` (mặc định `5008`).
 
-:::note[Không có cờ tính năng nào]
-MCP **không** bật bằng cờ tính năng. Nó là một tiến trình riêng: cài gói
-`fastmcp`, đặt cấu hình, chạy lệnh. Thượng nguồn từng có một cờ `MCP_SERVICE`
-nhưng nó chưa bao giờ được dùng tới và đã bị xoá.
-:::
+**Không có cờ tính năng nào** — MCP **không** bật bằng cờ tính năng. Nó là một
+tiến trình riêng: cài gói `fastmcp`, đặt cấu hình, chạy lệnh. Thượng nguồn từng
+có một cờ `MCP_SERVICE` nhưng nó chưa bao giờ được dùng tới và đã bị xoá.
 
 ## Liên quan
 

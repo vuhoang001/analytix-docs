@@ -8,26 +8,26 @@ const CATEGORIES = [
   {
     href: '/tutorials/',
     icon: '🧭',
-    title: 'Học theo hướng dẫn',
-    description: 'Bạn mới dùng AnalytiX, muốn làm theo từng bước có kết quả cụ thể.',
+    title: 'Bắt đầu',
+    description: 'Bạn mới dùng AnalytiX. Dắt tay từng bước, cuối bài có kết quả tự kiểm được.',
   },
   {
     href: '/how-to/',
     icon: '🛠️',
-    title: 'Cách làm',
-    description: 'Bạn đã biết AnalytiX, cần công thức cho một việc cụ thể.',
+    title: 'Làm một việc cụ thể',
+    description: 'Bạn đã cài xong, giờ cần công thức: thêm driver, nhúng báo cáo, đóng gói bản phát hành.',
   },
   {
     href: '/reference/',
     icon: '📖',
-    title: 'Tra cứu',
-    description: 'Bạn cần tra một bảng, một mã lỗi, một tham số.',
+    title: 'Tra bảng và tham số',
+    description: 'Bạn đã biết tên thứ cần tìm — biến môi trường, tham số, mã lỗi.',
   },
   {
     href: '/explanation/',
     icon: '💡',
-    title: 'Giải thích',
-    description: 'Bạn muốn hiểu vì sao AnalytiX hoạt động theo cách nó đang hoạt động.',
+    title: 'Hiểu vì sao',
+    description: 'Bạn muốn biết AnalytiX đánh đổi những gì, và vì sao nó làm thế.',
   },
 ];
 
@@ -44,7 +44,7 @@ function HomepageHeader() {
           dashboard chia sẻ ra ngoài.
         </p>
         <Link className="button button--primary button--lg" to="/tutorials/cai-dat-analytix">
-          Bắt đầu: Cài AnalytiX lần đầu →
+          Bắt đầu nhanh: cài AnalytiX →
         </Link>
       </div>
     </header>
