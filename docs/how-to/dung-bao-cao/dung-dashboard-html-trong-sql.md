@@ -1,6 +1,6 @@
 ---
 title: Dựng dashboard theo phong cách tuỳ chỉnh (Table-viz + HTML trong SQL)
-sidebar_position: 7
+sidebar_position: 8
 ---
 
 # Dựng dashboard theo phong cách tuỳ chỉnh

@@ -84,5 +84,5 @@ người ngồi dọn.
 ## Liên quan
 
 - [Từ database tới biểu đồ](../tutorials/tu-database-toi-bieu-do.md) — bài dẫn đi cả hai đường, mỗi đường một lần
-- [Viết SQL an toàn](../how-to/viet-sql-an-toan.md)
+- [Viết SQL an toàn](../how-to/dung-bao-cao/viet-sql-an-toan.md)
 - [Bảng thuật ngữ](../reference/bang-thuat-ngu.md)

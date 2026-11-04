@@ -28,7 +28,7 @@ Thuật ngữ gặp trong giao diện AnalytiX và trong tài liệu này.
 | **MCP** (Model Context Protocol) | Giao thức để trợ lý AI gọi được công cụ của một hệ thống khác. Trong AnalytiX, nó chạy như một dịch vụ riêng cạnh AnalytiX. Xem [Vì sao MCP là một dịch vụ riêng](../explanation/vi-sao-mcp-la-service-rieng.md) |
 | **Công cụ** (Tool, trong MCP) | Một thao tác mà trợ lý AI gọi được — ví dụ `generate_chart` tạo biểu đồ. Xem [Công cụ MCP](./mcp-cong-cu.md) |
 | **Chế độ dev** (MCP) | Cấu hình MCP **không kiểm token**, chạy dưới một tài khoản cố định. Chỉ an toàn khi dịch vụ nghe trên `127.0.0.1` |
-| **JWT** | Chứng từ có chữ ký, dùng xác thực MCP khi mở ra ngoài localhost. Xem [Đổi xác thực MCP sang JWT](../how-to/mcp-doi-sang-jwt.md) |
+| **JWT** | Chứng từ có chữ ký, dùng xác thực MCP khi mở ra ngoài localhost. Xem [Đổi xác thực MCP sang JWT](../how-to/tro-ly-ai/mcp-doi-sang-jwt.md) |
 | **DML** | Nhóm câu lệnh SQL thay đổi dữ liệu (`INSERT`, `UPDATE`, `DELETE`, `CREATE`…). Tắt quyền DML trên khai báo kết nối là chốt chặn ghi |
 | **RLS** (Row Level Security) | Luật lọc dữ liệu theo dòng, gắn với vai trò người dùng. MCP **không** đi vòng qua luật này |
 

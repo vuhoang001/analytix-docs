@@ -1,6 +1,6 @@
 ---
 title: Nhúng dashboard qua SDK cho đối tác ngoài
-sidebar_position: 9
+sidebar_position: 2
 ---
 
 # Nhúng dashboard qua SDK cho đối tác ngoài
@@ -9,7 +9,7 @@ Dùng khi cần nhúng dashboard cho một ứng dụng/portal bên ngoài, có 
 quyền theo từng người xem. Nếu chỉ cần nhúng đơn giản cho trang nội bộ
 không cần phân quyền, xem **Nhúng dashboard bằng iframe đơn giản** thay vì
 cách này. Lý do kỹ thuật đứng sau cách làm này được giải thích ở
-[Vì sao nhúng dashboard cần vé khách](../explanation/vi-sao-nhung-can-ve-khach.md).
+[Vì sao nhúng dashboard cần vé khách](../../explanation/vi-sao-nhung-can-ve-khach.md).
 
 Có ba việc, ba bên khác nhau làm:
 
@@ -176,4 +176,4 @@ Làm theo thứ tự; mỗi bước hỏng thì dừng ở đó trước khi đi
 | 4 | Chờ vé hết hạn rồi thao tác tiếp | SDK tự xin vé mới, trang không trắng |
 | 5 | Thu hẹp cửa sổ dưới 1200px | khung sinh thanh cuộn — đúng như mong đợi |
 
-Gặp lỗi, tra [Mã lỗi khi nhúng qua SDK](../reference/ma-loi-sdk.md).
+Gặp lỗi, tra [Mã lỗi khi nhúng qua SDK](../../reference/ma-loi-sdk.md).

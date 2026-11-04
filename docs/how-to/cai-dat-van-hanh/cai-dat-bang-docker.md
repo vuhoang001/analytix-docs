@@ -20,14 +20,14 @@ hành](./dong-goi-ban-phat-hanh.md). `bo-cai/dong-goi.sh` để kết quả ở
 
 :::tip[Chỉ muốn nó chạy thì có đường ngắn hơn]
 `./cai.sh --docker` làm đúng mọi bước trang này mô tả, trong một lệnh: dựng ảnh,
-tạo container, chờ healthy, in địa chỉ và mật khẩu. Xem [Bắt đầu
-nhanh](../tutorials/cai-dat-analytix.md).
+tạo container, chờ healthy, in địa chỉ và tài khoản quản trị. Xem [Bắt đầu
+nhanh](../../tutorials/cai-dat-analytix.md).
 
 Trang này dành cho khi bạn cần biết từng bước làm gì — để sửa khi nó hỏng, hoặc
 để đổi một tham số mà `cai.sh` không mở ra.
 :::
 
-Chưa cài lần nào thì đi [Cài AnalytiX lần đầu](../tutorials/cai-dat-analytix.md)
+Chưa cài lần nào thì đi [Cài AnalytiX lần đầu](../../tutorials/cai-dat-analytix.md)
 trước; trang này là bản tra cứu nhanh và các tình huống lệch khỏi đường thẳng.
 
 ## Các bước
@@ -55,16 +55,21 @@ tag của Docker không chứa được dấu `+`, nên **đừng** lấy phiên
 
 ```bash
 docker run -d --name analytix \
-  -p 8088:8088 \
+  -p 127.0.0.1:8088:8088 \
   -v analytix-data:/app/analytix \
   analytix:<bản>
 ```
+
+`127.0.0.1` ở đầu phần ánh xạ là cố ý: tài khoản quản trị mặc định là `admin` /
+`admin`, nên cổng chỉ nên mở trên chính máy đó. `-p 8088:8088` trần mở trên
+**mọi** giao diện mạng của máy chủ. `./cai.sh` mặc định làm đúng như dòng trên,
+và chỉ mở ra mạng khi bạn gõ rõ `ANALYTIX_BIND=0.0.0.0 ./cai.sh`.
 
 Docker in ra mã container rồi trả lại dấu nhắc ngay — ứng dụng khởi tạo ở phía sau.
 
 ![Lệnh docker run trả về một chuỗi hex dài là mã container.](./img/cai-docker/02-chay.png)
 
-### 3 · Lấy mật khẩu từ log
+### 3 · Đọc log khởi tạo
 
 ```bash
 docker logs analytix | grep '\[analytix\]'
@@ -77,8 +82,8 @@ Lần chạy đầu in ra:
 [analytix] config loads: AnalytiX ['en', 'vi']
 [analytix] applying database migrations
 [analytix] creating administrator admin
-[analytix] administrator admin password: <chuỗi>
-[analytix] printed once, written to no file. Save it now.
+[analytix] administrator: admin / admin
+[analytix] CHANGE IT at first login: Settings -> Info -> Reset my password.
 [analytix] initialising roles and permissions
 [analytix] version: 6.1.0+foxai.18
 [analytix] serving on 0.0.0.0:8088
@@ -86,22 +91,28 @@ Lần chạy đầu in ra:
 
 `serving on 0.0.0.0:8088` là dòng cuối. Chưa thấy nó thì container còn đang
 khởi tạo — lần đầu khoảng 40 giây. Những lần chạy sau không có dòng `writing`
-và dòng mật khẩu nữa, chỉ còn `administrator admin already exists`.
+và hai dòng tài khoản nữa, chỉ còn `administrator admin already exists`.
 
-![Log container: viết cấu hình, config nạp AnalytiX en+vi, migrate, tạo admin, in mật khẩu, phiên bản 6.1.0+foxai.18, serving on 0.0.0.0:8088.](./img/cai-docker/03-log.png)
+![Log container: viết cấu hình, config nạp AnalytiX en+vi, migrate, tạo admin, hai dòng administrator admin / admin và CHANGE IT at first login, phiên bản 6.1.0+foxai.18, serving on 0.0.0.0:8088.](./img/cai-docker/03-log.png)
 
-:::danger[Mật khẩu chỉ in một lần]
-Nó nằm trong log của lần khởi tạo đầu tiên. `docker logs` còn đọc lại được tới
-khi nào container chưa bị xoá — nhưng đừng dựa vào đó, lưu ngay.
+:::danger[Mật khẩu mặc định là `admin` — đổi ngay lần đăng nhập đầu]
+`admin` / `admin` là cặp ai cũng đoán được, và nó giống nhau trên mọi bản cài.
+Đổi nó ở lần đăng nhập đầu tiên: **Settings → Info → Reset my password**.
+
+Đổi trước khi mở cổng ra mạng. Container bên trong vẫn nghe `0.0.0.0`, nên thứ
+quyết định ai vào được là phần ánh xạ `-p` — `127.0.0.1:8088:8088` ở Bước 2,
+hoặc mặc định `127.0.0.1` của `./cai.sh`.
 :::
 
 ### 4 · Mở `http://127.0.0.1:8088`
 
 ![Trang đăng nhập AnalytiX với hai ô Username và Password.](./img/cai-khong-can-mang/04-dang-nhap.png)
 
-### 5 · Đăng nhập rồi đổi mật khẩu
+### 5 · Đăng nhập rồi đổi mật khẩu — bắt buộc
 
-Tài khoản `admin`. Vào xong: **Settings** → **Info** → **Reset my password**.
+Tài khoản `admin`, mật khẩu `admin`. Vào xong thì đổi ngay: **Settings** →
+**Info** → **Reset my password**. Đây là bước bắt buộc, không phải tuỳ chọn —
+mật khẩu mặc định giống nhau trên mọi bản cài.
 
 ![Trang chủ AnalytiX sau khi đăng nhập, chưa có dashboard nào.](./img/cai-khong-can-mang/05-vao-duoc.png)
 
@@ -110,12 +121,16 @@ Tài khoản `admin`. Vào xong: **Settings** → **Info** → **Reset my passwo
 | Biến | Mặc định | Ghi chú |
 |:---|:---|:---|
 | `ANALYTIX_ADMIN_USER` | `admin` | |
-| `ANALYTIX_ADMIN_PASSWORD` | *sinh ngẫu nhiên, in một lần* | Đặt tay thì nó nằm trong lịch sử shell |
+| `ANALYTIX_ADMIN_PASSWORD` | `admin` — đổi ngay lần đăng nhập đầu | Đặt tay thì nó nằm trong lịch sử shell |
 | `ANALYTIX_PORT` | `8088` | **Đọc kỹ cảnh báo dưới** |
 | `ANALYTIX_SECRET_KEY` | *sinh ngẫu nhiên lần chạy đầu* | Chỉ có ở đường container |
 | `ANALYTIX_HOME` | `/app/analytix` | Đổi thì phải gắn volume theo đường dẫn mới |
 
-Bảng đầy đủ: [Biến môi trường](../reference/bien-moi-truong.md).
+`ANALYTIX_BIND` **không** phải biến của container: `./cai.sh` đọc nó để quyết
+định địa chỉ máy chủ mà cổng Docker mở lên, mặc định `127.0.0.1`. Dựng tay bằng
+`docker run` thì chính phần `-p` bạn viết quyết định việc đó.
+
+Bảng đầy đủ: [Biến môi trường](../../reference/bien-moi-truong.md).
 
 Đổi `ANALYTIX_PORT` làm healthcheck báo sai. Healthcheck trong ảnh **ghim cứng**
 `http://127.0.0.1:8088/health`, nên đổi `ANALYTIX_PORT` sang cổng khác thì ứng
@@ -187,7 +202,9 @@ theme chưa nạp — và entrypoint lẽ ra đã phải dừng với lỗi, nê
 | Container khởi động rồi thoát, log có `ERROR: theme module missing at /app/analytix/workspace_x_theme.py` | Thư mục `/app/analytix` bị một bind-mount rỗng che mất tệp theme của ảnh, hoặc ảnh dựng từ context thiếu `workspace_x_theme.py` | Gắn **volume có tên** (`-v analytix-data:/app/analytix`), đừng bind-mount thư mục rỗng. Context thiếu tệp thì dựng lại từ bundle đầy đủ |
 | `docker ps` mãi `unhealthy` nhưng web mở được | Đã đổi `ANALYTIX_PORT` | Giữ cổng trong là 8088, chỉ đổi ánh xạ ngoài |
 | Chạy lại thì mất tài khoản và dữ liệu | Không gắn volume | Gắn `-v ... :/app/analytix` và cài lại |
-| Không thấy dòng mật khẩu trong log | Tài khoản đã tồn tại từ lần chạy trước (log có `administrator admin already exists`), hoặc bạn đã tự đặt `ANALYTIX_ADMIN_PASSWORD` — mật khẩu tự đặt thì entrypoint không in lại | Đặt lại bằng `docker exec analytix superset fab reset-password --username admin` |
+| Không thấy hai dòng `administrator: admin / admin` và `CHANGE IT at first login` trong log | Tài khoản đã tồn tại từ lần chạy trước (log có `administrator admin already exists`), hoặc bạn đã tự đặt `ANALYTIX_ADMIN_PASSWORD` — mật khẩu tự đặt thì entrypoint không in lại | Mật khẩu cũ vẫn dùng được. Mất thì `docker exec analytix superset fab reset-password --username admin` |
+| `LỖI: mật khẩu quản trị vẫn là 'admin'.` | Không phải lỗi của đường Docker: dòng này do `khoi-dong.sh` của đường cài thực trên máy in ra, khi `ANALYTIX_BIND` khác loopback mà mật khẩu còn mặc định | Đổi mật khẩu rồi chạy lại `khoi-dong.sh`. Xem [Cài thực trên máy](./cai-dat-tren-may.md) |
+| Máy khác không mở được `http://<máy-chủ>:8088` | Cổng chỉ mở trên `127.0.0.1` — đây là mặc định mới | Đổi mật khẩu quản trị trước, rồi `ANALYTIX_BIND=0.0.0.0 ./cai.sh`; dựng tay thì tự đổi phần `-p` |
 | Nối database bên ngoài báo thiếu driver | Chỉ SQLite có sẵn | [Thêm driver cho nguồn dữ liệu](./them-driver-du-lieu.md) |
 
 ## Hai điều phải biết
@@ -196,15 +213,16 @@ theme chưa nạp — và entrypoint lẽ ra đã phải dừng với lỗi, nê
 thật thì nên chạy với user thường và chỉ cấp quyền ghi vào `/app/analytix`.
 
 **Bên trong nghe `0.0.0.0`.** Đó là điều kiện để `-p` hoạt động, và biên bảo mật
-là ranh giới container chứ không phải địa chỉ nghe. Ánh xạ ra ngoài thì cân nhắc
-`-p 127.0.0.1:8088:8088` để chỉ máy đó vào được.
+là ranh giới container chứ không phải địa chỉ nghe. Thứ quyết định ai vào được là
+phần ánh xạ: `-p 127.0.0.1:8088:8088` chỉ máy đó vào được, `-p 8088:8088` trần
+mở trên mọi giao diện mạng. `./cai.sh` mặc định làm cái thứ nhất.
 
 ## Liên quan
 
-- [Cài AnalytiX lần đầu](../tutorials/cai-dat-analytix.md)
+- [Cài AnalytiX lần đầu](../../tutorials/cai-dat-analytix.md)
 - [Cài thực trên máy](./cai-dat-tren-may.md) — đường không dùng Docker
 - [Cài trên máy không có internet](./cai-tren-may-khong-co-mang.md) — máy đích không ra được PyPI
 - [Đóng gói bản phát hành](./dong-goi-ban-phat-hanh.md) — lấy bản đóng gói ở đâu
 - [Thêm driver cho nguồn dữ liệu](./them-driver-du-lieu.md)
-- [Biến môi trường](../reference/bien-moi-truong.md)
-- [Vì sao bản cài chưa sẵn sàng cho môi trường thật](../explanation/chua-san-sang-cho-production.md)
+- [Biến môi trường](../../reference/bien-moi-truong.md)
+- [Vì sao bản cài chưa sẵn sàng cho môi trường thật](../../explanation/chua-san-sang-cho-production.md)

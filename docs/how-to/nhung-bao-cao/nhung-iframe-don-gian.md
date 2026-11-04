@@ -1,6 +1,6 @@
 ---
 title: Nhúng dashboard bằng iframe đơn giản
-sidebar_position: 8
+sidebar_position: 1
 ---
 
 # Nhúng dashboard bằng iframe đơn giản
@@ -17,7 +17,7 @@ vé. Nếu cần nhúng cho đối tác bên ngoài có phân quyền theo ngư�
    ![Dashboard "Báo cáo bán hàng" với nhãn Published màu xanh cạnh tiêu đề.](./img/iframe/01-published.png)
 2. Lấy **mã trang (slug)** của dashboard ở thanh địa chỉ trình duyệt.
 3. Dán thẻ `iframe` vào trang web đích — xem đầy đủ tham số ở
-   [Tham số iframe khi nhúng dashboard](../reference/tham-so-iframe.md):
+   [Tham số iframe khi nhúng dashboard](../../reference/tham-so-iframe.md):
 
 ```html
 <iframe

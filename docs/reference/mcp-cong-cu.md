@@ -141,7 +141,7 @@ công cụ này — không có đường đi vòng.
 
 Kết nối đã tắt quyền ghi thì mọi câu ghi bị từ chối với thông báo
 `DML queries are not allowed on this database`. Đây là **kết quả đúng**, không
-phải lỗi — xem [Bật dịch vụ MCP](../how-to/bat-mcp.md).
+phải lỗi — xem [Bật dịch vụ MCP](../how-to/tro-ly-ai/bat-mcp.md).
 
 ## Phân trang
 
@@ -156,7 +156,7 @@ Các công cụ `list_*` trả về `10` mục mỗi trang, tối đa `100`. Ph�
 
 ## Liên quan
 
-- [Bật dịch vụ MCP](../how-to/bat-mcp.md)
+- [Bật dịch vụ MCP](../how-to/tro-ly-ai/bat-mcp.md)
 - [Cấu hình MCP](./mcp-cau-hinh.md)
 - [Tạo biểu đồ bằng lời](../tutorials/tao-bieu-do-bang-loi.md)
 - [Vì sao MCP là một dịch vụ riêng](../explanation/vi-sao-mcp-la-service-rieng.md)

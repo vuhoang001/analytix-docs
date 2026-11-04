@@ -98,7 +98,7 @@ kết nối. Bấm **Test Connection** trước khi lưu.
 :::danger[Tắt quyền ghi trừ khi thật sự cần]
 Bỏ chọn **Allow DML**, **Allow CTAS**, **Allow CVAS**. Đây là chốt chặn thật —
 nó chặn ở tầng kết nối, không dựa vào việc người dùng tự giữ mình. Đặc biệt quan
-trọng nếu bạn bật [dịch vụ MCP](./bat-mcp.md).
+trọng nếu bạn bật [dịch vụ MCP](../tro-ly-ai/bat-mcp.md).
 :::
 
 ## Kiểm tra là đã đúng
@@ -177,6 +177,6 @@ Cùng cách đó áp dụng được cho cả 156 gói của bộ pin nếu cầ
 
 - [Cài thực trên máy](./cai-dat-tren-may.md)
 - [Cài bằng Docker](./cai-dat-bang-docker.md)
-- [Viết SQL an toàn với cột dạng chữ](./viet-sql-an-toan.md)
-- [Bật dịch vụ MCP](./bat-mcp.md) — chỗ việc tắt quyền ghi quan trọng nhất
-- [AnalytiX là gì](../explanation/analytix-la-gi.md)
+- [Viết SQL an toàn với cột dạng chữ](../dung-bao-cao/viet-sql-an-toan.md)
+- [Bật dịch vụ MCP](../tro-ly-ai/bat-mcp.md) — chỗ việc tắt quyền ghi quan trọng nhất
+- [AnalytiX là gì](../../explanation/analytix-la-gi.md)

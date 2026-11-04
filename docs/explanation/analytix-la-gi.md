@@ -2,7 +2,7 @@
 title: AnalytiX là gì
 sidebar_position: 1
 last_update:
-  date: "2026-11-02"
+  date: "2026-11-04"
   author: vuhoang001
 ---
 
@@ -72,7 +72,7 @@ bản cài tay không thể lệch nhau.
 **Không mang theo driver database nào ngoài SQLite.** Cài xong, AnalytiX query
 được tệp SQLite — và gần như chỉ thế. Nối Postgres, MySQL, Trino hay bất cứ gì
 khác đều phải cài thêm driver bằng tay. Xem
-[Thêm driver cho nguồn dữ liệu](../how-to/them-driver-du-lieu.md).
+[Thêm driver cho nguồn dữ liệu](../how-to/cai-dat-van-hanh/them-driver-du-lieu.md).
 
 **Không phải bản sẵn sàng cho môi trường thật.** Cả hai đường cài đều chạy bằng
 web server dành cho phát triển, không có reverse proxy, không HTTPS. Xem
@@ -84,9 +84,12 @@ tiến trình chạy việc nền và một hàng đợi — bộ cài không d�
 **Không ảnh chụp biểu đồ.** Việc đó cần một trình duyệt không giao diện, bộ cài
 không mang theo.
 
-**Không có tài khoản mặc định.** Đây là chủ ý, không phải thiếu sót: mật khẩu
-quản trị được **sinh ngẫu nhiên và in ra một lần duy nhất** lúc cài. Không có
-`admin/admin` để ai dò cũng vào được.
+**Không bắt bạn đổi mật khẩu quản trị.** Tài khoản đầu tiên là `admin` / `admin`,
+và việc đổi là của người dùng ở lần đăng nhập đầu — bộ cài nhắc chứ không cưỡng
+chế. Nó bù lại bằng hai chốt: bản cài tay **từ chối nghe ra ngoài loopback** khi
+mật khẩu vẫn là `admin`, và đường Docker chỉ mở cổng trên `127.0.0.1`. Đặt
+`ANALYTIX_ADMIN_PASSWORD` lúc cài thì không có cặp mặc định nào được tạo. Xem
+[Biến môi trường](../reference/bien-moi-truong.md#analytix_admin_password).
 
 ## Điểm yếu của cách làm này
 
@@ -104,9 +107,15 @@ driver Postgres lại không có sẵn.
 **Giao diện vẫn còn chữ của nhà cung cấp cũ.** Vài bảng màu còn mang nhãn mang
 tên công ty phát triển, người dùng cuối nhìn thấy được.
 
+**Tài khoản mặc định `admin` / `admin` là một điểm yếu, không phải tiện lợi
+thuần.** Hai chốt kia chỉ chặn được đường ra mạng do bộ cài tự dựng; ai đặt
+reverse proxy phía trước, hoặc `docker run` tay với `-p` của mình, thì đi vòng
+qua cả hai. Xem [Vì sao bản cài chưa sẵn sàng cho môi trường
+thật](./chua-san-sang-cho-production.md).
+
 ## Liên quan
 
 - [Cài AnalytiX lần đầu](../tutorials/cai-dat-analytix.md) — đi từ đầu đến cuối
-- [Cài bằng Docker](../how-to/cai-dat-bang-docker.md)
-- [Cài thực trên máy](../how-to/cai-dat-tren-may.md)
+- [Cài bằng Docker](../how-to/cai-dat-van-hanh/cai-dat-bang-docker.md)
+- [Cài thực trên máy](../how-to/cai-dat-van-hanh/cai-dat-tren-may.md)
 - [Yêu cầu hệ thống](../reference/yeu-cau-he-thong.md)

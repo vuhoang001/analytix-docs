@@ -1,6 +1,6 @@
 ---
 title: Bật dịch vụ MCP
-sidebar_position: 10
+sidebar_position: 1
 last_update:
   date: "2026-11-03"
   author: vuhoang001
@@ -10,7 +10,7 @@ last_update:
 
 Bật dịch vụ cho phép trợ lý AI đọc dữ liệu và dựng biểu đồ trong công cụ trực
 quan bằng lời. Dịch vụ chạy như **một tiến trình riêng** — xem
-[Vì sao MCP là một dịch vụ riêng](../explanation/vi-sao-mcp-la-service-rieng.md).
+[Vì sao MCP là một dịch vụ riêng](../../explanation/vi-sao-mcp-la-service-rieng.md).
 
 Dành cho người quản trị. Cần có trước: quyền ghi vào thư mục cài của công cụ
 trực quan, và quyền khởi động tiến trình trên máy đó.
@@ -295,8 +295,8 @@ lý AI đang có quyền ghi vào nguồn dữ liệu thật.
 
 ## Liên quan
 
-- [Vì sao MCP là một dịch vụ riêng](../explanation/vi-sao-mcp-la-service-rieng.md)
+- [Vì sao MCP là một dịch vụ riêng](../../explanation/vi-sao-mcp-la-service-rieng.md)
 - [Đổi xác thực MCP sang JWT](./mcp-doi-sang-jwt.md) — **bắt buộc** trước khi mở ra ngoài localhost
-- [Cấu hình MCP](../reference/mcp-cau-hinh.md) — bảng đầy đủ các biến
-- [Công cụ MCP](../reference/mcp-cong-cu.md) — 24 công cụ và cách gọi
-- [Tạo biểu đồ bằng lời](../tutorials/tao-bieu-do-bang-loi.md)
+- [Cấu hình MCP](../../reference/mcp-cau-hinh.md) — bảng đầy đủ các biến
+- [Công cụ MCP](../../reference/mcp-cong-cu.md) — 24 công cụ và cách gọi
+- [Tạo biểu đồ bằng lời](../../tutorials/tao-bieu-do-bang-loi.md)

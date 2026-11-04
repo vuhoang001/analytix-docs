@@ -49,7 +49,7 @@ Cả năm dòng phải `OK`. Có dòng `FAILED` thì chép lại — đừng n�
 ./cai.sh
 ```
 
-Script nạp ảnh, dựng container, chờ sẵn sàng, rồi in địa chỉ và mật khẩu.
+Script nạp ảnh, dựng container, chờ sẵn sàng, rồi in địa chỉ và tài khoản quản trị.
 
 ![Output cai.sh ở thư mục offline: chọn đường offline, nạp ảnh 434M, Loaded image analytix:1.0, tạo container, chờ sẵn sàng, rồi in địa chỉ, tài khoản admin và mật khẩu.](./img/cai-khong-can-mang/03-chay.png)
 
@@ -60,11 +60,27 @@ nó tự biết phải nạp ảnh thay vì dựng ảnh.
 Thấy dòng `đang chạy tại` kèm địa chỉ là đạt. Không thấy thì script đã dừng ở
 trên — đọc bảng Lỗi hay gặp.
 
-:::danger[Mật khẩu chỉ in một lần]
-Nó không được ghi vào tệp nào. Lưu ngay khi thấy.
+:::danger[Mật khẩu mặc định là `admin` — đổi ngay lần đăng nhập đầu]
+Script in ra ba dòng:
+
+```
+[analytix] tài khoản quản trị:          admin / admin
+[analytix] ĐỔI MẬT KHẨU ngay lần đăng nhập đầu: Settings → Info → Reset my password.
+[analytix] cổng chỉ mở trên máy này. Mở ra mạng:  ANALYTIX_BIND=0.0.0.0 ./cai.sh
+```
+
+Cặp `admin` / `admin` giống nhau trên mọi bản cài, nên Bước 7 là việc bắt buộc,
+không phải tuỳ chọn.
 :::
 
 Đổi cổng: `ANALYTIX_PORT=9000 ./cai.sh`
+
+Cổng mặc định **chỉ mở trên `127.0.0.1`** — máy khác trong mạng không vào được.
+Đổi mật khẩu quản trị trước, rồi mở ra mạng bằng cách gõ rõ:
+
+```bash
+ANALYTIX_BIND=0.0.0.0 ./cai.sh
+```
 
 Nói rõ đường cũng được — `./cai.sh --offline` làm đúng việc trên.
 
@@ -78,7 +94,7 @@ Chạy lần thứ hai thì dòng `nạp ảnh từ ...` không in lại nữa, 
 
 ### 5 · Đăng nhập
 
-Tài khoản `admin`, mật khẩu ở Bước 3.
+Tài khoản `admin`, mật khẩu `admin` — cặp script in ra ở Bước 3.
 
 ![Trang chủ AnalytiX sau khi đăng nhập, chưa có dashboard nào.](./img/cai-khong-can-mang/05-vao-duoc.png)
 
@@ -88,9 +104,10 @@ Menu **Settings** trên thanh trên → **Info**.
 
 ![Trang Your user information, cuối trang có nút Reset my password.](./img/cai-khong-can-mang/06-trang-tai-khoan.png)
 
-### 7 · Đổi mật khẩu
+### 7 · Đổi mật khẩu — bắt buộc
 
-Bấm **Reset my password**, gõ mật khẩu mới hai lần, bấm **Save**.
+Bấm **Reset my password**, gõ mật khẩu mới hai lần, bấm **Save**. Đừng bỏ bước
+này: mật khẩu mặc định là `admin`, và nó giống nhau trên mọi bản cài.
 
 ![Form Reset Password với ô Password và Confirm Password.](./img/cai-khong-can-mang/07-doi-mat-khau.png)
 
@@ -211,7 +228,9 @@ có một đường, và đường đó cần Docker.
 | `exec format error` | Ảnh dựng cho kiến trúc CPU khác | Dựng lại trên máy cùng kiến trúc với máy đích |
 | `container ... đã có sẵn và đang gắn cổng X, không phải Y` | Ánh xạ cổng đóng cứng lúc tạo container | `docker rm -f analytix` rồi chạy lại với cổng mới. Dữ liệu nằm trong volume nên không mất |
 | `container báo unhealthy`, hoặc `quá 3 phút vẫn chưa sẵn sàng` | Container dựng được nhưng dịch vụ không lên | Script đã in `docker logs --tail 30` ngay trên dòng lỗi — đọc đoạn đó. Thử lại: `docker rm -f analytix && ./cai.sh` |
-| `mật khẩu:                    đã tạo từ trước, không in lại được` | Tài khoản đã tạo từ lần chạy trước | Mật khẩu cũ vẫn dùng được. Mất thì `./go-cai.sh --ca-du-lieu` rồi cài lại |
+| `mật khẩu:                    cái bạn đặt, hoặc cái đã đặt từ lần cài trước` | Tài khoản đã tạo từ lần chạy trước, hoặc bạn tự đặt `ANALYTIX_ADMIN_PASSWORD` | Mật khẩu cũ vẫn dùng được. Mất thì `docker exec analytix superset fab reset-password --username admin` |
+| `LỖI: mật khẩu quản trị vẫn là 'admin'.` | Không phải lỗi của thư mục này: dòng này do `khoi-dong.sh` của đường cài thực trên máy in ra, khi `ANALYTIX_BIND` khác loopback mà mật khẩu còn mặc định | Đổi mật khẩu rồi chạy lại `khoi-dong.sh`. Xem [Cài thực trên máy](./cai-dat-tren-may.md) |
+| Máy khác trong mạng không mở được `http://<máy-chủ>:8088` | Cổng chỉ mở trên `127.0.0.1` — đây là mặc định mới | Đổi mật khẩu quản trị, rồi `ANALYTIX_BIND=0.0.0.0 ./cai.sh` |
 | `không có bàn phím để hỏi. Thêm -y nếu thật sự muốn xoá.` | Chạy `./go-cai.sh` mà đầu vào không phải bàn phím (script, đường ống) | Thêm `-y`: `./go-cai.sh -y` |
 | `không hiểu tham số '...'. Chạy ./cai.sh --giup` | Gõ sai flag | Chỉ có `--docker`, `--may`, `--offline`, `--giup`. `./cai.sh --giup` in đủ danh sách |
 | Chỉ thấy SQLite | Ảnh không mang driver nào khác | Máy không có mạng thì không cài thêm được — xem [Thêm driver](./them-driver-du-lieu.md) |
@@ -223,5 +242,5 @@ tới. Chức năng không ảnh hưởng.
 ## Liên quan
 
 - [Đóng gói bản phát hành](./dong-goi-ban-phat-hanh.md) — bước cắt bundle đứng trước
-- [Yêu cầu hệ thống](../reference/yeu-cau-he-thong.md) — cái gì cần mạng, cái gì không
+- [Yêu cầu hệ thống](../../reference/yeu-cau-he-thong.md) — cái gì cần mạng, cái gì không
 - [Cài bằng Docker](./cai-dat-bang-docker.md) — khi máy đích có mạng

@@ -1,0 +1,9 @@
+{
+  "label": "Cài đặt và vận hành",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "slug": "/how-to/cai-dat-van-hanh",
+    "description": "Việc của người quản trị và người bảo trì: dựng bản chạy được, thêm driver, đóng gói bản phát hành."
+  }
+}

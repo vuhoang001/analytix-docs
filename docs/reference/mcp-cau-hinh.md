@@ -137,7 +137,7 @@ có một cờ `MCP_SERVICE` nhưng nó chưa bao giờ được dùng tới và
 
 ## Liên quan
 
-- [Bật dịch vụ MCP](../how-to/bat-mcp.md)
-- [Đổi xác thực MCP sang JWT](../how-to/mcp-doi-sang-jwt.md)
+- [Bật dịch vụ MCP](../how-to/tro-ly-ai/bat-mcp.md)
+- [Đổi xác thực MCP sang JWT](../how-to/tro-ly-ai/mcp-doi-sang-jwt.md)
 - [Công cụ MCP](./mcp-cong-cu.md)
 - [Vì sao MCP là một dịch vụ riêng](../explanation/vi-sao-mcp-la-service-rieng.md)

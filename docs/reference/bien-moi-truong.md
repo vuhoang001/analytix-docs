@@ -24,22 +24,27 @@ flag nghĩa là biến chỉ có tác dụng ở đường đó của `./cai.sh`
 |:---|:---|:--:|:--:|:--:|:--:|:--:|
 | `ANALYTIX_HOME` | `$HOME/analytix` · container: `/app/analytix` | `--may` | ✅ | ✅ | — | ✅ |
 | `ANALYTIX_ADMIN_USER` | `admin` | — | — | ✅ | — | ✅ |
-| `ANALYTIX_ADMIN_PASSWORD` | *sinh ngẫu nhiên, in một lần* | ✅ | — | ✅ | — | ✅ |
+| `ANALYTIX_ADMIN_PASSWORD` | `admin` — đổi ngay lần đăng nhập đầu | ✅ | — | ✅ | — | ✅ |
 | `ANALYTIX_PORT` | `8088` | ✅ | — | ✅ | ✅ | ✅ |
 | `ANALYTIX_NAME` | `analytix` | `--docker` `--offline` | ✅ | — | — | — |
 | `ANALYTIX_VOLUME` | `analytix-data` | `--docker` `--offline` | ✅ | — | — | — |
-| `ANALYTIX_BIND` | `127.0.0.1` | — | — | — | ✅ | — |
+| `ANALYTIX_BIND` | `127.0.0.1` | `--docker` `--offline` | — | — | ✅ | — |
 | `ANALYTIX_SECRET_KEY` | *sinh ngẫu nhiên lần chạy đầu* | — | — | — | — | ✅ |
 | `ANALYTIX_FRAME_ANCESTORS` | *không đặt* — mọi origin khác bị chặn nhúng | — | — | — | ✅ | ✅ |
 | `PYTHON` | `python3` — **bỏ qua khi bộ cài có `python/`** | ✅ | — | ✅ | — | — |
 
 Sáu chỗ hay nhầm:
 
-- **`ANALYTIX_BIND` không có tác dụng lúc cài.** Chỉ `khoi-dong.sh` đọc nó. Đặt lúc
-  chạy `./cai-tren-may.sh` là không có gì xảy ra — script đó chỉ ghi
-  `${ANALYTIX_BIND:-127.0.0.1}` vào `khoi-dong.sh` chứ không đọc giá trị. Đi qua
-  `./cai.sh --may` thì có tác dụng, vì script đó `exec` sang `khoi-dong.sh` ở
-  bước cuối.
+- **`ANALYTIX_BIND` có hai nghĩa khác nhau, tuỳ script nào đọc nó.** `cai.sh` ở
+  đường `--docker` và `--offline` đọc nó để quyết **cổng Docker mở trên giao diện
+  mạng nào** của máy chủ — `-p "$BIND:$PORT:8088"`. `khoi-dong.sh` đọc nó để quyết
+  **địa chỉ Flask nghe** — `superset run -h "$BIND"`. Cả hai mặc định `127.0.0.1`.
+  Riêng `cai-tren-may.sh` thì **không đọc giá trị**: nó chỉ ghi nguyên chuỗi
+  `${ANALYTIX_BIND:-127.0.0.1}` vào `khoi-dong.sh` lúc sinh script, nên đặt biến
+  lúc chạy `./cai-tren-may.sh` là không có gì xảy ra. Đi qua `./cai.sh --may` thì
+  có tác dụng, vì script đó `exec` sang `khoi-dong.sh` ở bước cuối và biến được kế
+  thừa qua môi trường — nhưng là có tác dụng ở nghĩa *Flask nghe ở đâu*, không
+  phải ở nghĩa ánh xạ cổng Docker.
 - **`ANALYTIX_SECRET_KEY` chỉ có ở đường container.** Bản cài tay luôn tự sinh
   khoá và không nhận biến này.
 - **`PYTHON` chỉ có ở bản cài tay, và bộ cài đầy đủ bỏ qua nó.** Container đã
@@ -156,17 +161,46 @@ mất cả khoá bí mật, tài khoản, dataset và biểu đồ.
 
 ### `ANALYTIX_ADMIN_PASSWORD`
 
-Không đặt thì bộ cài sinh một mật khẩu ngẫu nhiên và **in ra một lần duy nhất**:
+Không đặt thì mật khẩu là **`admin`** — tài khoản mặc định là `admin` / `admin`,
+và người dùng tự đổi ở lần đăng nhập đầu. `cai-tren-may.sh` in:
 
 ```
-[analytix] administrator admin password: <chuỗi>
-[analytix] this is printed once and is written to no file. Save it now.
+[analytix] administrator: admin / admin
+[analytix] CHANGE IT at first login: Settings -> Info -> Reset my password.
+[analytix] Until you do, the start script refuses to listen outside 127.0.0.1.
 ```
 
-**Không có mật khẩu mặc định.** Đây là chủ ý của sản phẩm. Không có
-`admin/admin`.
+`entrypoint.sh` trong container in hai dòng đầu, không có dòng thứ ba — chốt đó
+nằm ở `khoi-dong.sh`, mà container không dùng script này. `cai.sh` ở đường
+`--docker` và `--offline` in lại bằng tiếng Việt ở cuối:
 
-Mất mật khẩu thì đặt lại:
+```
+[analytix] tài khoản quản trị:          admin / admin
+[analytix] ĐỔI MẬT KHẨU ngay lần đăng nhập đầu: Settings → Info → Reset my password.
+```
+
+Đặt biến thì bộ cài dùng đúng giá trị đó và **không in mật khẩu ra**; `cai.sh`
+chuyển nó sang container bằng `-e`. Khi đó, và cả khi tài khoản đã có từ lần cài
+trước, `cai.sh` in:
+
+```
+[analytix] tài khoản quản trị:          admin
+[analytix] mật khẩu:                    cái bạn đặt, hoặc cái đã đặt từ lần cài trước
+```
+
+Tài khoản đã tồn tại thì **không** tạo lại và biến bị bỏ qua —
+`administrator admin already exists; not recreating it` ở bản cài tay,
+`administrator admin already exists` trong container. Đổi mật khẩu của tài khoản
+đã có thì dùng `reset-password`, không phải đặt lại biến này.
+
+:::warning[`admin/admin` là thông tin đăng nhập ai cũng đoán được]
+Đổi nó ngay lần đăng nhập đầu. Chừng nào chưa đổi, `khoi-dong.sh` **từ chối** nghe
+ra ngoài loopback — xem [`ANALYTIX_BIND`](#analytix_bind). Chốt đó không có ở
+đường container: biên bảo mật ở đó là ánh xạ cổng, mặc định chỉ mở trên
+`127.0.0.1`.
+:::
+
+Đổi mật khẩu, hoặc mất mật khẩu đã đặt tay:
 ```bash
 ~/analytix/venv/bin/superset fab reset-password --username admin
 ```
@@ -192,17 +226,67 @@ docker run -p 9000:8088 ...        # đúng
 
 ### `ANALYTIX_BIND`
 
-Chỉ `khoi-dong.sh` đọc. Mặc định `127.0.0.1` — chỉ chính máy đó vào được.
+Hai script đọc biến này, và **nghĩa của nó khác nhau ở hai chỗ**. Mặc định cả hai
+là `127.0.0.1` — chỉ chính máy đó vào được.
+
+| Script | Nó quyết định gì | Dòng mã |
+|:---|:---|:---|
+| `cai.sh` — `--docker`, `--offline` | giao diện mạng của **máy chủ** mà cổng Docker mở lên | `docker run -p "$BIND:$PORT:8088"` |
+| `khoi-dong.sh` — bản cài tay | địa chỉ **Flask** nghe trong tiến trình | `superset run -h "$BIND"` |
+
+`cai-tren-may.sh` không đọc giá trị, chỉ ghi `${ANALYTIX_BIND:-127.0.0.1}` vào
+`khoi-dong.sh` khi sinh script đó.
+
+#### Ở `cai.sh`: cổng Docker mở trên giao diện nào
+
+```bash
+ANALYTIX_BIND=0.0.0.0 ./cai.sh          # mở ra mọi giao diện mạng
+```
+
+Để mặc định thì cổng chỉ mở trên máy đó, và `cai.sh` in:
+
+```
+[analytix] cổng chỉ mở trên máy này. Mở ra mạng:  ANALYTIX_BIND=0.0.0.0 ./cai.sh
+```
+
+Đặt khác `127.0.0.1` thì nó in cảnh báo thay cho dòng trên:
+
+```
+[analytix] CẢNH BÁO: cổng đang mở trên 0.0.0.0 — đổi mật khẩu quản trị trước khi rời máy.
+```
+
+Ánh xạ cổng được đóng cứng lúc **tạo** container. Container đã tồn tại thì
+`cai.sh` khởi động lại cái cũ, và đổi biến này không có tác dụng gì — phải xoá
+rồi tạo lại.
+
+Bên trong container thì Flask luôn nghe `0.0.0.0`, không đọc `ANALYTIX_BIND` —
+đó là điều kiện để `-p` hoạt động, và biên bảo mật là ánh xạ cổng cùng ranh giới
+container.
+
+#### Ở `khoi-dong.sh`: Flask nghe ở đâu
 
 ```bash
 ANALYTIX_BIND=0.0.0.0 ~/analytix/khoi-dong.sh
 ```
 
-**Đổi mật khẩu quản trị trước khi mở ra mạng**, và đọc
-[Vì sao bản cài chưa sẵn sàng cho môi trường thật](../explanation/chua-san-sang-cho-production.md).
+:::danger[Chốt: mật khẩu còn là `admin` thì không ra khỏi loopback được]
+`ANALYTIX_BIND` khác `127.0.0.1` và khác `localhost` thì `khoi-dong.sh` đọc hash
+mật khẩu của `admin` trong `superset.db` và so với đúng chuỗi `admin`. Còn khớp
+thì nó dừng, chưa khởi động gì:
 
-Container luôn nghe `0.0.0.0` bên trong — đó là điều kiện để `-p` hoạt động, và
-biên bảo mật là ranh giới container.
+```
+[analytix] LỖI: mật khẩu quản trị vẫn là 'admin'.
+[analytix] Từ chối nghe trên 0.0.0.0. Đổi mật khẩu rồi chạy lại:
+[analytix]   Settings -> Info -> Reset my password
+[analytix] hoặc: ~/analytix/venv/bin/superset fab reset-password --username admin
+```
+
+Đổi mật khẩu xong là chốt tự mở. Nó **chỉ** kiểm đúng một chuỗi đó và không chặn
+gì khác — mật khẩu yếu kiểu `123456` thì nó cho qua.
+:::
+
+Đọc thêm [Vì sao bản cài chưa sẵn sàng cho môi trường
+thật](../explanation/chua-san-sang-cho-production.md) trước khi mở ra mạng.
 
 ### `ANALYTIX_FRAME_ANCESTORS`
 
@@ -222,7 +306,7 @@ Cho bất kỳ trang nào nhúng AnalytiX vào khung ẩn là mở đường cli
 Liệt kê đúng origin bạn kiểm soát.
 :::
 
-Xem [Nhúng dashboard bằng iframe đơn giản](../how-to/nhung-iframe-don-gian.md).
+Xem [Nhúng dashboard bằng iframe đơn giản](../how-to/nhung-bao-cao/nhung-iframe-don-gian.md).
 
 ### `ANALYTIX_SECRET_KEY`
 
@@ -287,7 +371,7 @@ khi cài, hoặc dựng thêm ở ngoài.
 
 ## Liên quan
 
-- [Cài thực trên máy](../how-to/cai-dat-tren-may.md)
-- [Cài bằng Docker](../how-to/cai-dat-bang-docker.md)
+- [Cài thực trên máy](../how-to/cai-dat-van-hanh/cai-dat-tren-may.md)
+- [Cài bằng Docker](../how-to/cai-dat-van-hanh/cai-dat-bang-docker.md)
 - [Yêu cầu hệ thống](./yeu-cau-he-thong.md)
 - [Cấu hình MCP](./mcp-cau-hinh.md) — các biến `MCP_*`, đặt trong `superset_config.py`

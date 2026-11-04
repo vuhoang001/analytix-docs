@@ -1,0 +1,9 @@
+{
+  "label": "Nhúng vào hệ thống khác",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "slug": "/how-to/nhung-bao-cao",
+    "description": "Đưa một dashboard đã dựng sang trang web khác. Hai cách, chọn theo việc người xem có tài khoản hay không."
+  }
+}

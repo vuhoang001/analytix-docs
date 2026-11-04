@@ -47,21 +47,29 @@ Một lệnh. Script tự dò máy bạn có Docker hay có Python rồi chọn 
 
 Kết quả mẫu:
 
-![Output cai.sh: chọn đường docker, dựng ảnh analytix:1.0, tạo container trên cổng 8088, chờ sẵn sàng, rồi in địa chỉ, tài khoản admin và mật khẩu sinh ngẫu nhiên.](./img/cai-dat/02-cai-sh.png)
+![Output cai.sh: chọn đường docker, dựng ảnh analytix:1.0, tạo container trên cổng 8088, chờ sẵn sàng, rồi in địa chỉ, tài khoản quản trị admin / admin kèm dòng nhắc đổi mật khẩu ngay lần đăng nhập đầu.](./img/cai-dat/02-cai-sh.png)
 
 Máy không có Docker thì script đi đường `--may` và **chiếm luôn cửa sổ
 terminal** — dòng cuối nó in bắt đầu bằng `[analytix] đang khởi động. Ctrl-C để
 dừng;` rồi chỉ ra `khoi-dong.sh` để chạy lại (mặc định
 `~/analytix/khoi-dong.sh`). Để nguyên cửa sổ đó và mở cửa sổ thứ hai cho các
-bước sau. Mật khẩu của đường này nằm ở dòng `[analytix] administrator admin
-password: ...` phía trên trong cùng một output.
+bước sau. Tài khoản của đường này nằm ở hai dòng `[analytix] administrator:
+admin / admin` và `[analytix] CHANGE IT at first login: Settings -> Info ->
+Reset my password.` phía trên trong cùng một output.
 
-:::danger[Mật khẩu chỉ in MỘT LẦN]
-Lưu nó ngay. Nó không được ghi vào tệp nào, và lần chạy sau sẽ không in lại vì
-tài khoản đã tồn tại. Không có tài khoản mặc định — đây là chủ ý.
+:::danger[Mật khẩu mặc định là `admin` — đổi ngay lần đăng nhập đầu]
+Tài khoản quản trị mặc định là `admin` / `admin`. Cặp đó ai cũng đoán được, nên
+đổi nó ngay ở lần đăng nhập đầu tiên: **Settings → Info → Reset my password**.
 
-Muốn tự chọn mật khẩu: `ANALYTIX_ADMIN_PASSWORD=... ./cai.sh`. Nhưng khi đó nó
-nằm trong lịch sử shell của bạn.
+Hai chốt giữ chỗ cho bạn tới lúc đó:
+
+- `khoi-dong.sh` — đường `--may` — **từ chối** nghe ra ngoài `127.0.0.1` chừng
+  nào mật khẩu vẫn còn là `admin`.
+- Đường Docker chỉ mở cổng trên `127.0.0.1`. Muốn mở ra mạng thì phải gõ rõ
+  `ANALYTIX_BIND=0.0.0.0 ./cai.sh`.
+
+Muốn tự chọn mật khẩu ngay từ lúc cài: `ANALYTIX_ADMIN_PASSWORD=... ./cai.sh`.
+Nhưng khi đó nó nằm trong lịch sử shell của bạn.
 :::
 
 Cổng 8088 đã có thứ khác dùng thì đổi cổng:
@@ -99,20 +107,24 @@ báo lỗi thì gửi cả tệp này. `cai.sh` cũng đọc chính tệp này �
 
 ## Bước 4: Đăng nhập
 
-Mở `http://127.0.0.1:8088`, đăng nhập bằng `admin` và mật khẩu ở Bước 2.
+Mở `http://127.0.0.1:8088`, đăng nhập bằng `admin` / `admin`.
 
-![Trang đăng nhập AnalytiX với hai ô Username và Password.](../how-to/img/cai-khong-can-mang/04-dang-nhap.png)
+![Trang đăng nhập AnalytiX với hai ô Username và Password.](../how-to/cai-dat-van-hanh/img/cai-khong-can-mang/04-dang-nhap.png)
 
 Góc trên trái phải là logo và chữ **AnalytiX** — không phải "Superset".
 
-![Trang chủ AnalytiX sau khi đăng nhập, logo AnalytiX ở góc trên trái.](../how-to/img/cai-khong-can-mang/05-vao-duoc.png)
+![Trang chủ AnalytiX sau khi đăng nhập, logo AnalytiX ở góc trên trái.](../how-to/cai-dat-van-hanh/img/cai-khong-can-mang/05-vao-duoc.png)
+
+Rồi đổi mật khẩu ngay — **Settings → Info → Reset my password**. Đây là việc
+bắt buộc, không phải tuỳ chọn: chừng nào mật khẩu còn là `admin`, bản cài này
+chỉ dùng được từ chính máy đó.
 
 Kiểm bằng dòng lệnh thay vì mắt:
 
 ```
 curl -s -X POST http://127.0.0.1:8088/api/v1/security/login \
   -H 'Content-Type: application/json' \
-  -d '{"username":"admin","password":"<mật-khẩu>","provider":"db","refresh":true}'
+  -d '{"username":"admin","password":"<mật-khẩu-mới>","provider":"db","refresh":true}'
 ```
 
 Kết quả mẫu:
@@ -258,6 +270,13 @@ curl -s http://127.0.0.1:8088/health
 
 Đạt khi hai lệnh trả về `healthy` và `OK`.
 
+Cổng chỉ mở trên `127.0.0.1`, nên máy khác trong mạng không vào được. Đổi mật
+khẩu quản trị trước, rồi mở ra mạng bằng cách gõ rõ:
+
+```
+ANALYTIX_BIND=0.0.0.0 ./cai.sh --docker
+```
+
 ### Đường 2 — cài thực trên máy
 
 Không cần Docker. Cài vào một môi trường ảo Python, chạy ở tiền cảnh.
@@ -275,6 +294,13 @@ curl -s http://127.0.0.1:8088/health
 
 Đạt khi đường dẫn nằm trong `~/analytix/venv/`, không nằm trong thư mục bộ cài,
 và `/health` trả `OK`.
+
+Đường này cũng mặc định nghe `127.0.0.1`, và `khoi-dong.sh` **từ chối** mở ra
+mạng khi mật khẩu quản trị vẫn là `admin`. Đổi mật khẩu trước, rồi:
+
+```
+ANALYTIX_BIND=0.0.0.0 ~/analytix/khoi-dong.sh
+```
 
 Trên **bản đầy đủ** đường này đổi tính chất: nó không cần Python của máy và
 không cần mạng. `cai.sh` thấy `python/` trong bộ cài nên chọn luôn `--may`, với
@@ -335,16 +361,16 @@ curl -s http://127.0.0.1:8088/health
 
 Vẫn phải ra `OK`.
 
-Dựng ba bản đó: [Đóng gói bản phát hành](../how-to/dong-goi-ban-phat-hanh.md).
+Dựng ba bản đó: [Đóng gói bản phát hành](../how-to/cai-dat-van-hanh/dong-goi-ban-phat-hanh.md).
 
 ## Xong!
 
 Bạn đã đi qua ba lớp đầu của AnalytiX: kết nối → dataset → biểu đồ. Lớp thứ tư,
 trang báo cáo, nằm ở bài dài hơn bên dưới. Tiếp theo:
 
-- [Thêm driver cho nguồn dữ liệu](../how-to/them-driver-du-lieu.md) — **gần như
+- [Thêm driver cho nguồn dữ liệu](../how-to/cai-dat-van-hanh/them-driver-du-lieu.md) — **gần như
   chắc chắn bạn cần việc này**, vì dữ liệu thật không nằm trong SQLite
 - [Từ database tới biểu đồ](./tu-database-toi-bieu-do.md) — bài dài hơn, dựng
   một trang báo cáo bốn biểu đồ có bộ lọc dùng chung
 - [Vì sao bản cài chưa sẵn sàng cho môi trường thật](../explanation/chua-san-sang-cho-production.md) — đọc trước khi cho người khác dùng
-- [Bật dịch vụ MCP](../how-to/bat-mcp.md) — hỏi bằng lời, nó tự dựng biểu đồ
+- [Bật dịch vụ MCP](../how-to/tro-ly-ai/bat-mcp.md) — hỏi bằng lời, nó tự dựng biểu đồ

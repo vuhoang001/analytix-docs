@@ -1,9 +1,4 @@
 {
   "label": "Làm một việc cụ thể",
-  "position": 2,
-  "link": {
-    "type": "generated-index",
-    "slug": "/how-to",
-    "description": "Bạn đã cài xong, giờ cần công thức: thêm driver, nhúng báo cáo, đóng gói bản phát hành."
-  }
+  "position": 2
 }

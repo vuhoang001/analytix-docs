@@ -1,13 +1,13 @@
 ---
 title: Viết SQL an toàn với cột dạng chữ
-sidebar_position: 6
+sidebar_position: 7
 ---
 
 # Viết SQL an toàn với cột dạng chữ
 
 Bộ nạp liệu **không tự suy ra kiểu dữ liệu** — mọi cột ở lớp `raw` đều là
 chữ (VARCHAR), kể cả cột chứa số hay ngày tháng (xem
-[Kiến trúc dữ liệu](../explanation/analytix-la-gi.md) để biết vì sao).
+[Kiến trúc dữ liệu](../../explanation/analytix-la-gi.md) để biết vì sao).
 Muốn tính toán, phải ép kiểu tường minh — và phải ép kiểu **đúng cách**, nếu
 không ô trống sẽ âm thầm biến thành số `0`.
 

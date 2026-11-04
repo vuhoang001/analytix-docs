@@ -360,4 +360,4 @@ internet](./cai-tren-may-khong-co-mang.md).
 - [Cài thực trên máy](./cai-dat-tren-may.md)
 - [Cài bằng Docker](./cai-dat-bang-docker.md)
 - [Thêm driver cho nguồn dữ liệu](./them-driver-du-lieu.md)
-- [AnalytiX là gì](../explanation/analytix-la-gi.md)
+- [AnalytiX là gì](../../explanation/analytix-la-gi.md)

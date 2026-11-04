@@ -45,7 +45,7 @@ gói lại trên đúng kiến trúc đó.
 
 :::tip[Chỉ muốn nó chạy thì có đường ngắn hơn]
 `./cai.sh --may` làm đúng mọi bước trang này mô tả, trong một lệnh, rồi khởi
-động luôn. Xem [Bắt đầu nhanh](../tutorials/cai-dat-analytix.md).
+động luôn. Xem [Bắt đầu nhanh](../../tutorials/cai-dat-analytix.md).
 
 Trang này dành cho khi bạn cần biết từng bước làm gì — để sửa khi nó hỏng, hoặc
 để đổi một tham số mà `cai.sh` không mở ra.
@@ -82,7 +82,7 @@ Bộ cài tự làm sáu việc: kiểm bản đóng gói, chọn trình thông 
 cài **đúng thứ tự**, viết cấu hình, tạo database và tài khoản quản trị, rồi viết
 script khởi động.
 
-![Output cai-tren-may.sh trên bản đầy đủ: chép Python vào thư mục cài, báo python 3.12.16 from the bundle, cài từ kho 158 wheel không dùng PyPI, cachelib khớp pin, config nạp AnalytiX en+vi, tạo admin, và in mật khẩu một lần.](./img/cai-may/02-cai.png)
+![Output cai-tren-may.sh trên bản đầy đủ: chép Python vào thư mục cài, báo python 3.12.16 from the bundle, cài từ kho 158 wheel không dùng PyPI, cachelib khớp pin, config nạp AnalytiX en+vi, tạo admin, và in hai dòng administrator: admin / admin và CHANGE IT at first login.](./img/cai-may/02-cai.png)
 
 Bốn dòng đáng nhìn:
 
@@ -117,11 +117,15 @@ Nó chạy ở tiền cảnh và giữ cửa sổ này. Mở cửa sổ thứ ha
 
 ### 5 · Đăng nhập
 
-Tài khoản `admin`, mật khẩu ở Bước 2.
+Tài khoản `admin`, mật khẩu `admin` — cặp bộ cài in ra ở Bước 2.
 
 ![Trang chủ AnalytiX sau khi đăng nhập, chưa có dashboard nào.](./img/cai-khong-can-mang/05-vao-duoc.png)
 
-### 6 · Đổi mật khẩu
+### 6 · Đổi mật khẩu — bắt buộc
+
+Mật khẩu mặc định là `admin`, giống nhau trên mọi bản cài, nên bước này không
+phải tuỳ chọn: làm ngay ở lần đăng nhập đầu. Chừng nào chưa làm, `khoi-dong.sh`
+từ chối nghe ra ngoài `127.0.0.1` — xem phần *Cho máy khác truy cập* bên dưới.
 
 Menu **Settings** → **Info** → nút **Reset my password**.
 
@@ -152,28 +156,32 @@ PYTHON=python3.12 \
 |:---|:---|
 | `ANALYTIX_HOME` | `$HOME/analytix` |
 | `ANALYTIX_ADMIN_USER` | `admin` |
-| `ANALYTIX_ADMIN_PASSWORD` | *sinh ngẫu nhiên, in một lần* |
+| `ANALYTIX_ADMIN_PASSWORD` | `admin` — đổi ngay lần đăng nhập đầu |
 | `ANALYTIX_PORT` | `8088` |
 | `PYTHON` | `python3` |
 
 `ANALYTIX_BIND` **không** dùng lúc cài — nó chỉ được `khoi-dong.sh` đọc, xem phần
-dưới. Bảng đầy đủ: [Biến môi trường](../reference/bien-moi-truong.md).
+dưới. Bảng đầy đủ: [Biến môi trường](../../reference/bien-moi-truong.md).
 
-:::danger[Mật khẩu in một lần, không ghi vào tệp nào]
-Dòng cuối của bộ cài:
+:::danger[Mật khẩu mặc định là `admin` — đổi ngay lần đăng nhập đầu]
+Ba dòng cuối của bộ cài, khi nó vừa tạo tài khoản và bạn không đặt
+`ANALYTIX_ADMIN_PASSWORD`:
 
 ```
-[analytix] administrator admin password: <chuỗi>
-[analytix] this is printed once and is written to no file. Save it now.
+[analytix] administrator: admin / admin
+[analytix] CHANGE IT at first login: Settings -> Info -> Reset my password.
+[analytix] Until you do, the start script refuses to listen outside 127.0.0.1.
 ```
 
-Lưu ngay. Mất thì đặt lại bằng:
+Cặp `admin` / `admin` ai cũng đoán được, nên đổi nó ở lần đăng nhập đầu. Từ dòng
+lệnh cũng đổi được:
 
 ```bash
 ~/analytix/venv/bin/superset fab reset-password --username admin
 ```
 
-Không có tài khoản mặc định nào — đây là chủ ý của sản phẩm, không phải thiếu sót.
+Đặt `ANALYTIX_ADMIN_PASSWORD` lúc cài thì ba dòng trên không in ra, và chốt
+`127.0.0.1` cũng không giữ gì — mật khẩu lúc đó đã không phải `admin`.
 :::
 
 ## Cài vào đâu
@@ -198,9 +206,22 @@ thương hiệu** và AnalytiX trở lại thành Superset. Hai tệp phải đi
 ANALYTIX_BIND=0.0.0.0 ~/analytix/khoi-dong.sh
 ```
 
+Lệnh đó **không chạy** khi mật khẩu quản trị vẫn là `admin`. `khoi-dong.sh` đọc
+hash mật khẩu trong `superset.db`, thấy nó khớp đúng chuỗi `admin` thì dừng:
+
+```
+[analytix] LỖI: mật khẩu quản trị vẫn là 'admin'.
+[analytix] Từ chối nghe trên 0.0.0.0. Đổi mật khẩu rồi chạy lại:
+[analytix]   Settings -> Info -> Reset my password
+[analytix] hoặc: $ANALYTIX_HOME/venv/bin/superset fab reset-password --username admin
+```
+
+Chốt này chỉ kiểm đúng một thứ đó. Đổi mật khẩu xong là nó tự mở, không phải sửa
+gì thêm. Nó cũng không chặn `127.0.0.1` và `localhost`.
+
 :::danger[Đổi mật khẩu quản trị TRƯỚC khi mở ra mạng]
 Và biết rằng bạn đang mở một web server dành cho phát triển, không có HTTPS. Xem
-[Vì sao bản cài chưa sẵn sàng cho môi trường thật](../explanation/chua-san-sang-cho-production.md).
+[Vì sao bản cài chưa sẵn sàng cho môi trường thật](../../explanation/chua-san-sang-cho-production.md).
 :::
 
 ## Kiểm tra là đã đúng
@@ -248,7 +269,7 @@ Chạy `./cai-tren-may.sh` lần hai là **an toàn**:
 
 - venv có rồi thì dùng lại, không dựng lại
 - `superset_config.py` có rồi thì **giữ nguyên** — khoá bí mật không bị sinh lại
-- tài khoản quản trị có rồi thì không tạo lại, không in mật khẩu mới
+- tài khoản quản trị có rồi thì không tạo lại, và không in lại dòng `administrator:`
 - `db upgrade` chạy lại, và nó vốn an toàn khi chạy nhiều lần
 
 Nên nâng cấp lên bản mới chính là: giải nén bundle mới, chạy lại `./cai-tren-may.sh`
@@ -317,7 +338,8 @@ chỉ coi một thư mục là bản cài khi trong đó có `venv/bin/superset`
 | Dừng ở bước cài gói, lỗi mạng | Không ra được PyPI | Bundle **không** mang theo gói. Cần mạng, hoặc dựng một kho gói nội bộ |
 | `AssertionError` ở bước `config loads` | Theme không nạp được, hoặc tên/ngôn ngữ sai | Kiểm `workspace_x_theme.py` có trong bundle và đọc được |
 | Nối database bên ngoài báo thiếu driver | Chỉ SQLite có sẵn | [Thêm driver cho nguồn dữ liệu](./them-driver-du-lieu.md) |
-| Mất mật khẩu quản trị | Nó chỉ in một lần | `~/analytix/venv/bin/superset fab reset-password --username admin` |
+| `LỖI: mật khẩu quản trị vẫn là 'admin'.` | Đặt `ANALYTIX_BIND` khác `127.0.0.1` mà mật khẩu quản trị vẫn là mặc định | Đổi mật khẩu — **Settings → Info → Reset my password**, hoặc `~/analytix/venv/bin/superset fab reset-password --username admin` — rồi chạy lại `khoi-dong.sh`. Chốt tự mở |
+| Mất mật khẩu quản trị | Đã đổi khỏi `admin` rồi quên mất | `~/analytix/venv/bin/superset fab reset-password --username admin` |
 | `./go-cai.sh` in `không tìm thấy gì để gỡ.` | Cài ở chỗ khác mặc định, hoặc thư mục đó không còn `venv/bin/superset` lẫn `superset_config.py` | Chỉ rõ chỗ cài: `ANALYTIX_HOME=/opt/analytix ./go-cai.sh`. Dòng `đã ngó:` ngay dưới cho biết nó vừa tìm ở đâu |
 | `ANALYTIX_HOME phải là đường dẫn tuyệt đối, đang là '...'` | Gỡ với đường dẫn tương đối | Gõ đường dẫn tuyệt đối, ví dụ `/opt/analytix` |
 
@@ -334,5 +356,5 @@ Muốn nó tự chạy lại sau khi khởi động máy thì phải tự viết
 - [Cài bằng Docker](./cai-dat-bang-docker.md) — không cần Python trên máy đích
 - [Thêm driver cho nguồn dữ liệu](./them-driver-du-lieu.md)
 - [Đóng gói bản phát hành](./dong-goi-ban-phat-hanh.md)
-- [Biến môi trường](../reference/bien-moi-truong.md)
-- [Yêu cầu hệ thống](../reference/yeu-cau-he-thong.md)
+- [Biến môi trường](../../reference/bien-moi-truong.md)
+- [Yêu cầu hệ thống](../../reference/yeu-cau-he-thong.md)

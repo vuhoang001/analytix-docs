@@ -1,6 +1,6 @@
 ---
 title: Đổi xác thực MCP sang JWT
-sidebar_position: 11
+sidebar_position: 2
 last_update:
   date: "2026-11-02"
   author: vuhoang001
@@ -144,6 +144,6 @@ chưa có tác dụng — rất có thể cấu hình chưa được nạp lại
 ## Liên quan
 
 - [Bật dịch vụ MCP](./bat-mcp.md)
-- [Cấu hình MCP](../reference/mcp-cau-hinh.md) — bảng đầy đủ các biến
-- [Vì sao MCP là một dịch vụ riêng](../explanation/vi-sao-mcp-la-service-rieng.md)
-- [Vì sao nhúng dashboard cần "vé khách"](../explanation/vi-sao-nhung-can-ve-khach.md) — cơ chế token khác, cho việc nhúng
+- [Cấu hình MCP](../../reference/mcp-cau-hinh.md) — bảng đầy đủ các biến
+- [Vì sao MCP là một dịch vụ riêng](../../explanation/vi-sao-mcp-la-service-rieng.md)
+- [Vì sao nhúng dashboard cần "vé khách"](../../explanation/vi-sao-nhung-can-ve-khach.md) — cơ chế token khác, cho việc nhúng
